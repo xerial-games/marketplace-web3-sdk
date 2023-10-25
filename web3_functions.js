@@ -45,7 +45,7 @@ async function sellNft(tokenId, collectionAddress, price) {
         const res = await collectionContract.connect(signer).setApprovalForAll(marketplace.address, true);
         const resApproval = await res.wait();
         // console.log(resApproval);
-        
+
         // Lista el NFT y lo toma de tu inventario.
         let tx = await marketplace.connect(signer).list(listingInput);
         await tx.wait();
@@ -83,19 +83,17 @@ async function changeTokenPrices(tokenId, newPrice, collectionAddress) {
     if (!marketplaceContractAddress) throw new Error("Fallando.");
     const marketplace = new ethers.Contract(marketplaceContractAddress, marketplaceABI, provider);
 
-    // Esto es la collection contract != Venly. Utilizando el ABI de Venly.
+    // Esto es el collection contract
     const collection = new ethers.Contract(collectionAddress, venlyABI, provider);
       let listingInput = [{
         erc1155: collectionAddress, // address del marketplace contract
-        tokenId, // Id del token dentro del contrato por ahora van el 6 y el 4
+        tokenId,
         newPrice: ethers.utils.parseUnits(newPrice, 6) // pasaje a 6 cifras
       }];
 
       // Permiso al marketplace de tomar tus NFTs de X contrato.
       const res = await collection.isApprovedForAll(await signer.getAddress(), marketplaceContractAddress) 
       if (res === true) {
-        // const res = await collection.connect(signer).setApprovalForAll(marketplace.address, true);
-        // console.log(res, "permisos del market para tomar tus NFTs")
         let tx = await marketplace.connect(signer).changeTokenPrices(listingInput);
         await tx.wait();
       } 
@@ -128,11 +126,32 @@ async function listings (tokenId, contractAddress) {
   }
 }
 
+async function getListedNfts (collectionAddresses) {
+  try {
+    const { provider, signer } = await connectToMetaMask();
+    if (!marketplaceContractAddress) throw new Error("Fallando.");
+    const nftsArray = await Promise.all(collectionAddresses.map(async (collectionAddress) => {
+      const marketplace = new ethers.Contract(marketplaceContractAddress, marketplaceABI, provider);
+      const tokensListedSecundaryMarketWithBigNumbers = await marketplace.getListedTokens(collectionAddress);
+      const tokensListedPrimaryMarketWithBigNumbers = await marketplace.getListedTokensOnPrimary(collectionAddress);
+
+      const tokensListedPrimaryMarket = tokensListedPrimaryMarketWithBigNumbers.map((tokenId) => tokenId.toString());
+      const tokensListedSecundaryMarket = tokensListedSecundaryMarketWithBigNumbers.map((tokenId) => tokenId.toString()).filter((item) => !tokensListedPrimaryMarket.includes(item));
+      
+      return { [collectionAddress]: { tokensListedPrimaryMarket, tokensListedSecundaryMarket } };
+    }));
+    return nftsArray;
+  } catch (error) {
+    throw new Error("Error al solicitar los NFTs listados.");
+  }
+}
+
 const marketplaceFunctions = {
   sellNft,
   delistNft,
   changeTokenPrices,
-  listings
+  listings,
+  getListedNfts
 }
 
 export default marketplaceFunctions;
