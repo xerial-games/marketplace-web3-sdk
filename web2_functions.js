@@ -1,20 +1,6 @@
+import { callApi, errorsManager } from "./call_api_functions";
+
 const web2Functions = {};
-
-const callApi = async (url, payload) => {
-  const response = await fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(payload)
-  });
-
-  return response;
-}
-
-const errorsManager = async (response) => {
-  if (!response.status) throw new Error("El response no tiene status.");
-  const resjson = response.json();
-  if (response.status.toString()[0] != "2") throw resjson;
-  return resjson;
-}
 
 web2Functions.getNftMetadata = async (tokenId, collectionId) => {
   if (collectionId) {
@@ -33,6 +19,7 @@ web2Functions.getGameStudioCollections = async (studioAddress) => {
   return await errorsManager(response);
 }
 
+// Function to get secundary and primary market all metadata.
 web2Functions.loadAllMetadata = async (items, collections, setAllNftsMetadata) => {
   try {
     let allInfo = [];
@@ -53,11 +40,23 @@ web2Functions.loadAllMetadata = async (items, collections, setAllNftsMetadata) =
       const allMetadata = await Promise.all(allInfo.map(async (data) => {
         return await web2Functions.getNftMetadata(data.tokenId, data.collectionId);
       }));
-      console.log(allMetadata)
       setAllNftsMetadata(allMetadata);
     }
   } catch (error) {
     console.error("Error al obtener la metadata de los NFTs.", error.message)
+  }
+}
+
+web2Functions.getUserInventory = async (address, studioAddress) => {
+  try {
+    const response = await callApi(`${process.env.NEXT_PUBLIC_API_HOST}/user_inventory`, {
+      studioAddress,
+      user: address,
+    });
+    const resjson = await errorsManager(response);
+    return resjson;
+  } catch (error) {
+    throw new Error("Error: getUserInventory Failed.")
   }
 }
 

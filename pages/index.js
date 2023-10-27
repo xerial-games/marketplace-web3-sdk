@@ -1,12 +1,8 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from '@/styles/Home.module.css'
 import marketplaceFunctions from '@/web3_functions'
 import { useEffect, useState } from 'react'
 import web2Functions from '@/web2_functions'
-import Item from '@/atoms/Item/Item'
-const inter = Inter({ subsets: ['latin'] })
+import Item from '@/atoms/Item/Item';
 
 export default function Home() {
   const [items, setItems] = useState([]);
@@ -24,6 +20,10 @@ export default function Home() {
     }
   }, [items]);
 
+  useEffect(() => {
+    
+  }, [collections, items])
+
   async function executeAsyncFunctions(fnArray) {
     await Promise.all(
       fnArray.map(async (fn) => {
@@ -34,9 +34,8 @@ export default function Home() {
 
   const renderNftsFlowFunction = async () => {
     try {
-      const collectionsFromGameStudio = await web2Functions.getGameStudioCollections("0xD3A7EF9D79214D5989d9A5AD5BE6604780617d36");
+      const collectionsFromGameStudio = await web2Functions.getGameStudioCollections(process.env.NEXT_PUBLIC_STUDIO_ADDRESS);
       setCollections(collectionsFromGameStudio.collections);
-
       const collectionAddresses = collectionsFromGameStudio.collections.map((collection) => collection.collectionAddress);
       if (!collectionAddresses || collectionAddresses.length <= 0) {
         console.error("No se encontraron las collections de este Game Studio");
@@ -50,6 +49,17 @@ export default function Home() {
     }
   };
 
+  // marketCategory need values: primary || secondary
+  async function purchaseNft (tokenId, collectionAddress, marketCategory) {
+    try {
+      await marketplaceFunctions.purchaseNft(tokenId, collectionAddress, marketCategory);
+      alert("NFT purchased.")
+    } catch (error) {
+      console.error(error.message);
+      // console.error("Error: Failed to purchase NFT.")
+    }
+  }
+
   return (
     <>
       <Head>
@@ -61,18 +71,18 @@ export default function Home() {
         <div>
           <h1>Primary Market</h1>
           {items?.map((collection) => {
-              const collectionAddr = Object.keys(collection)[0];
-              const { tokensListedPrimaryMarket, tokensListedSecundaryMarket } = collection[collectionAddr];
+              const collectionAddress = Object.keys(collection)[0];
+              const { tokensListedPrimaryMarket, tokensListedSecundaryMarket } = collection[collectionAddress];
               return tokensListedPrimaryMarket?.map((nftId, index) => {
                 return (
                   <Item
                     key={index}
                     id={nftId}
-                    collectionAddress={collectionAddr}
+                    collectionAddress={collectionAddress}
                     allNftsMetadata={allNftsMetadata}
-                    // onClickBuyButton={() => {
-                    //   setBuyModalActive(!buyModalActive)
-                    // }}
+                    onClickBuyButton={async () => {
+                      await purchaseNft(nftId, collectionAddress, "primary");
+                    }}
                   />
                 );
               })
@@ -83,18 +93,18 @@ export default function Home() {
             <h2>Secondary market</h2>
             <div>
             {items?.map((collection) => {
-              const collectionAddr = Object.keys(collection)[0];
-              const { tokensListedPrimaryMarket, tokensListedSecundaryMarket } = collection[collectionAddr];
+              const collectionAddress = Object.keys(collection)[0];
+              const { tokensListedPrimaryMarket, tokensListedSecundaryMarket } = collection[collectionAddress];
               return tokensListedSecundaryMarket?.map((nftId, index) => {
                 return (
                   <Item
                     key={index}
                     id={nftId}
-                    collectionAddress={collectionAddr}
+                    collectionAddress={collectionAddress}
                     allNftsMetadata={allNftsMetadata}
-                    // onClickBuyButton={() => {
-                    //   setBuyModalActive(!buyModalActive)
-                    // }}
+                    onClickBuyButton={async () => {
+                      await purchaseNft(nftId, collectionAddress, "secondary")
+                    }}
                   />
                 );
               })
