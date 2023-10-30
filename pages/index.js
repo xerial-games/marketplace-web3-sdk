@@ -1,7 +1,7 @@
 import Head from 'next/head'
-import marketplaceFunctions from '@/web3_functions'
+import web3Functions from '@/utils/web3_functions/web3_functions';
 import { useEffect, useState } from 'react'
-import web2Functions from '@/web2_functions'
+import web2Functions from '@/utils/web2_functions/web2_functions';
 import Item from '@/atoms/Item/Item';
 
 export default function Home() {
@@ -10,8 +10,6 @@ export default function Home() {
   const [allNftsMetadata, setAllNftsMetadata] = useState([]);
   useEffect(() => {
     renderNftsFlowFunction();
-    // Muestra la info de un NFT por tokenId y contractAddress. Te menciona si se encuentra listado o no en el marketplace primario.
-    // marketplaceFunctions.listings("4", "0x4Ee540daA6ecA698B2dDd25373784594B8f82949");
   }, []);
 
   useEffect(() => {
@@ -42,7 +40,7 @@ export default function Home() {
         return;
       }
       
-      const listedNfts = await marketplaceFunctions.getListedNfts(collectionAddresses);
+      const listedNfts = await web3Functions.getListedNfts(collectionAddresses);
       setItems(listedNfts);
     } catch (error) {
       console.error("Error: ", error.message);
@@ -52,7 +50,7 @@ export default function Home() {
   // marketCategory need values: primary || secondary
   async function purchaseNft (tokenId, collectionAddress, marketCategory) {
     try {
-      await marketplaceFunctions.purchaseNft(tokenId, collectionAddress, marketCategory);
+      await web3Functions.purchaseNft(tokenId, collectionAddress, marketCategory);
       alert("NFT purchased.")
     } catch (error) {
       console.error(error.message);
@@ -70,7 +68,8 @@ export default function Home() {
       <div>
         <div>
           <h1>Primary Market</h1>
-          {items?.map((collection) => {
+          <div className='home__itemsContainer'>
+            {items?.map((collection) => {
               const collectionAddress = Object.keys(collection)[0];
               const { tokensListedPrimaryMarket, tokensListedSecundaryMarket } = collection[collectionAddress];
               return tokensListedPrimaryMarket?.map((nftId, index) => {
@@ -87,11 +86,12 @@ export default function Home() {
                 );
               })
             })}
-            <hr/>
-            <hr/>
-            <hr/>
-            <h2>Secondary market</h2>
-            <div>
+          </div>
+          <hr/>
+          <hr/>
+          <hr/>
+          <h1>Secondary market</h1>
+          <div className='home__itemsContainer'>
             {items?.map((collection) => {
               const collectionAddress = Object.keys(collection)[0];
               const { tokensListedPrimaryMarket, tokensListedSecundaryMarket } = collection[collectionAddress];
@@ -109,7 +109,7 @@ export default function Home() {
                 );
               })
             })}
-            </div>
+          </div>
         </div>
       </div>
     </>

@@ -1,0 +1,77 @@
+h1 {
+  font-family: sans-serif;
+  font-weight: 500;
+  font-size: 26px;
+  color: #000000;
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-family: sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  color: #000000;
+  margin-bottom: 20px;
+}
+
+h3 {
+  font-family: sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  color: #000000;
+  margin-bottom: 20px;
+}
+
+.global-style__textWithDots {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.home__itemsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.atom-item__box {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  gap: 12px;
+  padding: 20px;
+  height: 500px;
+  background-color: rgb(18, 185, 200);
+}
+
+.atom-item__itemImage {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.atom-item__generalText {
+  font-family: sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: #000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.atom-item__button {
+  min-width: fit-content;
+  width: 300px;
+  height: fit-content;
+  padding: 6px 12px;
+  background-color: rgb(218, 18, 198);
+  border-radius: 12px;
+  border: transparent;
+  cursor: pointer;
+  color: #fff;
+  font-family: sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+}

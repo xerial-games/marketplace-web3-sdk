@@ -1,4 +1,4 @@
-import marketplaceFunctions from "@/web3_functions";
+import web3Functions from "@/utils/web3_functions/web3_functions";
 import { useEffect, useState } from "react";
 
 const Item = ({ id, allNftsMetadata, collectionAddress, onClickBuyButton }) => {
@@ -24,17 +24,18 @@ const Item = ({ id, allNftsMetadata, collectionAddress, onClickBuyButton }) => {
 
   
   async function loadPrice() {
-    const nftPrice = await marketplaceFunctions.getNftPrice(id, collectionAddress);
+    const nftPrice = await web3Functions.getNftPrice(id, collectionAddress);
     setPrice(nftPrice);
   }
 
   return (
-    <div>
-      <h1>Token Id: {id}</h1>
-      <h2>Token name: {!metadata || !metadata?.metadata ? "loading..." : metadata.metadata.name}</h2>
-      <p>collectionAddress: {collectionAddress}</p>
-      <p>price: {!price ? "loading..." : price}</p>
-      <button onClick={onClickBuyButton}>Buy</button>
+    <div className="atom-item__box">
+      <h1 className="global-style__textWithDots">Token Id: {id}</h1>
+      <h2 className="global-style__textWithDots">Token name: {!metadata || !metadata?.metadata ? "loading..." : metadata.metadata.name}</h2>
+      <img className="atom-item__itemImage" src={!metadata || !metadata?.metadata ? "" : metadata.metadata.image} alt="nft img" />
+      <p className="atom-item__generalText">collectionAddress: {collectionAddress}</p>
+      <p className="atom-item__generalText">price: {!price ? "loading..." : price}</p>
+      <button className="atom-item__button" onClick={onClickBuyButton}>Buy</button>
     </div>
   )
 }

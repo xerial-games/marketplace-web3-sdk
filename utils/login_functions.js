@@ -1,4 +1,4 @@
-import marketplaceFunctions from "./web3_functions";
+import marketplaceFunctions from "../utils/web3_functions/web3_functions";
 
 const { callApi, errorsManager } = require("./call_api_functions");
 

@@ -1,7 +1,7 @@
 const ethers = require("ethers");
-import usdcAbi from "./web3_abis/usdc_abi";
-import marketplaceABI from "./web3_abis/marketplace_abi";
-import venlyABI from "./web3_abis/venly_abi";
+import usdcAbi from "@/web3_abis/usdc_abi";
+import marketplaceABI from "@/web3_abis/marketplace_abi";
+import venlyABI from "@/web3_abis/venly_abi";
 
 const usdcAddress = process.env.NEXT_PUBLIC_MARKETPLACE_USDC_CONTRACT;
 const marketplaceContractAddress = process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT;
@@ -25,65 +25,9 @@ async function connectToMetaMask() {
   return { provider, signer };
 }
 
-async function sellNft(tokenId, collectionAddress, price) {
-  try {
-    const { provider, signer } = await connectToMetaMask();
-    if (!marketplaceContractAddress) throw new Error("Marketplace contract address not found.");
-    const marketplace = new ethers.Contract(marketplaceContractAddress, marketplaceABI, provider);
-    // Esto es la collection contract. Utiliza el ABI de Venly.
-    const collectionContract = new ethers.Contract(collectionAddress, venlyABI, provider);
-      let listingInput = [{
-        erc1155: collectionAddress, // address de la collection contract
-        tokenId, // Id del token dentro de la collection
-        askPrice: ethers.utils.parseUnits(price, 6) // 1 USDC = 1000000
-      }];
+const web3Functions = {};
 
-      
-
-      // Chequea si esta activo el permiso al marketplace de tomar tus NFTs de X contrato. Retorna un booleano
-      const res = await collectionContract.isApprovedForAll(await signer.getAddress(), marketplaceContractAddress) 
-      if (res === true) {
-        let tx = await marketplace.connect(signer).list(listingInput);
-        await tx.wait();
-      }
-      else {
-        // Solicitud para darle permisos al marketplace de tomar tus NFTs
-        const res = await collectionContract.connect(signer).setApprovalForAll(marketplace.address, true);
-        const resApproval = await res.wait();
-        // console.log(resApproval);
-
-        // Lista el NFT y lo toma de tu inventario.
-        let tx = await marketplace.connect(signer).list(listingInput);
-        await tx.wait();
-      }
-    } catch (error) {
-      console.log("%cMensaje de error en listing.", "color: red; font-size: 30px; font-weight: 500")
-      console.error(error.message);
-      // console.error(error.reason)
-    }
-}
-
-async function delistNft(tokenId, collectionAddress) {
-  try {
-    const { provider, signer } = await connectToMetaMask();
-    if (!marketplaceContractAddress) throw new Error("Marketplace contract address not found.");
-    const marketplace = new ethers.Contract(marketplaceContractAddress, marketplaceABI, provider);
-    let delistInput = [{
-      erc1155: collectionAddress, // address del marketplace contract
-      tokenId, // Id del token dentro del contrato por ahora van el 6 y el 4
-    }];
-
-    let tx = await marketplace.connect(signer).delist(delistInput);
-    let fullRes = await tx.wait();
-    // console.log(fullRes);
-    alert("Token eliminado del market")
-  } catch (error) {
-    console.log("%cMensaje de error en listing.", "color: red; font-size: 30px; font-weight: 500")
-    console.error(error.message);
-  }
-}
-
-async function changeTokenPrices(tokenId, newPrice, collectionAddress) {
+web3Functions.changeTokenPrices = async (tokenId, newPrice, collectionAddress) => {
   try {
     const { provider, signer } = await connectToMetaMask();
     const marketplaceContractAddress = process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT;
@@ -117,22 +61,27 @@ async function changeTokenPrices(tokenId, newPrice, collectionAddress) {
     }
 }
 
-async function listings (tokenId, contractAddress) {
+web3Functions.delistNft = async (tokenId, collectionAddress) => {
   try {
     const { provider, signer } = await connectToMetaMask();
-    const marketplaceContractAddress = process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT;
     if (!marketplaceContractAddress) throw new Error("Marketplace contract address not found.");
     const marketplace = new ethers.Contract(marketplaceContractAddress, marketplaceABI, provider);
+    let delistInput = [{
+      erc1155: collectionAddress, // address del marketplace contract
+      tokenId, // Id del token dentro del contrato por ahora van el 6 y el 4
+    }];
 
-    const res = await marketplace.listings(contractAddress, tokenId);
-    if (res.owner) return res;
-    } catch (error) {
-      console.log("%cMensaje de error en listing.", "color: red; font-size: 30px; font-weight: 500")
-      console.error(error.message);
+    let tx = await marketplace.connect(signer).delist(delistInput);
+    let fullRes = await tx.wait();
+    // console.log(fullRes);
+    alert("Token removed from the market.")
+  } catch (error) {
+    console.log("%cMensaje de error en listing.", "color: red; font-size: 30px; font-weight: 500")
+    console.error(error.message);
   }
 }
 
-async function getListedNfts (collectionAddresses) {
+web3Functions.getListedNfts = async (collectionAddresses) => {
   try {
     const { provider, signer } = await connectToMetaMask();
     if (!marketplaceContractAddress) throw new Error("Marketplace contract address not found.");
@@ -152,7 +101,7 @@ async function getListedNfts (collectionAddresses) {
   }
 }
 
-async function getNftPrice(tokenId, collectionAddress) {
+web3Functions.getNftPrice = async (tokenId, collectionAddress) => {
   const { provider, signer } = await connectToMetaMask();
   if (!marketplaceContractAddress) throw new Error("Marketplace contract address not found.");
   const marketplace = new ethers.Contract(marketplaceContractAddress, marketplaceABI, provider);
@@ -160,8 +109,38 @@ async function getNftPrice(tokenId, collectionAddress) {
   return Number(price.price.toString()) / Math.pow(10, 6); // Formatea el precio quitandole 6 decimales.
 }
 
+web3Functions.loadListedNftsOnSecondaryMarket = async (collectionAddresses) => {
+  const { provider, signer } = await connectToMetaMask();
+  const marketplaceContractAddress = process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT;
+  if (!marketplaceContractAddress) throw new Error("Fallando.");
+  const nftsArray = await Promise.all(collectionAddresses.map(async (collectionAddress) => {
+    const marketplace = new ethers.Contract(marketplaceContractAddress, marketplaceABI, provider);
+    const tokensListedSecondaryMarketWithBigNumbers = await marketplace.getListedTokens(collectionAddress);
+    const tokensListedPrimaryMarketWithBigNumbers = await marketplace.getListedTokensOnPrimary(collectionAddress);
+      
+    const tokensListedPrimaryMarket = tokensListedPrimaryMarketWithBigNumbers.map((tokenId) => tokenId.toString());
+    const tokensListedSecondaryMarket = tokensListedSecondaryMarketWithBigNumbers.map((tokenId) => tokenId.toString()).filter((item) => !tokensListedPrimaryMarket.includes(item));
+    return { [collectionAddress]: { tokensListedSecondaryMarket } };
+  }));
+  return nftsArray;
+}
+
+web3Functions.listings = async (tokenId, contractAddress) => {
+  try {
+    const { provider, signer } = await connectToMetaMask();
+    const marketplaceContractAddress = process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT;
+    if (!marketplaceContractAddress) throw new Error("Marketplace contract address not found.");
+    const marketplace = new ethers.Contract(marketplaceContractAddress, marketplaceABI, provider);
+
+    const res = await marketplace.listings(contractAddress, tokenId);
+    if (res.owner) return res;
+    } catch (error) {
+      console.log("%cMensaje de error en listing.", "color: red; font-size: 30px; font-weight: 500")
+      console.error(error.message);
+  }
+}
 // marketCategory expected values: primary || secondary
-async function purchaseNft(tokenId, collectionAddress, marketCategory) {
+web3Functions.purchaseNft = async (tokenId, collectionAddress, marketCategory) => {
   try {
     if (!tokenId || !collectionAddress || !marketCategory) throw new Error("Faltan parámetros.");
     const { provider, signer } = await connectToMetaMask();
@@ -202,7 +181,45 @@ async function purchaseNft(tokenId, collectionAddress, marketCategory) {
   }
 }
 
-const signMessageWithLoginAttemptIdWithMetamask = async function (loginAttemptId) {
+web3Functions.sellNft = async (tokenId, collectionAddress, price) => {
+  try {
+    const { provider, signer } = await connectToMetaMask();
+    if (!marketplaceContractAddress) throw new Error("Marketplace contract address not found.");
+    const marketplace = new ethers.Contract(marketplaceContractAddress, marketplaceABI, provider);
+    // Esto es la collection contract. Utiliza el ABI de Venly.
+    const collectionContract = new ethers.Contract(collectionAddress, venlyABI, provider);
+      let listingInput = [{
+        erc1155: collectionAddress, // address de la collection contract
+        tokenId, // Id del token dentro de la collection
+        askPrice: ethers.utils.parseUnits(price, 6) // 1 USDC = 1000000
+      }];
+
+      
+
+      // Chequea si esta activo el permiso al marketplace de tomar tus NFTs de X contrato. Retorna un booleano
+      const res = await collectionContract.isApprovedForAll(await signer.getAddress(), marketplaceContractAddress) 
+      if (res === true) {
+        let tx = await marketplace.connect(signer).list(listingInput);
+        await tx.wait();
+      }
+      else {
+        // Solicitud para darle permisos al marketplace de tomar tus NFTs
+        const res = await collectionContract.connect(signer).setApprovalForAll(marketplace.address, true);
+        const resApproval = await res.wait();
+        // console.log(resApproval);
+
+        // Lista el NFT y lo toma de tu inventario.
+        let tx = await marketplace.connect(signer).list(listingInput);
+        await tx.wait();
+      }
+    } catch (error) {
+      console.log("%cMensaje de error en listing.", "color: red; font-size: 30px; font-weight: 500")
+      console.error(error.message);
+      // console.error(error.reason)
+    }
+}
+
+web3Functions.signMessageWithLoginAttemptIdWithMetamask = async function (loginAttemptId) {
   checkEthereumExistInUI();
   const accounts = await ethereum.request({
     method: "eth_requestAccounts",
@@ -220,15 +237,4 @@ const signMessageWithLoginAttemptIdWithMetamask = async function (loginAttemptId
   return { publicKey: realAddress, signature: signature }
 }
 
-const marketplaceFunctions = {
-  sellNft,
-  delistNft,
-  changeTokenPrices,
-  listings,
-  getListedNfts,
-  getNftPrice,
-  purchaseNft,
-  signMessageWithLoginAttemptIdWithMetamask
-}
-
-export default marketplaceFunctions;
+export default web3Functions;

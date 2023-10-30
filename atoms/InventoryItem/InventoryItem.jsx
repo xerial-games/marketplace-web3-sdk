@@ -1,6 +1,3 @@
-import marketplaceFunctions from "@/web3_functions";
-import { useEffect, useState } from "react";
-
 const handleWheel = () => {
   window.document.activeElement.blur()
 };

@@ -1,8 +1,20 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Xerial marketplace SDK
 
-## Getting Started
+## About
+This repository was essentially created to help developers implement Xerial marketplace functions in the personal marketplaces of game studios.
 
-First, run the development server:
+#### SDK functions
+- [web3 functions](./utils/web3_functions/web3_functions.md) It's necesary use your metamask to use.
+- [web2 functions](./utils/web2_functions/web2_functions.md) This section includes some web3-related functions, but you don't need use Metamask to use them. Only web2 interaction.
+
+## Important information
+
+- Essential files for implementing marketplace functions can be found in the /utils folder.
+- The /pages folder includes some implementation examples.
+
+## Run project
+
+Run the development server:
 
 ```bash
 npm run dev
@@ -12,27 +24,8 @@ yarn dev
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Project Dependencies
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+The following dependency is required for other developers to implement the functionality in their own repositories, by copying and incorporating the functional parts of this repository and installing "ethers" as well:
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- "ethers": "5.7"

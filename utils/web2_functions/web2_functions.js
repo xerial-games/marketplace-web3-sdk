@@ -1,6 +1,11 @@
-import { callApi, errorsManager } from "./call_api_functions";
+import { callApi, errorsManager } from "../call_api_functions";
 
 const web2Functions = {};
+
+web2Functions.getGameStudioCollections = async (studioAddress) => {
+  const response = await callApi(`${process.env.NEXT_PUBLIC_API_HOST}/get_venly_collections_from_project`, { studioAddress });
+  return await errorsManager(response);
+}
 
 web2Functions.getNftMetadata = async (tokenId, collectionId) => {
   if (collectionId) {
@@ -13,13 +18,20 @@ web2Functions.getNftMetadata = async (tokenId, collectionId) => {
   return null;
 }
 
-web2Functions.getGameStudioCollections = async (studioAddress) => {
-  const response = await callApi(`${process.env.NEXT_PUBLIC_API_HOST}/get_venly_collections_from_project`, { studioAddress });
-  
-  return await errorsManager(response);
+web2Functions.getUserInventory = async (address, studioAddress) => {
+  try {
+    const response = await callApi(`${process.env.NEXT_PUBLIC_API_HOST}/user_inventory`, {
+      studioAddress,
+      user: address,
+    });
+    const resjson = await errorsManager(response);
+    return resjson;
+  } catch (error) {
+    throw new Error("Error: getUserInventory Failed.")
+  }
 }
 
-// Function to get secundary and primary market all metadata.
+// Function to get secondary and primary market all metadata.
 web2Functions.loadAllMetadata = async (items, collections, setAllNftsMetadata) => {
   try {
     let allInfo = [];
@@ -44,19 +56,6 @@ web2Functions.loadAllMetadata = async (items, collections, setAllNftsMetadata) =
     }
   } catch (error) {
     console.error("Error al obtener la metadata de los NFTs.", error.message)
-  }
-}
-
-web2Functions.getUserInventory = async (address, studioAddress) => {
-  try {
-    const response = await callApi(`${process.env.NEXT_PUBLIC_API_HOST}/user_inventory`, {
-      studioAddress,
-      user: address,
-    });
-    const resjson = await errorsManager(response);
-    return resjson;
-  } catch (error) {
-    throw new Error("Error: getUserInventory Failed.")
   }
 }
 
