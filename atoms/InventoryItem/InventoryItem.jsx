@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const handleWheel = () => {
   window.document.activeElement.blur()
 };
