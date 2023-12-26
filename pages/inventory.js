@@ -1,135 +1,105 @@
-// This page need update.
-// Update incoming.
-
-
 import InventoryItem from "@/atoms/InventoryItem/InventoryItem";
-import connectMetamaskWallet from "@/utils/login_functions";
+import loginWithMetamask from "@/utils/login_functions";
 import web2Functions from "@/utils/web2_functions/web2_functions";
 import web3Functions from "@/utils/web3_functions/web3_functions";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 const envStudioAddress = process.env.NEXT_PUBLIC_STUDIO_ADDRESS;
+
 const handleWheel = () => {
   window.document.activeElement.blur()
 };
 
 const Inventory = () => {
-  const [signature, setSignature] = useState("");
-  const [publicKey, setPublicKey] = useState("");
-  const [sessionToken, setSessionToken] = useState("");
   const [items, setItems] = useState(null);
-  const [allMetadata, setAllMetadata] = useState([]);
-  const [secondaryMarketMetadata, setSecondaryMarketMetadata] = useState([]);
-  const [secondaryMarketItemsOfUser, setSecondaryMarketItemsOfUser] = useState([]);
-  // studioAddress is Game Studio Address
+  // studioAddress is the Game Studio Address
   const [studioAddress, setStudioAddress] = useState(envStudioAddress);
   const [collections, setCollections] = useState([]);
+  const [project, setProject] = useState({});
+  const [hostname, setHostname] = useState("");
+  const [wallets, setWallets] = useState([]);
+  const [sessionToken, setSessionToken] = useState("");
+  const [userAddress, setUserAddress] = useState("");
+  const router = useRouter();
+
   useEffect(() => {
-    loadCollections();
-  }, [])
+    setHostname(window.location.hostname);
+  }, []);
+
   useEffect(() => {
-    if (studioAddress && publicKey) {
+    if (hostname) {
+      load();
+    }
+  }, [hostname]);
+
+
+  useEffect(() => {
+    if (project && JSON.stringify(project) != "{}") {
+      loadCollections();
+    }
+  }, [project]);
+
+  useEffect(() => {
+    if (sessionToken) {
       loadInventory();
     }
-  }, [studioAddress, publicKey]);
+  }, [sessionToken]);
 
-  useEffect(() => {
-    if (items && collections) {
-      loadAllMetadata();
-      loadItemsOnSecondaryMarket();
-    }
-  }, [items, collections]);
-
-  async function connectWallet() {
-    try {
-      const { publicKey, signature, sessionToken } = await connectMetamaskWallet("6532a2164bf23c6c7551a56c");
-      setPublicKey(publicKey);
-      setSignature(signature);
-      setSessionToken(sessionToken);
-    } catch (error) {
-      console.error("Error: Login Failed.");
-    }
+  async function load () {
+    const getProjectForDomainResponse = await web2Functions.getProjectForDomain(hostname);
+    setProject(getProjectForDomainResponse.project);
   }
 
   async function loadCollections() {
-    const collectionsFromGameStudio = await web2Functions.getGameStudioCollections(process.env.NEXT_PUBLIC_STUDIO_ADDRESS);
+    const collectionsFromGameStudio = await web2Functions.getGameStudioCollections(project.id);
     setCollections(collectionsFromGameStudio.collections);
   }
 
   async function loadInventory () {
     try {
-      const inventory = await web2Functions.getUserInventory(publicKey, studioAddress);
+      const inventory = await web2Functions.getInventory({
+        address: userAddress,
+        studioAddress: project.address,
+        chain: "polygon",
+      });
+
       setItems(inventory);
     } catch (error) {
       console.error(error.message);
     }
   }
 
-  async function loadAllMetadata() {
-    const infoToGetMetadata = Object.keys(items)?.map((objectKey) => {
-      return Object.entries(items[objectKey]).map((entries, index) => {
-        // Index 0 = tokenId
-        // Index 1 = 0 || 1. Lo tengo o no lo tengo...
-        if (entries[1] === 1) {
-          const collectionId = collections.find((collection) => collection.collectionAddress === objectKey)?.collectionId;
-          if (!collectionId) throw new Error(`collectionId of ${objectKey} not Found.`)
-          return { tokenId: entries[0], collectionId: collectionId }
-        }
-      })
-    })
-    .flat().filter(Boolean);
-    const metadata = await Promise.all(
-      infoToGetMetadata.map(async ({ tokenId, collectionId }) => {
-        const metadataUwu = await web2Functions.getNftMetadata(tokenId, collectionId);
-        return metadataUwu
-      })
-    );
-
-    setAllMetadata(metadata);
-  }
-
-  async function loadItemsOnSecondaryMarket () {
-    const collectionAddresses = collections.map((collection) => collection.collectionAddress);
-    const listedNfts = await web3Functions.loadListedNftsOnSecondaryMarket(collectionAddresses);
-    const newArrayToGetMetadata = listedNfts.map((item) => {
-      const key = Object.keys(item)[0];
-      const collectionFinded = collections.find((collection) => collection.collectionAddress === key);
-      const tokensListed = item[key].tokensListedSecondaryMarket;
-
-      return tokensListed.map((tokenId) => ({
-        collectionId: collectionFinded.collectionId,
-        tokenId,
-      }));
-    })
-    .flat()
-    .filter(Boolean);
-
-    await loadSecondaryMarketMetadata(newArrayToGetMetadata);
-    setSecondaryMarketItemsOfUser(listedNfts);
-  }
-
-  async function loadSecondaryMarketMetadata(arrayToGetMetadata) {
-    if (arrayToGetMetadata && arrayToGetMetadata.length > 0) {
-      const allMetadata = await Promise.all(
-        arrayToGetMetadata.map(async (data) => web2Functions.getNftMetadata(data.tokenId, data.collectionId))
-      );
-      setSecondaryMarketMetadata(allMetadata);
+  async function connectWallet() {
+    try {
+      const { loguedWith, player, sessionToken, tokens, wallets } = await loginWithMetamask();
+      const userAddress = wallets.find((wallet) => wallet.chain === "ethereum").address;
+      if (!userAddress) throw new Error("Ethereum userAddress not found");
+      setWallets(wallets);
+      setSessionToken(sessionToken);
+      setUserAddress(userAddress);
+    } catch (error) {
+      console.error("Error: Login Failed.");
     }
+  }
+
+  function goToHome () {
+    router.push("/");
   }
 
   async function onSellNft(tokenId, collectionAddress, price) {
     try {
-      if (!price) {
-        alert("Please set a price");
-        return;
-      }
-      await web3Functions.sellNft(tokenId, collectionAddress, price);
+      // if (!price) {
+      //   alert("Please set a price");
+      //   return;
+      // }
+      // await web3Functions.sellNft(tokenId, collectionAddress, price);
     } catch (error) {
       
     }
   }
 
   function Items () {
-    if (!(items)) return (
+    if (!items || items.length === 0) return (
       <div className="inventory-items__inventoryWithoutItems">
         <p className="inventory-items__generalTextSemiBold inventory-items__textCenter">You don't have any assets yet</p>
         <p className="inventory-items__generalText inventory-items__textCenter">The assets you purchase will be displayed on this page</p>
@@ -140,43 +110,20 @@ const Inventory = () => {
       <div>
         <h1>Your Inventory</h1>
         <div className="inventory-items__itemsContainer" style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
-          {Object.keys(items)?.map((objectKey, index) => {
-            return Object.entries(items[objectKey]).map((entries, index) => {
-              // Index 0 = tokenId
-              // Index 1 = 0 || 1. Lo tengo o no lo tengo...
-              if (entries[1] === 1) {
-                const metadata = allMetadata.find((mtdt) => {
-                  if (mtdt.nftId == entries[0] && mtdt.metadata.contract.address === objectKey.toLowerCase()) return true;
-                });
-                return <InventoryItem key={index} tokenId={parseInt(entries[0])} collectionAddress={objectKey} metadata={metadata} onSellNft={onSellNft}/>
-              }
-            })
+          {items.map((nft) => {
+            return (
+              <InventoryItem nft={nft} key={nft.metadata.contract.address + nft.metadata.image}/>
+            )
           })}
         </div>
       </div>
     )
   }
 
-  function ItemsInSecondaryMarket({ tokenId, collectionAddress }) {
-    const [metadata, setMetadata] = useState(null);
+  function ItemsInSecondaryMarket({ nft }) {
     const [price, setPrice] = useState(null);
-    const [active, setActive] = useState(false);
-    if (!tokenId || !collectionAddress || !collections) return;
-
-    useEffect(() => {
-      if (secondaryMarketMetadata && secondaryMarketMetadata.length > 0) {
-        const nftMetadata = secondaryMarketMetadata.find((data) =>
-          data.nftId === tokenId.toString() && data.metadata.contract.address === collectionAddress.toLowerCase()
-        );
-        if (nftMetadata) setMetadata(nftMetadata);
-      }
-    }, [secondaryMarketMetadata]);
-
-    useEffect(() => {
-      web3Functions.listings(tokenId, collectionAddress).then((res) => {
-        if (res.owner === publicKey) setActive(true);
-      });
-    }, [active]);
+    return;
+    // if (!tokenId || !collectionAddress || !collections) return;
 
     if (!active) return;
 
@@ -242,13 +189,13 @@ const Inventory = () => {
 
   return (
     <div>
+      <button onClick={goToHome}>Go to home</button>
       <button onClick={connectWallet}>Connect</button>
-      <p>User address: {publicKey}</p>
-      <p>User signature: {signature}</p>
+      <p>User address: {userAddress}</p>
       <p>SessionToken: {sessionToken}</p>
       <Items/>
       <section className="inventory-items__secondaryMarketSection">
-        {secondaryMarketItemsOfUser && <h1>Your items in Secondary Market</h1>}
+        {/* {secondaryMarketItemsOfUser && <h1>Your items in Secondary Market</h1>}
         {secondaryMarketItemsOfUser?.map((collectionWithTokenIds) => {
           return Object.keys(collectionWithTokenIds)?.map((objectKey, index) => {
             return Object.entries(collectionWithTokenIds[objectKey]).map((marketInfo) => {
@@ -263,7 +210,7 @@ const Inventory = () => {
               });
             });
           });
-        })}
+        })} */}
       </section>
     </div>
   )

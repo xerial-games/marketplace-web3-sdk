@@ -4,7 +4,7 @@ const handleWheel = () => {
   window.document.activeElement.blur()
 };
 
-const InventoryItem = ({ tokenId, metadata, collectionAddress, onSellNft }) => {
+const InventoryItem = ({ nft }) => {
   const [price, setPrice] = useState("");
 
   function onChangePrice (value) {
@@ -13,15 +13,15 @@ const InventoryItem = ({ tokenId, metadata, collectionAddress, onSellNft }) => {
 
   async function handleSubmit (event) {
     event.preventDefault();
-    await onSellNft(tokenId, collectionAddress, price);
+    // await onSellNft(tokenId, collectionAddress, price); Please don't use this in this moment. This need update.
   }
 
   return (
     <div style={{ backgroundColor: "rgb(59, 109, 152)", padding: 10, display: "flex", flexDirection: "column", gap: 12, width: 600 }}>
-      <h1>Token Id: {tokenId}</h1>
-      <h2>Token name: {!metadata || !metadata?.metadata ? "loading..." : metadata.metadata.name}</h2>
-      {metadata && <img src={metadata.metadata.image} alt={metadata.metadata.name} style={{width: 300, height: "auto"}}/>}
-      <p>collectionAddress: {collectionAddress}</p>
+      <h1>Nft typeId: {nft.typeId}</h1>
+      <h2>Nft name: {nft.metadata.name}</h2>
+      <img src={nft.metadata.image} alt={nft.metadata.name} style={{width: 300, height: "auto"}}/>
+      <p>collectionAddress: {nft.metadata.contract.address}</p>
       <form className="inventory-items__form" onSubmit={handleSubmit}>
         <label className="inventory-items__itemLabelForInput">
           <span className="inventory-items__itemInputWithLabelTitle">Price</span>

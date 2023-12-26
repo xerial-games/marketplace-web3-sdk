@@ -9,7 +9,7 @@ web2Functions.getGameStudioCollections = async (projectId) => {
 }
 
 // Chain can be "polygon"
-web2Functions.getUserInventory = async (address, studioAddress, chain) => {
+web2Functions.getInventory = async ({ address, studioAddress, chain }) => {
   try {
     const response = await callApi(`${apiBaseUrl}/get_inventory`, {
       studioAddress,
@@ -19,7 +19,7 @@ web2Functions.getUserInventory = async (address, studioAddress, chain) => {
     const resjson = await errorsManager(response);
     return resjson;
   } catch (error) {
-    throw new Error("Error: getUserInventory Failed.")
+    throw new Error("Error: getInventory Failed.")
   }
 }
 

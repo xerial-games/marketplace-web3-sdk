@@ -80,11 +80,10 @@ const web3Functions = {};
 //   }
 // }
 
-// updated 25 - 12 - 2023
 web3Functions.purchaseNfts = async function ({ tokenTypeId, amount, collectionAddress }) {
   try {
     if (!tokenTypeId || !collectionAddress || !amount) throw new Error("All params are required.");
-    const { provider, signer } = await helpers.web3.connectToMetaMask();
+    const { provider, signer } = await connectToMetaMask();
     const usdc = new ethers.Contract(usdcAddress, usdcAbi, provider);
     const collection = new ethers.Contract(collectionAddress, collectionAbi, provider);
 
@@ -100,7 +99,6 @@ web3Functions.purchaseNfts = async function ({ tokenTypeId, amount, collectionAd
     const purchaseTransaction = await collection.connect(signer).primaryPurchase(amount, tokenTypeId);
     const purchaseTransactionWaited = await purchaseTransaction.wait();
     console.log(purchaseTransactionWaited);
-    await vm.loadListedNfts({ chain: "polygon" });
   } catch (error) {
     throw new Error(error.message);
   }

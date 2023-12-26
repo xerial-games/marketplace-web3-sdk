@@ -3,11 +3,13 @@ import web3Functions from '@/utils/web3_functions/web3_functions';
 import { useEffect, useState } from 'react'
 import web2Functions from '@/utils/web2_functions/web2_functions';
 import Item from '@/atoms/Item/Item';
+import { useRouter } from 'next/router';
 
 export default function Home() {
   const [hostname, setHostname] = useState("");
   const [project, setProject] = useState({});
   const [listedNfts, setListedNfts] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
     setHostname(window.location.hostname);
@@ -39,17 +41,10 @@ export default function Home() {
     setListedNfts(getListedNftsResponse);
   }
 
-  // marketCategory need values: primary || secondary
-  async function purchaseNft (tokenId, collectionAddress, marketCategory) {
-    try {
-      await web3Functions.purchaseNft(tokenId, collectionAddress, marketCategory);
-      alert("NFT purchased.")
-    } catch (error) {
-      console.error(error.message);
-      // console.error("Error: Failed to purchase NFT.")
-    }
+  function goToInventory () {
+    router.push("inventory");
   }
-
+  
   return (
     <>
       <Head>
@@ -58,6 +53,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div>
+        <button onClick={goToInventory}>Go to inventory</button>
         {project && (
           <div>
             <div>Your project is: {project.name}</div>
@@ -68,9 +64,13 @@ export default function Home() {
         <div>
           <h1>Primary Market</h1>
           <div className='home__itemsContainer'>
-            {listedNfts?.map((nft) => {
-              return <Item key={nft.id} nft={nft} />;
-            })}
+            {listedNfts && listedNfts.length === 0 ? (
+                <div>There are no listed NFTs.</div>
+              ) : (
+              listedNfts?.map((nft) => {
+                return <Item key={nft.id} nft={nft} />;
+              })
+            )}
           </div>
           <hr/>
           <hr/>
