@@ -1,28 +1,20 @@
 import { callApi, errorsManager } from "../call_api_functions";
 
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_HOST;
 const web2Functions = {};
 
-web2Functions.getGameStudioCollections = async (studioAddress) => {
-  const response = await callApi(`${process.env.NEXT_PUBLIC_API_HOST}/get_venly_collections_from_project`, { studioAddress });
+web2Functions.getGameStudioCollections = async (projectId) => {
+  const response = await callApi(`${process.env.NEXT_PUBLIC_API_HOST}/get_collections_from_project`, { projectId });
   return await errorsManager(response);
 }
 
-web2Functions.getNftMetadata = async (tokenId, collectionId) => {
-  if (collectionId) {
-    const response = await callApi(`${process.env.NEXT_PUBLIC_API_HOST}/get_nft_metadata`, {
-      collectionId,
-      nftId: tokenId
-    });
-    return await errorsManager(response);
-  }
-  return null;
-}
-
-web2Functions.getUserInventory = async (address, studioAddress) => {
+// Chain can be "polygon"
+web2Functions.getUserInventory = async (address, studioAddress, chain) => {
   try {
-    const response = await callApi(`${process.env.NEXT_PUBLIC_API_HOST}/user_inventory`, {
+    const response = await callApi(`${apiBaseUrl}/get_inventory`, {
       studioAddress,
-      user: address,
+      address,
+      chain
     });
     const resjson = await errorsManager(response);
     return resjson;
@@ -31,32 +23,38 @@ web2Functions.getUserInventory = async (address, studioAddress) => {
   }
 }
 
-// Function to get secondary and primary market all metadata.
-web2Functions.loadAllMetadata = async (items, collections, setAllNftsMetadata) => {
-  try {
-    let allInfo = [];
-    const data = items?.map((collection) => {
-      const collectionAddr = Object.keys(collection)[0];
-      const { tokensListedPrimaryMarket, tokensListedSecundaryMarket } = collection[collectionAddr];
-      const info = tokensListedPrimaryMarket?.map((tokenId, index) => {
-        return { tokenId, collectionId: collections.find((collection) => collection.collectionAddress === collectionAddr)?.collectionId };
-      });
-      const infoSec = tokensListedSecundaryMarket?.map((tokenId, index) => {
-        return { tokenId, collectionId: collections.find((collection) => collection.collectionAddress === collectionAddr)?.collectionId };
-      });
-      allInfo.push(info);
-      allInfo.push(infoSec);
-    });
-    allInfo = allInfo.flat();
-    if (allInfo.length > 0) {
-      const allMetadata = await Promise.all(allInfo.map(async (data) => {
-        return await web2Functions.getNftMetadata(data.tokenId, data.collectionId);
-      }));
-      setAllNftsMetadata(allMetadata);
-    }
-  } catch (error) {
-    console.error("Error al obtener la metadata de los NFTs.", error.message)
-  }
+web2Functions.getProjectForDomain = async function (projectDomain) {
+  const response = await callApi(`${apiBaseUrl}/get_project_for_marketplace`, {
+    projectDomain
+  });
+  const resjson = await errorsManager(response);
+  return resjson;
 }
+
+web2Functions.getListedNfts = async function ({ chain, projectId }) {
+  const response = await callApi(`${apiBaseUrl}/get_listed_nfts`, {
+    chain,
+    projectId
+  });
+  const resjson = await errorsManager(response);
+  return resjson;
+}
+
+// web2Functions.loginWithGoogle = async function () {}
+
+web2Functions.logout = async function () {}
+
+// Purchase in primary market
+// web2Functions.primaryPurchaseWithXerialWallet = async function () {}
+
+// web2Functions.sellNft = async function () {}
+
+// web2Functions.delist = async function () {}
+
+// web2Functions.transferNft = async function () {}
+
+// web2Functions.transferMatic = async function () {}
+
+// web2Functions.transferUsdc = async function () {}
 
 export default web2Functions;

@@ -1,3 +1,7 @@
+// This page need update.
+// Update incoming.
+
+
 import InventoryItem from "@/atoms/InventoryItem/InventoryItem";
 import connectMetamaskWallet from "@/utils/login_functions";
 import web2Functions from "@/utils/web2_functions/web2_functions";

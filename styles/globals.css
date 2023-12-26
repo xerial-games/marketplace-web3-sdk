@@ -41,7 +41,8 @@ h3 {
   gap: 12px;
   padding: 20px;
   height: 500px;
-  background-color: rgb(18, 185, 200);
+  background-color: rgb(64, 103, 103);
+  border-radius: 20px;
 }
 
 .atom-item__itemImage {

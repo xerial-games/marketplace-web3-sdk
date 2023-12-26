@@ -5,47 +5,39 @@ import web2Functions from '@/utils/web2_functions/web2_functions';
 import Item from '@/atoms/Item/Item';
 
 export default function Home() {
-  const [items, setItems] = useState([]);
-  const [collections, setCollections] = useState([]);
-  const [allNftsMetadata, setAllNftsMetadata] = useState([]);
+  const [hostname, setHostname] = useState("");
+  const [project, setProject] = useState({});
+  const [listedNfts, setListedNfts] = useState([]);
+
   useEffect(() => {
-    renderNftsFlowFunction();
+    setHostname(window.location.hostname);
   }, []);
 
   useEffect(() => {
-    if (items && collections && items.length > 0) {
-      web2Functions.loadAllMetadata(items, collections, setAllNftsMetadata);
+    if (hostname) {
+      load();
     }
-  }, [items]);
+  }, [hostname]);
 
   useEffect(() => {
-    
-  }, [collections, items])
+    if (project && JSON.stringify(project) != "{}") {
+      loadListedNfts();
+    }
+  }, [project]);
 
-  async function executeAsyncFunctions(fnArray) {
-    await Promise.all(
-      fnArray.map(async (fn) => {
-        await fn();
-      })
-    );
+  async function load () {
+    const getProjectForDomainResponse = await web2Functions.getProjectForDomain(hostname);
+    setProject(getProjectForDomainResponse.project);
   }
 
-  const renderNftsFlowFunction = async () => {
-    try {
-      const collectionsFromGameStudio = await web2Functions.getGameStudioCollections(process.env.NEXT_PUBLIC_STUDIO_ADDRESS);
-      setCollections(collectionsFromGameStudio.collections);
-      const collectionAddresses = collectionsFromGameStudio.collections.map((collection) => collection.collectionAddress);
-      if (!collectionAddresses || collectionAddresses.length <= 0) {
-        console.error("No se encontraron las collections de este Game Studio");
-        return;
-      }
-      
-      const listedNfts = await web3Functions.getListedNfts(collectionAddresses);
-      setItems(listedNfts);
-    } catch (error) {
-      console.error("Error: ", error.message);
-    }
-  };
+  async function loadListedNfts () {
+    const getListedNftsResponse = await web2Functions.getListedNfts({
+      chain: "polygon",
+      projectId: project.id,
+    });
+
+    setListedNfts(getListedNftsResponse);
+  }
 
   // marketCategory need values: primary || secondary
   async function purchaseNft (tokenId, collectionAddress, marketCategory) {
@@ -66,25 +58,18 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div>
+        {project && (
+          <div>
+            <div>Your project is: {project.name}</div>
+            <div>ID: {project.id}</div>
+            <div>Description: {project.description}</div>
+          </div>
+        )}
         <div>
           <h1>Primary Market</h1>
           <div className='home__itemsContainer'>
-            {items?.map((collection) => {
-              const collectionAddress = Object.keys(collection)[0];
-              const { tokensListedPrimaryMarket, tokensListedSecundaryMarket } = collection[collectionAddress];
-              return tokensListedPrimaryMarket?.map((nftId, index) => {
-                return (
-                  <Item
-                    key={index}
-                    id={nftId}
-                    collectionAddress={collectionAddress}
-                    allNftsMetadata={allNftsMetadata}
-                    onClickBuyButton={async () => {
-                      await purchaseNft(nftId, collectionAddress, "primary");
-                    }}
-                  />
-                );
-              })
+            {listedNfts?.map((nft) => {
+              return <Item key={nft.id} nft={nft} />;
             })}
           </div>
           <hr/>
@@ -92,23 +77,7 @@ export default function Home() {
           <hr/>
           <h1>Secondary market</h1>
           <div className='home__itemsContainer'>
-            {items?.map((collection) => {
-              const collectionAddress = Object.keys(collection)[0];
-              const { tokensListedPrimaryMarket, tokensListedSecundaryMarket } = collection[collectionAddress];
-              return tokensListedSecundaryMarket?.map((nftId, index) => {
-                return (
-                  <Item
-                    key={index}
-                    id={nftId}
-                    collectionAddress={collectionAddress}
-                    allNftsMetadata={allNftsMetadata}
-                    onClickBuyButton={async () => {
-                      await purchaseNft(nftId, collectionAddress, "secondary")
-                    }}
-                  />
-                );
-              })
-            })}
+            
           </div>
         </div>
       </div>
