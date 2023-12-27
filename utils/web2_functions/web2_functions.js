@@ -23,18 +23,18 @@ web2Functions.getInventory = async ({ address, studioAddress, chain }) => {
   }
 }
 
-web2Functions.getProjectForDomain = async function (projectDomain) {
-  const response = await callApi(`${apiBaseUrl}/get_project_for_marketplace`, {
-    projectDomain
+web2Functions.getListedNfts = async function ({ chain, projectId }) {
+  const response = await callApi(`${apiBaseUrl}/get_listed_nfts`, {
+    chain,
+    projectId
   });
   const resjson = await errorsManager(response);
   return resjson;
 }
 
-web2Functions.getListedNfts = async function ({ chain, projectId }) {
-  const response = await callApi(`${apiBaseUrl}/get_listed_nfts`, {
-    chain,
-    projectId
+web2Functions.getProjectForDomain = async function (projectDomain) {
+  const response = await callApi(`${apiBaseUrl}/get_project_for_marketplace`, {
+    projectDomain
   });
   const resjson = await errorsManager(response);
   return resjson;
