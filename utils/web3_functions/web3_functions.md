@@ -6,4 +6,3 @@ Allows the player to buy NFTs.
 | tokenTypeId       | The typeId of the NFT.                           |
 | amount            | The amount the player wants to purchase.         |
 | collectionAddress | The collection address of the NFT.               |
-```
