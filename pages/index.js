@@ -28,7 +28,7 @@ export default function Home() {
   }, [project]);
 
   async function load () {
-    const getProjectForDomainResponse = await web2Functions.getProjectForDomain(hostname);
+    const getProjectForDomainResponse = await web2Functions.getProjectForDomain({ projectDomain: hostname });
     setProject(getProjectForDomainResponse.project);
   }
 

@@ -4,7 +4,6 @@ import web2Functions from "@/utils/web2_functions/web2_functions";
 import web3Functions from "@/utils/web3_functions/web3_functions";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-const envStudioAddress = process.env.NEXT_PUBLIC_STUDIO_ADDRESS;
 
 const handleWheel = () => {
   window.document.activeElement.blur()
@@ -13,7 +12,6 @@ const handleWheel = () => {
 const Inventory = () => {
   const [items, setItems] = useState(null);
   // studioAddress is the Game Studio Address
-  const [studioAddress, setStudioAddress] = useState(envStudioAddress);
   const [collections, setCollections] = useState([]);
   const [project, setProject] = useState({});
   const [hostname, setHostname] = useState("");
@@ -46,12 +44,12 @@ const Inventory = () => {
   }, [sessionToken]);
 
   async function load () {
-    const getProjectForDomainResponse = await web2Functions.getProjectForDomain(hostname);
+    const getProjectForDomainResponse = await web2Functions.getProjectForDomain({ projectDomain: hostname });
     setProject(getProjectForDomainResponse.project);
   }
 
   async function loadCollections() {
-    const collectionsFromGameStudio = await web2Functions.getGameStudioCollections(project.id);
+    const collectionsFromGameStudio = await web2Functions.getGameStudioCollections({ projectId: project.id });
     setCollections(collectionsFromGameStudio.collections);
   }
 

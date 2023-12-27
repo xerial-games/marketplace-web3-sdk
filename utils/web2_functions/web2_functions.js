@@ -3,7 +3,7 @@ import { callApi, errorsManager } from "../call_api_functions";
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_HOST;
 const web2Functions = {};
 
-web2Functions.getGameStudioCollections = async (projectId) => {
+web2Functions.getGameStudioCollections = async ({ projectId }) => {
   const response = await callApi(`${process.env.NEXT_PUBLIC_API_HOST}/get_collections_from_project`, { projectId });
   return await errorsManager(response);
 }
@@ -32,7 +32,7 @@ web2Functions.getListedNfts = async function ({ chain, projectId }) {
   return resjson;
 }
 
-web2Functions.getProjectForDomain = async function (projectDomain) {
+web2Functions.getProjectForDomain = async function ({ projectDomain }) {
   const response = await callApi(`${apiBaseUrl}/get_project_for_marketplace`, {
     projectDomain
   });
