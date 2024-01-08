@@ -76,7 +76,39 @@ web2Functions.getProjectForDomain = async function ({ projectDomain }) {
   return resjson;
 }
 
-// web2Functions.loginWithGoogle = async function () {}
+web2Functions.loginWithGoogle = async function ({ credential, clientId, projectId }) {
+  try {
+    if (!projectId) throw new Error("Project not found.");
+    const raw = JSON.stringify({ token: credential, clientId, projectId });
+    const resAuth = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/auth/google`, {
+      method: "POST",
+      body: raw,
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    const resjsonAuth = await errorsManager(resAuth);
+    if (resjsonAuth.refresh && resjsonAuth.access) {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/user`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "Application/json",
+          Authorization: `Bearer ${resjsonAuth.access.token}`
+        }
+      });
+      const userResjson = await response.json();
+      return {
+        sessionToken: resjsonAuth.access.token,
+        tokens: resjsonAuth,
+        player: userResjson.user,
+        wallets: userResjson.wallets,
+        loguedWith: "google",
+      };
+    } else throw new Error("Auth tokens not found.");
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 web2Functions.logout = async function () {}
 
