@@ -1,7 +1,10 @@
 const callApi = async (url, payload) => {
   const response = await fetch(url, {
     method: 'POST',
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
+    headers: {
+      "Content-Type": "Application/json"
+    }
   });
 
   return response;

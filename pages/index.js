@@ -4,11 +4,13 @@ import { useEffect, useState } from 'react'
 import web2Functions from '@/utils/web2_functions/web2_functions';
 import Item from '@/atoms/Item/Item';
 import { useRouter } from 'next/router';
+import SecondaryMarketItem from '@/atoms/SecondaryMarketItem/SecondaryMarketItem';
 
 export default function Home() {
   const [hostname, setHostname] = useState("");
   const [project, setProject] = useState({});
   const [listedNfts, setListedNfts] = useState([]);
+  const [listedNftsOnSecondaryMarket, setListedNftsOnSecondaryMarket] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -24,6 +26,7 @@ export default function Home() {
   useEffect(() => {
     if (project && JSON.stringify(project) != "{}") {
       loadListedNfts();
+      loadListedNftsOnSecondaryMarket();
     }
   }, [project]);
 
@@ -41,8 +44,24 @@ export default function Home() {
     setListedNfts(getListedNftsResponse);
   }
 
+  async function loadListedNftsOnSecondaryMarket () {
+    const getListedNftsOnSecondaryMarket = await web2Functions.getListedNftsOnSecondaryMarket({
+      chain: "polygon",
+      projectAddress: project.address
+    });
+
+    setListedNftsOnSecondaryMarket(getListedNftsOnSecondaryMarket);
+  }
+
   function goToInventory () {
     router.push("inventory");
+  }
+
+  function refreshListedItems () {
+    if (project && JSON.stringify(project) != "{}") {
+      loadListedNfts();
+      loadListedNftsOnSecondaryMarket();
+    } else console.error("Project not found.")
   }
   
   return (
@@ -54,6 +73,7 @@ export default function Home() {
       </Head>
       <div>
         <button onClick={goToInventory}>Go to inventory</button>
+        <button onClick={refreshListedItems}>Refresh listed items</button>
         {project && (
           <div>
             <div>Your project is: {project.name}</div>
@@ -77,7 +97,13 @@ export default function Home() {
           <hr/>
           <h1>Secondary market</h1>
           <div className='home__itemsContainer'>
-            
+            {listedNftsOnSecondaryMarket && listedNftsOnSecondaryMarket.length === 0 ? (
+              <div>There are no listed NFTs.</div>
+            ) : (
+              listedNftsOnSecondaryMarket?.map((nft) => {
+                return <SecondaryMarketItem key={nft.marketItemId} nft={nft}/>
+              })
+            )}
           </div>
         </div>
       </div>

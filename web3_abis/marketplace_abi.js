@@ -2,18 +2,13 @@ const marketplaceABI = [
   {
     "inputs": [
       {
-        "internalType": "contract IERC20",
+        "internalType": "address",
         "name": "_usdc",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "_owner",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_feeRecipient",
+        "name": "_xerialComissionWallet",
         "type": "address"
       }
     ],
@@ -24,85 +19,56 @@ const marketplaceABI = [
     "anonymous": false,
     "inputs": [
       {
-        "components": [
-          {
-            "internalType": "contract IVenlyERC1155",
-            "name": "erc1155",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "tokenId",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "newPrice",
-            "type": "uint256"
-          }
-        ],
         "indexed": false,
-        "internalType": "struct XerialMarketplace.PriceChange[]",
-        "name": "info",
-        "type": "tuple[]"
+        "internalType": "uint256",
+        "name": "marketItemId",
+        "type": "uint256"
       }
     ],
-    "name": "ChangedPrices",
+    "name": "MarketItemCancelled",
     "type": "event"
   },
   {
     "anonymous": false,
     "inputs": [
       {
-        "components": [
-          {
-            "internalType": "contract IVenlyERC1155",
-            "name": "erc1155",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "tokenId",
-            "type": "uint256"
-          }
-        ],
         "indexed": false,
-        "internalType": "struct XerialMarketplace.DelistingInput[]",
-        "name": "info",
-        "type": "tuple[]"
-      }
-    ],
-    "name": "DelistedTokens",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
+        "internalType": "uint256",
+        "name": "marketItemId",
+        "type": "uint256"
+      },
       {
-        "components": [
-          {
-            "internalType": "contract IVenlyERC1155",
-            "name": "erc1155",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "tokenId",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "askPrice",
-            "type": "uint256"
-          }
-        ],
+        "indexed": true,
+        "internalType": "address",
+        "name": "nftContract",
+        "type": "address"
+      },
+      {
         "indexed": false,
-        "internalType": "struct XerialMarketplace.ListingInput[]",
-        "name": "info",
-        "type": "tuple[]"
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "studio",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "seller",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
       }
     ],
-    "name": "ListedTokens",
+    "name": "MarketItemCreated",
     "type": "event"
   },
   {
@@ -128,66 +94,109 @@ const marketplaceABI = [
     "anonymous": false,
     "inputs": [
       {
-        "components": [
-          {
-            "internalType": "contract IVenlyERC1155",
-            "name": "erc1155",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "tokenId",
-            "type": "uint256"
-          }
-        ],
+        "indexed": true,
+        "internalType": "address",
+        "name": "nftContract",
+        "type": "address"
+      },
+      {
         "indexed": false,
-        "internalType": "struct XerialMarketplace.Purchase[]",
-        "name": "info",
-        "type": "tuple[]"
+        "internalType": "uint256[]",
+        "name": "tokenIds",
+        "type": "uint256[]"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "studio",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "buyer",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "unitPrice",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "totalPrice",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "income",
+        "type": "uint256"
       }
     ],
-    "name": "PurchasedTokens",
+    "name": "PrimaryPurchase",
     "type": "event"
   },
   {
-    "inputs": [],
-    "name": "PERCENTAGE_FACTOR",
-    "outputs": [
+    "anonymous": false,
+    "inputs": [
       {
+        "indexed": true,
+        "internalType": "address",
+        "name": "nftContract",
+        "type": "address"
+      },
+      {
+        "indexed": false,
         "internalType": "uint256",
-        "name": "",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "studio",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "seller",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "buyer",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "royalty",
         "type": "uint256"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    "name": "SecondaryPurchase",
+    "type": "event"
   },
   {
     "inputs": [
       {
-        "components": [
-          {
-            "internalType": "contract IVenlyERC1155",
-            "name": "erc1155",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "tokenId",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "newPrice",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct XerialMarketplace.PriceChange[]",
-        "name": "changes",
-        "type": "tuple[]"
+        "internalType": "uint256",
+        "name": "marketItemId",
+        "type": "uint256"
       }
     ],
-    "name": "changeTokenPrices",
+    "name": "cancelMarketItem",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -195,144 +204,67 @@ const marketplaceABI = [
   {
     "inputs": [
       {
-        "components": [
-          {
-            "internalType": "contract IVenlyERC1155",
-            "name": "erc1155",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "tokenId",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct XerialMarketplace.DelistingInput[]",
-        "name": "tokens",
-        "type": "tuple[]"
+        "internalType": "address",
+        "name": "nftContractAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
       }
     ],
-    "name": "delist",
+    "name": "createMarketItem",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "fees",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "marketFeeRate",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
-        "name": "owner",
+        "name": "seller",
         "type": "address"
       }
     ],
-    "name": "getContracts",
+    "name": "getMarketItemsBySeller",
     "outputs": [
       {
-        "internalType": "address[]",
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "marketItemId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "seller",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "metadataURI",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct MarketplaceStorage.MarketItemMetadata[]",
         "name": "",
-        "type": "address[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IVenlyERC1155",
-        "name": "erc1155",
-        "type": "address"
-      }
-    ],
-    "name": "getERC1155RoyaltyFeeRate",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "rate",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "erc1155Addr",
-        "type": "address"
-      }
-    ],
-    "name": "getListedTokens",
-    "outputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "",
-        "type": "uint256[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "erc1155Addr",
-        "type": "address"
-      }
-    ],
-    "name": "getListedTokensOnPrimary",
-    "outputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "",
-        "type": "uint256[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getMarketFeeRate",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "rate",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IVenlyERC1155",
-        "name": "erc1155",
-        "type": "address"
-      }
-    ],
-    "name": "getRoyaltyFeeRate",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",
@@ -346,12 +278,39 @@ const marketplaceABI = [
         "type": "address"
       }
     ],
-    "name": "getStudioFeeRate",
+    "name": "getMarketItemsByStudio",
     "outputs": [
       {
-        "internalType": "uint256",
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "marketItemId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "seller",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "metadataURI",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct MarketplaceStorage.MarketItemMetadata[]",
         "name": "",
-        "type": "uint256"
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",
@@ -360,51 +319,36 @@ const marketplaceABI = [
   {
     "inputs": [
       {
-        "components": [
-          {
-            "internalType": "contract IVenlyERC1155",
-            "name": "erc1155",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "tokenId",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "askPrice",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct XerialMarketplace.ListingInput[]",
-        "name": "tokens",
-        "type": "tuple[]"
-      }
-    ],
-    "name": "list",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
       }
     ],
-    "name": "listings",
+    "name": "marketItemIdToMarketItem",
     "outputs": [
       {
+        "internalType": "uint256",
+        "name": "marketItemId",
+        "type": "uint256"
+      },
+      {
         "internalType": "address",
-        "name": "owner",
+        "name": "nftContractAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "studio",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "seller",
         "type": "address"
       },
       {
@@ -414,68 +358,11 @@ const marketplaceABI = [
       },
       {
         "internalType": "bool",
-        "name": "listed",
-        "type": "bool"
-      },
-      {
-        "internalType": "bool",
-        "name": "primarySale",
+        "name": "inSale",
         "type": "bool"
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "marketFeeRecipient",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "operator",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "id",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "value",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
-      }
-    ],
-    "name": "onERC1155Received",
-    "outputs": [
-      {
-        "internalType": "bytes4",
-        "name": "",
-        "type": "bytes4"
-      }
-    ],
-    "stateMutability": "pure",
     "type": "function"
   },
   {
@@ -494,49 +381,22 @@ const marketplaceABI = [
   {
     "inputs": [
       {
-        "components": [
-          {
-            "internalType": "contract IVenlyERC1155",
-            "name": "erc1155",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "tokenId",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct XerialMarketplace.Purchase[]",
-        "name": "purchases",
-        "type": "tuple[]"
-      }
-    ],
-    "name": "purchasePrimary",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
+        "internalType": "address",
+        "name": "nftContractAddress",
+        "type": "address"
+      },
       {
-        "components": [
-          {
-            "internalType": "contract IVenlyERC1155",
-            "name": "erc1155",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "tokenId",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct XerialMarketplace.Purchase[]",
-        "name": "purchases",
-        "type": "tuple[]"
+        "internalType": "uint256",
+        "name": "tokenTypeId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "quantity",
+        "type": "uint256"
       }
     ],
-    "name": "purchaseSecondary",
+    "name": "primaryPurchase",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -552,11 +412,11 @@ const marketplaceABI = [
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "fee",
+        "name": "marketItemId",
         "type": "uint256"
       }
     ],
-    "name": "setMarketFees",
+    "name": "secondaryPurchase",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -564,17 +424,35 @@ const marketplaceABI = [
   {
     "inputs": [
       {
-        "internalType": "contract IVenlyERC1155",
-        "name": "erc1155",
+        "internalType": "address",
+        "name": "studio",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "fee",
+        "name": "comission",
         "type": "uint256"
       }
     ],
-    "name": "setRoyaltyFeeRate",
+    "name": "setStudioComission",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "studio",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tier",
+        "type": "uint256"
+      }
+    ],
+    "name": "setStudioTier",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -583,11 +461,16 @@ const marketplaceABI = [
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "fee",
+        "name": "tier",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "comission",
         "type": "uint256"
       }
     ],
-    "name": "setStudioFee",
+    "name": "setTierComission",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -603,19 +486,6 @@ const marketplaceABI = [
     "name": "transferOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "usdc",
-    "outputs": [
-      {
-        "internalType": "contract IERC20",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   }
 ];

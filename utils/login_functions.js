@@ -2,7 +2,7 @@ import { getApiCodeAndSignCodeWithMetamask } from "@/helpers/web3";
 
 const { callApi, errorsManager, callWalletApi } = require("./call_api_functions");
 
-const loginWithMetamask = async function () {
+const loginWithMetamask = async function ({ projectId }) {
   try {
     const { publicKey, signature } = await getApiCodeAndSignCodeWithMetamask();
     const resAuth = await callWalletApi(
@@ -10,6 +10,7 @@ const loginWithMetamask = async function () {
       {
         address: publicKey,
         signature,
+        projectId
       },
       {
         method: "POST"

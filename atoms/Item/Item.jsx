@@ -24,7 +24,7 @@ const Item = ({ nft }) => {
       <h2 className="global-style__textWithDots">Token name: {nft.metadata.name}</h2>
       <img className="atom-item__itemImage" src={nft.metadata.image} alt="nft img" />
       <p className="atom-item__generalText">collectionAddress: {nft.metadata.contract.address}</p>
-      <p className="atom-item__generalText">price: {nft.supply}</p>
+      <p className="atom-item__generalText">supply: {nft.supply - nft.mintedTokens}</p>
       <p className="atom-item__generalText">price: {nft.price}</p>
       <input
         type="text"
