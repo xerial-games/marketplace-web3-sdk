@@ -1,10 +1,11 @@
+import web3Functions from "@/utils/web3_functions/web3_functions";
 import { useState } from "react";
 
 const handleWheel = () => {
   window.document.activeElement.blur()
 };
 
-const InventoryItem = ({ nft }) => {
+const InventoryItem = ({ nft, tokenId }) => {
   const [price, setPrice] = useState("");
 
   function onChangePrice (value) {
@@ -13,7 +14,7 @@ const InventoryItem = ({ nft }) => {
 
   async function handleSubmit (event) {
     event.preventDefault();
-    // await onSellNft(tokenId, collectionAddress, price); Please don't use this in this moment. This need update.
+    await web3Functions.sellNftOnSecondaryMarket({ collectionAddress: nft.metadata.contract.address, tokenId, price });
   }
 
   return (

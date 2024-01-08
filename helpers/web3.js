@@ -25,7 +25,13 @@ const getApiCodeAndSignCodeWithMetamask = async function () {
 		});
 		const publicKey = accounts[0];
 		const realAddress = ethers.utils.getAddress(publicKey);
-		const res = await callWalletApi(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${realAddress}/nonce`);
+		const res = await callWalletApi(
+      `${process.env.NEXT_PUBLIC_WALLET_API_HOST}/nonce`,
+      { address: realAddress },
+      {
+        method: "POST",
+      }
+    );
 		const resjson = await res.json();
 		if (!resjson.nonce) throw new Error("Nonce not found.");
 

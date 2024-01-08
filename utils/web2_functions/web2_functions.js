@@ -32,6 +32,42 @@ web2Functions.getListedNfts = async function ({ chain, projectId }) {
   return resjson;
 }
 
+// Chain can be "polygon"
+web2Functions.getListedNftsOnSecondaryMarket = async function ({ chain, projectAddress }) {
+  const url = `${process.env.NEXT_PUBLIC_API_HOST}/get_market_items`;
+  const raw = JSON.stringify({
+    studioAddress: projectAddress,
+    chain
+  });
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: raw
+  });
+  const resjson = await response.json();
+  return resjson;
+}
+
+// Chain can be "polygon"
+web2Functions.getPlayerItemsOnSecondaryMarket = async function ({ chain, userAddress }) {
+  const url = `${process.env.NEXT_PUBLIC_API_HOST}/get_market_items`;
+  const raw = JSON.stringify({
+    seller: userAddress,
+    chain
+  });
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: raw
+  });
+  const resjson = await response.json();
+  return resjson;
+}
+
 web2Functions.getProjectForDomain = async function ({ projectDomain }) {
   const response = await callApi(`${apiBaseUrl}/get_project_for_marketplace`, {
     projectDomain

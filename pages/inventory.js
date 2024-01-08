@@ -1,4 +1,5 @@
 import InventoryItem from "@/atoms/InventoryItem/InventoryItem";
+import InventoryItemOnSecondaryMarket from "@/atoms/InventoryItemOnSecondaryMarket/InventoryItemOnSecondaryMarket";
 import loginWithMetamask from "@/utils/login_functions";
 import web2Functions from "@/utils/web2_functions/web2_functions";
 import web3Functions from "@/utils/web3_functions/web3_functions";
@@ -18,6 +19,7 @@ const Inventory = () => {
   const [wallets, setWallets] = useState([]);
   const [sessionToken, setSessionToken] = useState("");
   const [userAddress, setUserAddress] = useState("");
+  const [playerItemsOnSecondaryMarket, setPlayerItemsOnSecondaryMarket] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -40,6 +42,7 @@ const Inventory = () => {
   useEffect(() => {
     if (sessionToken) {
       loadInventory();
+      loadPlayerItemsOnSecondaryMarket();
     }
   }, [sessionToken]);
 
@@ -67,10 +70,20 @@ const Inventory = () => {
     }
   }
 
+  async function loadPlayerItemsOnSecondaryMarket () {
+    const items = await web2Functions.getPlayerItemsOnSecondaryMarket({ chain: "polygon", userAddress: userAddress });
+    setPlayerItemsOnSecondaryMarket(items);
+  }
+
+  async function reloadPlayerItemsOnSecundaryMarketAndInventory() {
+    loadPlayerItemsOnSecondaryMarket();
+    loadInventory();
+  }
+
   async function connectWallet() {
     try {
-      const { loguedWith, player, sessionToken, tokens, wallets } = await loginWithMetamask();
-      const userAddress = wallets.find((wallet) => wallet.chain === "ethereum").address;
+      const { loguedWith, player, sessionToken, tokens, wallets } = await loginWithMetamask({ projectId: project.id });
+      const userAddress = wallets[0].address;
       if (!userAddress) throw new Error("Ethereum userAddress not found");
       setWallets(wallets);
       setSessionToken(sessionToken);
@@ -82,18 +95,6 @@ const Inventory = () => {
 
   function goToHome () {
     router.push("/");
-  }
-
-  async function onSellNft(tokenId, collectionAddress, price) {
-    try {
-      // if (!price) {
-      //   alert("Please set a price");
-      //   return;
-      // }
-      // await web3Functions.sellNft(tokenId, collectionAddress, price);
-    } catch (error) {
-      
-    }
   }
 
   function Items () {
@@ -109,77 +110,37 @@ const Inventory = () => {
         <h1>Your Inventory</h1>
         <div className="inventory-items__itemsContainer" style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
           {items.map((nft) => {
-            return (
-              <InventoryItem nft={nft} key={nft.metadata.contract.address + nft.metadata.image}/>
-            )
+            return nft.tokenIds.map((tokenId) => {
+              return (
+                <InventoryItem nft={nft} key={nft.metadata.contract.address + tokenId} tokenId={tokenId}/>
+              )
+            })
           })}
         </div>
       </div>
     )
   }
 
-  function ItemsInSecondaryMarket({ nft }) {
-    const [price, setPrice] = useState(null);
-    return;
-    // if (!tokenId || !collectionAddress || !collections) return;
-
-    if (!active) return;
-
-    async function onSubmit (event) {
-      event.preventDefault();
-      try {
-        if (!price) {
-          alert("Please set a price");
-          return;
-        }
-        await web3Functions.changeTokenPrices(tokenId, price, collectionAddress);
-        // Here <= All functions to reload inventory data.
-      } catch (error) {
-        
-      }
-    }
-
-    function onChangePrice (value) {
-      setPrice(value);
-    }
+  function SecondaryMarketItems () {
+    if (!playerItemsOnSecondaryMarket || playerItemsOnSecondaryMarket.length === 0) return (
+      <div className="inventory-items__inventoryWithoutItems">
+        <p className="inventory-items__generalTextSemiBold inventory-items__textCenter">You don't have any assets yet</p>
+        <p className="inventory-items__generalText inventory-items__textCenter">The assets will be displayed on this page</p>
+      </div>
+    )
 
     return (
-      <div className="inventory-items__itemContainer">
-        <div className="inventory-items__itemBoxListedNfts">
-          <h2 className="inventory-items__itemTitle">{metadata?.metadata?.name || "loading..."}</h2>
-          <img className="inventory-items__itemImage" src={metadata?.metadata?.image || "/assets/inventoryAssets/grey-img-template.svg"}/>
-          <div className="inventory-items__horizontalLine"></div>
-          <form className="inventory-items__form" onSubmit={onSubmit}>
-            <label className="inventory-items__itemLabelForInput">
-              <span className="inventory-items__itemInputWithLabelTitle">Price</span>
-              <input
-                className="inventory-items__itemInputWithLabelInput"
-                name="price"
-                type="number" placeholder="N"
-                defaultValue={""}
-                onChange={(e) => onChangePrice(e.target.value)}
-                onWheel={handleWheel}
+      <div>
+        <h1>Your items listed on secondary market</h1>
+        <div className="inventory-items__itemsContainer" style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
+          {playerItemsOnSecondaryMarket?.map((nft) => {
+            return (
+              <InventoryItemOnSecondaryMarket
+                nft={nft}
+                key={nft.metadata.contract.address + nft.tokenId}
               />
-            </label>
-            <button className="inventory-items__buttonSell inventory-items__buttonSell--mini" type="submit">
-              Update price
-            </button>
-            <button className="inventory-items__buttonSell inventory-items__buttonSell--mini" type="button"
-              onClick={async () => {
-                try {
-                  await web3Functions.delistNft(
-                    tokenId,
-                    collectionAddress
-                  );
-                  // Here <= All functions to reload inventory data.
-                } catch (error) {
-                  console.error("Error delisting NFT");
-                }
-              }}
-            >
-              Delist
-            </button>
-          </form>
+            );
+          })}
         </div>
       </div>
     )
@@ -189,27 +150,11 @@ const Inventory = () => {
     <div>
       <button onClick={goToHome}>Go to home</button>
       <button onClick={connectWallet}>Connect</button>
+      <button onClick={reloadPlayerItemsOnSecundaryMarketAndInventory}>Reload inventory and player market items</button>
       <p>User address: {userAddress}</p>
       <p>SessionToken: {sessionToken}</p>
       <Items/>
-      <section className="inventory-items__secondaryMarketSection">
-        {/* {secondaryMarketItemsOfUser && <h1>Your items in Secondary Market</h1>}
-        {secondaryMarketItemsOfUser?.map((collectionWithTokenIds) => {
-          return Object.keys(collectionWithTokenIds)?.map((objectKey, index) => {
-            return Object.entries(collectionWithTokenIds[objectKey]).map((marketInfo) => {
-              return marketInfo[1].map((tokenId, index) => {
-                return (
-                  <ItemsInSecondaryMarket
-                    key={index}
-                    collectionAddress={objectKey}
-                    tokenId={tokenId}
-                  />
-                );
-              });
-            });
-          });
-        })} */}
-      </section>
+      <SecondaryMarketItems/>
     </div>
   )
 }
