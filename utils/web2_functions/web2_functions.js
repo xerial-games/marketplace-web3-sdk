@@ -107,19 +107,137 @@ web2Functions.loginWithGoogle = async function ({ credential, clientId, projectI
     } else throw new Error("Auth tokens not found.");
   } catch (error) {
     console.error(error);
+    if (error.message) {
+      throw new Error(error.message);
+    }
+    throw new Error(error);
   }
 }
 
 web2Functions.logout = async function () {}
 
-// Purchase in primary market
-// web2Functions.primaryPurchaseWithXerialWallet = async function () {}
+// Purchase in primary market (Falta probar.)
+web2Functions.primaryPurchaseWithXerialWallet = async function ({ tokenTypeId, quantity, collectionAddress, userAddress, sessionToken }) {
+  try {
+    if (!userAddress) throw new Error("User wallet not found.");
+    if (!sessionToken) throw new Error("sessionToken not found.")
+    const raw = JSON.stringify({ typeId: tokenTypeId, quantity, collectionAddress });
+    const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/primary-purchase`, {
+      method: "POST",
+      body: raw,
+      headers: {
+        "Content-Type": "Application/json",
+        Authorization: `Bearer ${sessionToken}`
+      }
+    });
+    return await errorsManager(response);
+  } catch (error) {
+    if (error.message) {
+      throw new Error(error.message);
+    }
+    throw new Error(error);
+  }
+}
 
-// web2Functions.sellNft = async function () {}
+web2Functions.secondaryPurchaseWithXerialWallet = async function ({ marketItemId, sessionToken, userAddress }) {
+  try {
+    if (!userAddress) throw new Error("User wallet not found.");
+    const raw = JSON.stringify({ marketItemId });
+    const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/secondary-purchase`, {
+      method: "POST",
+      body: raw,
+      headers: {
+        "Content-Type": "Application/json",
+        Authorization: `Bearer ${sessionToken}`
+      }
+    });
+    return await errorsManager(response);
+  } catch (error) {
+    if (error.message) {
+      throw new Error(error.message);
+    }
+    throw new Error(error);
+  }
+}
 
-// web2Functions.delist = async function () {}
+web2Functions.delistNftOnSecondaryMarket =  async function ({ marketItemId, userAddress, sessionToken }) {
+  try {
+    if (!userAddress) throw new Error("User wallet not found.");
+    const raw = JSON.stringify({ marketItemId });
+    const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/delist-nft`, {
+      method: "POST",
+      body: raw,
+      headers: {
+        "Content-Type": "Application/json",
+        Authorization: `Bearer ${sessionToken}`
+      }
+    });
+    return await errorsManager(response);
+  } catch (error) {
+    if (error.message) {
+      throw new Error(error.message);
+    }
+    throw new Error(error);
+  }
+}
 
-// web2Functions.transferNft = async function () {}
+web2Functions.listNftOnSecondaryMarket = async function ({ collectionAddress, tokenId, price, userAddress, sessionToken }) {
+  try {
+    if (!userAddress) throw new Error("User wallet not found.");
+    const raw = JSON.stringify({ collectionAddress, tokenId, price});
+    const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/list-nft`, {
+      method: "POST",
+      body: raw,
+      headers: {
+        "Content-Type": "Application/json",
+        Authorization: `Bearer ${sessionToken}`
+      }
+    });
+    return await errorsManager(response);
+  } catch (error) {
+    if (error.message) {
+      throw new Error(error.message);
+    }
+    throw new Error(error);
+  }
+}
+
+web2Functions.transferNft = async function ({ collectionAddress, tokenId, to, userAddress }) {
+  try {
+    if (!userAddress) throw new Error("User wallet not found.");
+    const raw = JSON.stringify({ collectionAddress, tokenId, to});
+    const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/transfer-nft`, {
+      method: "POST",
+      body: raw,
+      headers: {
+        "Content-Type": "Application/json",
+        Authorization: `Bearer ${vm.sessionToken}`
+      }
+    });
+    return await errorsManager(response);
+  } catch (error) {
+    if (error.message) {
+      throw new Error(error.message);
+    }
+    throw new Error(error);
+  }
+}
+
+web2Functions.loadMaticBalance = async function ({ userAddress }) {
+  if (!userAddress) throw new Error("User wallet not found.");
+  const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/eth`);
+  const resjson = await errorsManager(response);
+  if (!resjson.balance) throw new Error("Error to get matic balance.");
+  return Number(resjson.balance);
+}
+
+web2Functions.loadUsdcBalance = async function ({ userAddress }) {
+  if (!userAddress) throw new Error("User wallet not found.");
+  const resTokens = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/tokens`);
+  const resjsonTokens = await errorsManager(resTokens);
+  if (!resjsonTokens.balances) throw new Error("Error to get USDC balance.");
+  return Number(resjsonTokens.balances.usdc);
+}
 
 // web2Functions.transferMatic = async function () {}
 
