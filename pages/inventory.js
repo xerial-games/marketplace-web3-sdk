@@ -3,8 +3,10 @@ import InventoryItemOnSecondaryMarket from "@/atoms/InventoryItemOnSecondaryMark
 import loginWithMetamask from "@/utils/login_functions";
 import web2Functions from "@/utils/web2_functions/web2_functions";
 import web3Functions from "@/utils/web3_functions/web3_functions";
+import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+const clientId = process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID;
 
 const handleWheel = () => {
   window.document.activeElement.blur()
@@ -84,7 +86,26 @@ const Inventory = () => {
     try {
       const { loguedWith, player, sessionToken, tokens, wallets } = await loginWithMetamask({ projectId: project.id });
       const userAddress = wallets[0].address;
-      if (!userAddress) throw new Error("Ethereum userAddress not found");
+      if (!userAddress) throw new Error("userAddress not found");
+      setWallets(wallets);
+      setSessionToken(sessionToken);
+      setUserAddress(userAddress);
+    } catch (error) {
+      console.error("Error: Login Failed.");
+    }
+  }
+  
+  async function connectWithGoogle(credentialResponse) {
+    try {
+      const { loguedWith, player, sessionToken, tokens, wallets } =
+      await web2Functions.loginWithGoogle({
+        credential: credentialResponse.credential,
+        clientId,
+        projectId: project.id,
+      });
+
+      const userAddress = wallets[0].address;
+      if (!userAddress) throw new Error("userAddress not found");
       setWallets(wallets);
       setSessionToken(sessionToken);
       setUserAddress(userAddress);
@@ -148,9 +169,20 @@ const Inventory = () => {
 
   return (
     <div>
-      <button onClick={goToHome}>Go to home</button>
-      <button onClick={connectWallet}>Connect</button>
-      <button onClick={reloadPlayerItemsOnSecundaryMarketAndInventory}>Reload inventory and player market items</button>
+      <div className="inventory__buttons">
+        <button className="inventory__button" onClick={goToHome}>Go to home</button>
+        <button className="inventory__button" onClick={reloadPlayerItemsOnSecundaryMarketAndInventory}>Reload inventory and player market items</button>
+        <button className="inventory__button" onClick={connectWallet}>Connect with metamask</button>
+        <GoogleLogin
+          theme='outline'
+          width='335px'
+          onSuccess={connectWithGoogle}
+        
+          onError={() => {
+            console.error('Login Failed');
+          }}
+        />
+      </div>
       <p>User address: {userAddress}</p>
       <p>SessionToken: {sessionToken}</p>
       <Items/>

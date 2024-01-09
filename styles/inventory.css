@@ -1,0 +1,18 @@
+.inventory__buttons {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.inventory__button {
+  width: 333px;
+	height: 38px;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+.inventory__button:hover {
+	background-color: rgb(10, 144, 144);
+	color: white;
+	transition: 1s;
+}
