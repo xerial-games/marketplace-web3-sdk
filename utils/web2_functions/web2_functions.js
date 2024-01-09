@@ -116,7 +116,7 @@ web2Functions.loginWithGoogle = async function ({ credential, clientId, projectI
 
 web2Functions.logout = async function () {}
 
-// Purchase in primary market (Falta probar.)
+// Purchase in primary market
 web2Functions.primaryPurchaseWithXerialWallet = async function ({ tokenTypeId, quantity, collectionAddress, userAddress, sessionToken }) {
   try {
     if (!userAddress) throw new Error("User wallet not found.");
