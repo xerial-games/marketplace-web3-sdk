@@ -1,35 +1,35 @@
 const callApi = async (url, payload) => {
   const response = await fetch(url, {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify(payload),
     headers: {
-      "Content-Type": "Application/json"
-    }
+      "Content-Type": "Application/json",
+    },
   });
 
   return response;
-}
+};
 
 const callWalletApi = async (url, payload, options) => {
   if (!options) {
     const response = await fetch(url);
-    return response
+    return response;
   } else {
     const finalOptions = {
       ...options,
       headers: options.headers ?? { "Content-Type": "Application/json" },
-      body: JSON.stringify(payload)
-    }
+      body: JSON.stringify(payload),
+    };
     const response = await fetch(url, finalOptions);
-    return response
+    return response;
   }
-}
+};
 
 const errorsManager = async (response) => {
-  if (!response.status) throw new Error("Reponse without status.");
+  if (!response.status) throw new Error("Reponse Without Status");
   const resjson = await response.json();
   if (response.status.toString()[0] != "2") throw resjson;
   return resjson;
-}
+};
 
-export {  callApi, errorsManager, callWalletApi  };
+export { callApi, errorsManager, callWalletApi };

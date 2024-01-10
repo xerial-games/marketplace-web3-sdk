@@ -38,12 +38,12 @@ export default function Home() {
     }
   }, [project]);
 
-  async function load () {
+  async function load() {
     const getProjectForDomainResponse = await web2Functions.getProjectForDomain({ projectDomain: hostname });
     setProject(getProjectForDomainResponse.project);
   }
 
-  async function loadListedNfts () {
+  async function loadListedNfts() {
     const getListedNftsResponse = await web2Functions.getListedNfts({
       chain: "polygon",
       projectId: project.id,
@@ -52,24 +52,24 @@ export default function Home() {
     setListedNfts(getListedNftsResponse);
   }
 
-  async function loadListedNftsOnSecondaryMarket () {
+  async function loadListedNftsOnSecondaryMarket() {
     const getListedNftsOnSecondaryMarket = await web2Functions.getListedNftsOnSecondaryMarket({
       chain: "polygon",
-      projectAddress: project.address
+      projectAddress: project.address,
     });
 
     setListedNftsOnSecondaryMarket(getListedNftsOnSecondaryMarket);
   }
 
-  function goToInventory () {
+  function goToInventory() {
     router.push("inventory");
   }
 
-  function refreshListedItems () {
+  function refreshListedItems() {
     if (project && JSON.stringify(project) != "{}") {
       loadListedNfts();
       loadListedNftsOnSecondaryMarket();
-    } else console.error("Project not found.")
+    } else console.error("Project Not Found");
   }
 
   async function connectWithGoogle(credentialResponse) {
@@ -117,20 +117,20 @@ export default function Home() {
         )}
         <div>
           <h1>Primary Market</h1>
-          <div className='home__itemsContainer'>
+          <div className="home__itemsContainer">
             {listedNfts && listedNfts.length === 0 ? (
-                <div>There are no listed NFTs.</div>
-              ) : (
+              <div>There are no listed NFTs.</div>
+            ) : (
               listedNfts?.map((nft) => {
                 return <Item key={nft.id} nft={nft} XerialWalletViewmodel={xerialWalletViewmodelInstance}/>;
               })
             )}
           </div>
-          <hr/>
-          <hr/>
-          <hr/>
+          <hr />
+          <hr />
+          <hr />
           <h1>Secondary market</h1>
-          <div className='home__itemsContainer'>
+          <div className="home__itemsContainer">
             {listedNftsOnSecondaryMarket && listedNftsOnSecondaryMarket.length === 0 ? (
               <div>There are no listed NFTs.</div>
             ) : (
@@ -142,5 +142,5 @@ export default function Home() {
         </div>
       </div>
     </>
-  )
+  );
 }

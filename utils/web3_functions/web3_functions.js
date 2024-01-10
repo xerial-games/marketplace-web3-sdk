@@ -7,16 +7,16 @@ const marketplaceContractAddress = process.env.NEXT_PUBLIC_POLYGON_MARKETPLACE_C
 const ethereum = globalThis.ethereum;
 const checkEthereumExistInUI = function () {
   if (!globalThis.ethereum) throw Error("There is no ethereum in window / MetaMask is not installed");
-}
+};
 
 async function connectToMetaMask() {
   // Check if MetaMask is installed
-  if (typeof ethereum === 'undefined') {
-    throw new Error('MetaMask is not installed');
+  if (typeof ethereum === "undefined") {
+    throw new Error("MetaMask is not installed");
   }
 
   // Request access to the user's MetaMask accounts
-  await ethereum.request({ method: 'eth_requestAccounts' });
+  await ethereum.request({ method: "eth_requestAccounts" });
   // Create a Web3Provider instance using MetaMask provider
   const provider = new ethers.providers.Web3Provider(ethereum);
   // Get the signer object
@@ -30,9 +30,9 @@ web3Functions.purchaseNfts = async function ({ tokenTypeId, amount, collectionAd
   try {
     const usdcAddress = process.env.NEXT_PUBLIC_POLYGON_USDC_CONTRACT;
     const marketplaceAddress = process.env.NEXT_PUBLIC_POLYGON_MARKETPLACE_CONTRACT;
-    if (!marketplaceAddress) throw new Error("Marketplace address not found.");
-    if (!usdcAddress) throw new Error("usdc address not found.");
-    if (!tokenTypeId || !collectionAddress || !amount) throw new Error("All params are required.");
+    if (!marketplaceAddress) throw new Error("Marketplace Address Not Found");
+    if (!usdcAddress) throw new Error("USDC Address Not Found");
+    if (!tokenTypeId || !collectionAddress || !amount) throw new Error("All Parameters Are Required");
     const { provider, signer } = await connectToMetaMask();
     const usdc = new ethers.Contract(usdcAddress, usdcAbi, provider);
     const marketplace = new ethers.Contract(marketplaceAddress, marketplaceABI, provider);
@@ -41,7 +41,7 @@ web3Functions.purchaseNfts = async function ({ tokenTypeId, amount, collectionAd
     const tx = await usdc.allowance(await signer.getAddress(), marketplaceAddress);
     if (!(Number(tx.toString()) > 0)) {
       // USDC permission
-      const maxNumber = BigNumber.from(2).pow(256).sub(1);  
+      const maxNumber = BigNumber.from(2).pow(256).sub(1);
       const tx = await usdc.connect(signer).approve(marketplaceAddress, maxNumber);
       const resTx = await tx.wait();
     }
@@ -52,7 +52,7 @@ web3Functions.purchaseNfts = async function ({ tokenTypeId, amount, collectionAd
   } catch (error) {
     throw new Error(error.message);
   }
-}
+};
 
 web3Functions.secondaryMarketPurchase = async function ({ marketplaceNftId }) {
   try {
@@ -65,7 +65,7 @@ web3Functions.secondaryMarketPurchase = async function ({ marketplaceNftId }) {
     const tx = await usdc.allowance(await signer.getAddress(), marketplaceAddress);
     if (!(Number(tx.toString()) > 0)) {
       // USDC permission
-      const maxNumber = BigNumber.from(2).pow(256).sub(1);  
+      const maxNumber = BigNumber.from(2).pow(256).sub(1);
       const tx = await usdc.connect(signer).approve(marketplaceAddress, maxNumber);
       const resTx = await tx.wait();
     }
@@ -74,10 +74,10 @@ web3Functions.secondaryMarketPurchase = async function ({ marketplaceNftId }) {
     const purchaseTransactionWaited = await purchaseTransaction.wait();
     console.log(purchaseTransactionWaited);
   } catch (error) {
-    console.error("Error to purchase NFT in secondary market.");
+    console.error("Error to purchase NFT in Secondary Market");
     throw new Error(error.message);
   }
-}
+};
 
 web3Functions.sellNftOnSecondaryMarket = async function ({ collectionAddress, tokenId, price }) {
   try {
@@ -95,10 +95,10 @@ web3Functions.sellNftOnSecondaryMarket = async function ({ collectionAddress, to
     const createMarketItemTransactionWaited = await createMarketItemTransaction.wait();
     console.log(createMarketItemTransactionWaited);
   } catch (error) {
-    console.error("Error to publish your NFT in secondary market.");
+    console.error("Error to publish your NFT in Secondary Market");
     throw new Error(error.message);
   }
-}
+};
 
 web3Functions.delistNftOnSecondaryMarket = async function ({ marketplaceNftId }) {
   try {
@@ -110,9 +110,9 @@ web3Functions.delistNftOnSecondaryMarket = async function ({ marketplaceNftId })
     const cancelMarketItemTransactionWaited = await cancelMarketItemTransaction.wait();
     console.log(cancelMarketItemTransactionWaited);
   } catch (error) {
-    console.error("Error to cancel NFT in secondary market.");
+    console.error("Error to cancel NFT in Secondary Market");
     throw new Error(error.message);
   }
-}
+};
 
 export default web3Functions;

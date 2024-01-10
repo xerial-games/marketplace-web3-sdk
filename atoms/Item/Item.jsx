@@ -17,7 +17,7 @@ const Item = ({ nft, XerialWalletViewmodel }) => {
       onSubmit={async (event) => {
         event.preventDefault();
         if (!amount || amount <= 0) {
-          console.error("Please set a valid amount.");
+          console.error("Please Set a Valid Amount");
           return;
         }
         if (loguedWith === "google") {
@@ -49,7 +49,7 @@ const Item = ({ nft, XerialWalletViewmodel }) => {
       />
       <button className="atom-item__button">Buy</button>
     </form>
-  )
-}
+  );
+};
 
 export default Item;
