@@ -1,0 +1,573 @@
+.atoms__xerial-wallet__principalContainer {
+  display: flex;
+  flex-direction: column;
+  width: 375px;
+  background-color: #000;
+  padding: 18px;
+  padding-bottom: 50px;
+  height: fit-content;
+  border-radius: 28px;
+  z-index: 30;
+}
+
+.atoms__xerial-wallet__topSideContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.atoms__xerial-wallet__item2 {
+  margin-left: -50px;
+}
+
+.atoms__xerial-wallet__selectedChain {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: 72px;
+  height: 32px;
+  border-radius: 10px;
+  background-color: #141414;
+  cursor: pointer;
+}
+
+.atoms__xerial-wallet__selectedChain span {
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #fff;
+}
+
+.atoms__xerial-wallet__selectedChain img {
+  width: 10px;
+  height: auto;
+}
+
+.atoms__xerial-wallet__chainsList {
+  background-color: #141414;
+  border-radius: 10px;
+  padding: 12px 24px;
+  position: absolute;
+  margin-top: 6px;
+  width: 164px;
+}
+
+.atoms__xerial-wallet__chainInSelect {
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  color: #fff;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.atoms__xerial-wallet__username {
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #fff;
+}
+
+.atoms__xerial-wallet__optionsIcon {
+  width: 18px;
+  display: block;
+  height: auto;
+  cursor: pointer;
+}
+
+.atoms__xerial-wallet__positionRelative {
+  position: relative;
+}
+
+.atoms__xerial-wallet__optionsContainer {
+  position: absolute;
+  margin-top: 6px;
+  right: 0;
+  background-color: #141414;
+  border-radius: 10px;
+}
+
+.atoms__xerial-wallet__logoutButton {
+  padding: 12px 24px;
+  width: 164px;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  color: #fff;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.atoms__xerial-wallet__balanceAndAddressContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.atoms__xerial-wallet__balance {
+  font-family: "Poppins", sans-serif;
+  font-size: 20px;
+  color: #fff;
+  font-weight: 600;
+}
+.atoms__xerial-wallet__address {
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  color: rgba(128, 128, 128, 1);
+  font-weight: 400;
+}
+
+.atoms__xerial-wallet__txButtons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 21px;
+}
+
+.atoms__xerial-wallet__txButton {
+  width: 164px;
+  height: 54px;
+  background-color: rgba(20, 20, 20, 1);
+  border-radius: 10px;
+  gap: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  span {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #fff;
+  }
+}
+
+.atoms__xerial-wallet__colsAndTokenButtons {
+  padding: 8px 10px;
+  border: 1px solid #141414;
+  border-radius: 30px;
+  background: #141414;
+  box-shadow: 0px 12px 60px 0px rgba(141, 155, 170, 0.10);
+  display: flex;
+  cursor: pointer;
+  width: 327px;
+  margin: 0 auto;
+  margin-bottom: 33px;
+}
+
+.atoms__xerial-wallet__colButton {
+  width: 171px;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ADB4C0;
+  filter: drop-shadow(0px 5px 20px rgba(85, 94, 104, 0.13));
+  padding: 12px 0;
+  display: flex;
+  justify-content: center;
+  border-radius: 30px;
+}
+
+.atoms__xerial-wallet__colButton--selected {
+  color: #fff;
+  background: linear-gradient(180deg, #F0F 0%, #F3ACFF 100%);
+}
+
+.atoms__xerial-wallet__tokenButton {
+  width: 134px;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #ADB4C0;
+  filter: drop-shadow(0px 5px 20px rgba(85, 94, 104, 0.13));
+  padding: 12px 0;
+  display: flex;
+  justify-content: center;
+  border-radius: 30px;
+}
+
+.atoms__xerial-wallet__tokenButton--selected {
+  color: #fff;
+  background: linear-gradient(180deg, #F0F 0%, #F3ACFF 100%);
+}
+
+.atoms__xerial-wallet__inventory__nftImages {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 17px 0 18px;
+  gap: 19px 26px;
+  max-height: 400px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.atoms__xerial-wallet__inventory__nftImages::-webkit-scrollbar {
+  width: 0;
+}
+
+.atoms__xerial-wallet__inventory__nftImageContainer {
+  height: fit-content;
+}
+
+.atoms__xerial-wallet__inventory__nftImage {
+  width: 139px;
+  height: 139px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 13px;
+  cursor: pointer;
+}
+
+.atoms__xerial-wallet__tokens__tokenContainer {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  align-items: center;
+  height: 74px;
+  width: 100%;
+}
+
+.atoms__xerial-wallet__tokens__tokenContainer span {
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: #ffffff;
+}
+
+.atoms__xerial-wallet__tokens__polygonTextAndIconContainer {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.atoms__xerial-wallet__tokens__polygonIcon {
+  width: 30px;
+  height: auto;
+}
+
+.atoms__xerial-wallet__tokens__tokenValue {
+  font-family: "Poppins", sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: #ffffff;
+}
+
+.atoms__xerial-wallet__depositSection__topSideContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 12px;
+}
+
+.atoms__xerial-wallet__depositSection__cancelButton {
+  background: linear-gradient(180deg, #F0F 0%, #F3ACFF 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+}
+
+.atoms__xerial-wallet__depositSection__generalText {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: #fff;
+  line-height: 100%;
+}
+
+.atoms__xerial-wallet__depositSection__userAddress {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  color: #ADB4C0;
+  line-height: 100%;
+  padding: 12px 15px;
+  border-radius: 12px;
+  border: 1px solid #181C2F;
+  background: #181C2F;
+  margin-bottom: 17px;
+}
+
+.atoms__xerial-wallet__depositSection__button {
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  background-color: #f0f;
+  border-radius: 50px;
+  font-size: 15px;
+  width: 176px;
+  padding: 8px 10px;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+}
+
+.atoms__xerial-wallet__selectedNft__btn-go-back {
+  display: flex;
+  background-color: transparent;
+  cursor: pointer;
+  img {
+    display: block;
+    width: 42px;
+    height: auto;
+  }
+}
+
+.atoms__xerial-wallet__selectedNft__generalText {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  color: #ffffff;
+}
+
+.atoms__xerial-wallet__selectedNft__topSideContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 17px;
+}
+
+.atoms__xerial-wallet__selectedNft__image {
+  display: block;
+  width: 257px;
+  height: 257px;
+  object-fit: cover;
+  object-position: center;
+  margin: 0 auto;
+  border-radius: 16px;
+  margin-bottom: 32px;
+}
+
+.atoms__xerial-wallet__selectedNft__transferInputLabel {
+  display: flex;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 1px solid #181C2F;
+  background: #181C2F;
+  margin-bottom: 26px;
+  gap: 12px;
+}
+
+.atoms__xerial-wallet__selectedNft__transferInputLabel textarea {
+  width: 100%;
+  resize: none;
+  font-size: 17px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  overflow: hidden;
+}
+
+.atoms__xerial-wallet__selectedNft__transferInputLabel textarea::placeholder {
+  color: #999494;
+}
+
+.atoms__xerial-wallet__selectedNft__transferInputLabel img {
+  display: block;
+  width: 25px;
+  height: 25px;
+}
+
+.atoms__xerial-wallet__selectedNft__buttons {
+  display: flex;
+  justify-content: center;
+  gap: 19px;
+}
+
+.atoms__xerial-wallet__selectedNft__button {
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  background-color: #f0f;
+  border-radius: 50px;
+  font-size: 18px;
+  width: 130px;
+  padding: 10px 10px;
+  cursor: pointer;
+  display: block;
+  height: fit-content;
+}
+
+.atoms__xerial-wallet__selectedNft__buttonRefresh {
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  background-color: #f0f;
+  border-radius: 50px;
+  font-size: 18px;
+  width: 180px;
+  padding: 10px 10px;
+  cursor: pointer;
+  display: block;
+  height: fit-content;
+  margin: 0 auto;
+  margin-top: 12px
+}
+
+.atoms__xerial-wallet__selectedNft__inputToSellNftContainer {
+  display: flex;
+  gap: 8px;
+}
+
+.atoms__xerial-wallet__selectedNft__inputToSellNft {
+  width: 190px;
+  resize: none;
+  font-size: 17px;
+  border: solid 1px #181C2F;
+  background: #181C2F;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  padding: 9px 16px 10px 16px;
+  border-radius: 12px;
+  margin-bottom: 17px;
+}
+
+.atoms__xerial-wallet__selectedNft__inputToSellNft::placeholder {
+  color: #999494;
+}
+
+.atoms__xerial-wallet__selectedNft__nftCollectionNameContainer {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 27px;
+  border-radius: 20px;
+  background-color: #141414;
+}
+
+.atoms__xerial-wallet__selectedNft__nftCollectionName {
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.atoms__xerial-wallet__selectedNft__nftCollectionName--title {
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  color: #fff;
+}
+
+.atoms__xerial-wallet__loader__principalContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: space-between;
+  padding: 80px 0 50px 0;
+}
+
+.atoms__xerial-wallet__loader__miniLoaderContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 380px;
+  gap: 20px;
+}
+
+.atoms__xerial-wallet__loader__loaderImage {
+  width: 102px;
+  height: auto;
+  animation: spin 2s linear infinite;
+  margin-bottom: 12px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.atoms__xerial-wallet__loader__loaderMessageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.atoms__xerial-wallet__loader__loaderMessageGradient {
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  background: linear-gradient(180deg, #F0F 0%, #F3ACFF 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.atoms__xerial-wallet__loader__loaderMessage {
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #fff;
+}
+
+.atoms__xerial-wallet__modal__modalPrincipalContainer {
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.atoms__xerial-wallet__modal__imageContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 28px;
+}
+
+.atoms__xerial-wallet__modal__image {
+  width: 140px;
+  height: 140px;
+}
+
+.atoms__xerial-wallet__modal__textContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 50px;
+}
+
+.atoms__xerial-wallet__modal__whiteText {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.atoms__xerial-wallet__modal__greyText {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  color: #67697A;
+  text-align: center;
+}
+
+.atoms__xerial-wallet__modal__buttonReturn {
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #ffffff;
+  padding: 15px 20px;
+  width: 100%;
+  min-width: fit-content;
+  border-radius: 50px;
+  background: linear-gradient(180deg, #F0F 0%, #F3ACFF 100%);
+  cursor: pointer;
+}
+
+.atoms__xerial-wallet__inventory__inventoryIncoming {
+  color: #ffffff;
+  font-size: 18px;
+  font-family: "Lato", sans-serif;
+}
+
+.atoms__xerial-wallet__depositSection__opacityOff {
+  opacity: 0;
+  cursor: initial;
+}

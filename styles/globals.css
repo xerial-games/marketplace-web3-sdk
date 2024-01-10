@@ -1,3 +1,25 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  outline: 0;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  border: none;
+}
+
 h1 {
   font-family: sans-serif;
   font-weight: 500;
@@ -74,3 +96,4 @@ h3 {
 
 @import "./home.css";
 @import "./inventory.css";
+@import "../atoms/XerialWallet/XerialWallet.css"
