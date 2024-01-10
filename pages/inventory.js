@@ -3,17 +3,11 @@ import InventoryItemOnSecondaryMarket from "@/atoms/InventoryItemOnSecondaryMark
 import loginWithMetamask from "@/utils/login_functions";
 import web2Functions from "@/utils/web2_functions/web2_functions";
 
-// REVIEW: this route is never read
 import web3Functions from "@/utils/web3_functions/web3_functions";
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 const clientId = process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID;
-
-// REVIEW: never read
-const handleWheel = () => {
-  window.document.activeElement.blur();
-};
 
 const Inventory = () => {
   const [items, setItems] = useState(null);
@@ -24,8 +18,7 @@ const Inventory = () => {
   const [wallets, setWallets] = useState([]);
   const [sessionToken, setSessionToken] = useState("");
   const [userAddress, setUserAddress] = useState("");
-  const [playerItemsOnSecondaryMarket, setPlayerItemsOnSecondaryMarket] =
-    useState([]);
+  const [playerItemsOnSecondaryMarket, setPlayerItemsOnSecondaryMarket] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -52,15 +45,12 @@ const Inventory = () => {
   }, [sessionToken]);
 
   async function load() {
-    const getProjectForDomainResponse = await web2Functions.getProjectForDomain(
-      { projectDomain: hostname }
-    );
+    const getProjectForDomainResponse = await web2Functions.getProjectForDomain({ projectDomain: hostname });
     setProject(getProjectForDomainResponse.project);
   }
 
   async function loadCollections() {
-    const collectionsFromGameStudio =
-      await web2Functions.getGameStudioCollections({ projectId: project.id });
+    const collectionsFromGameStudio = await web2Functions.getGameStudioCollections({ projectId: project.id });
     setCollections(collectionsFromGameStudio.collections);
   }
 
@@ -93,8 +83,7 @@ const Inventory = () => {
 
   async function connectWallet() {
     try {
-      const { loguedWith, player, sessionToken, tokens, wallets } =
-        await loginWithMetamask({ projectId: project.id });
+      const { loguedWith, player, sessionToken, tokens, wallets } = await loginWithMetamask({ projectId: project.id });
       const userAddress = wallets[0].address;
       if (!userAddress) throw new Error("User Address Not Found");
       setWallets(wallets);
@@ -107,12 +96,11 @@ const Inventory = () => {
 
   async function connectWithGoogle(credentialResponse) {
     try {
-      const { loguedWith, player, sessionToken, tokens, wallets } =
-        await web2Functions.loginWithGoogle({
-          credential: credentialResponse.credential,
-          clientId,
-          projectId: project.id,
-        });
+      const { loguedWith, player, sessionToken, tokens, wallets } = await web2Functions.loginWithGoogle({
+        credential: credentialResponse.credential,
+        clientId,
+        projectId: project.id,
+      });
 
       const userAddress = wallets[0].address;
       if (!userAddress) throw new Error("User Address Not Found");
@@ -132,31 +120,18 @@ const Inventory = () => {
     if (!items || items.length === 0)
       return (
         <div className="inventory-items__inventoryWithoutItems">
-          <p className="inventory-items__generalTextSemiBold inventory-items__textCenter">
-            You don't have any assets yet
-          </p>
-          <p className="inventory-items__generalText inventory-items__textCenter">
-            The assets you purchase will be displayed on this page
-          </p>
+          <p className="inventory-items__generalTextSemiBold inventory-items__textCenter">You don't have any assets yet</p>
+          <p className="inventory-items__generalText inventory-items__textCenter">The assets you purchase will be displayed on this page</p>
         </div>
       );
 
     return (
       <div>
         <h1>Your Inventory</h1>
-        <div
-          className="inventory-items__itemsContainer"
-          style={{ display: "flex", flexWrap: "wrap", gap: 20 }}
-        >
+        <div className="inventory-items__itemsContainer" style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
           {items.map((nft) => {
             return nft.tokenIds.map((tokenId) => {
-              return (
-                <InventoryItem
-                  nft={nft}
-                  key={nft.metadata.contract.address + tokenId}
-                  tokenId={tokenId}
-                />
-              );
+              return <InventoryItem nft={nft} key={nft.metadata.contract.address + tokenId} tokenId={tokenId} />;
             });
           })}
         </div>
@@ -165,35 +140,20 @@ const Inventory = () => {
   }
 
   function SecondaryMarketItems() {
-    if (
-      !playerItemsOnSecondaryMarket ||
-      playerItemsOnSecondaryMarket.length === 0
-    )
+    if (!playerItemsOnSecondaryMarket || playerItemsOnSecondaryMarket.length === 0)
       return (
         <div className="inventory-items__inventoryWithoutItems">
-          <p className="inventory-items__generalTextSemiBold inventory-items__textCenter">
-            You don't have any assets yet
-          </p>
-          <p className="inventory-items__generalText inventory-items__textCenter">
-            The assets will be displayed on this page
-          </p>
+          <p className="inventory-items__generalTextSemiBold inventory-items__textCenter">You don't have any assets yet</p>
+          <p className="inventory-items__generalText inventory-items__textCenter">The assets will be displayed on this page</p>
         </div>
       );
 
     return (
       <div>
         <h1>Your items listed on secondary market</h1>
-        <div
-          className="inventory-items__itemsContainer"
-          style={{ display: "flex", flexWrap: "wrap", gap: 20 }}
-        >
+        <div className="inventory-items__itemsContainer" style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
           {playerItemsOnSecondaryMarket?.map((nft) => {
-            return (
-              <InventoryItemOnSecondaryMarket
-                nft={nft}
-                key={nft.metadata.contract.address + nft.tokenId}
-              />
-            );
+            return <InventoryItemOnSecondaryMarket nft={nft} key={nft.metadata.contract.address + nft.tokenId} />;
           })}
         </div>
       </div>
@@ -206,10 +166,7 @@ const Inventory = () => {
         <button className="inventory__button" onClick={goToHome}>
           Go to home
         </button>
-        <button
-          className="inventory__button"
-          onClick={reloadPlayerItemsOnSecundaryMarketAndInventory}
-        >
+        <button className="inventory__button" onClick={reloadPlayerItemsOnSecundaryMarketAndInventory}>
           Reload inventory and player market items
         </button>
         <button className="inventory__button" onClick={connectWallet}>
