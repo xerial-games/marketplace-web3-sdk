@@ -88,8 +88,8 @@ export default function Home() {
       </Head>
       <div>
         <div className="home__buttonsContainer">
-          <button className="home__button" onClick={goToInventory}>Go to inventory</button>
-          <button className="home__button" onClick={refreshListedItems}>Refresh listed items</button>
+          <button className="home__button" onClick={goToInventory}>Go to Inventory</button>
+          <button className="home__button" onClick={refreshListedItems}>Refresh Listed Items</button>
           <GoogleLogin
             theme='outline'
             width='335px'
@@ -113,7 +113,7 @@ export default function Home() {
           <h1>Primary Market</h1>
           <div className="home__itemsContainer">
             {listedNfts && listedNfts.length === 0 ? (
-              <div>There are no listed NFTs.</div>
+              <div>There are no listed NFTs</div>
             ) : (
               listedNfts?.map((nft) => {
                 return <Item key={nft.id} nft={nft} XerialWalletViewmodel={xerialWalletViewmodelInstance}/>;
@@ -126,7 +126,7 @@ export default function Home() {
           <h1>Secondary market</h1>
           <div className="home__itemsContainer">
             {listedNftsOnSecondaryMarket && listedNftsOnSecondaryMarket.length === 0 ? (
-              <div>There are no listed NFTs.</div>
+              <div>There are no listed NFTs</div>
             ) : (
               listedNftsOnSecondaryMarket?.map((nft) => {
                 return <SecondaryMarketItem key={nft.marketItemId} nft={nft} XerialWalletViewmodel={xerialWalletViewmodelInstance}/>
