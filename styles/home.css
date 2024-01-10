@@ -3,3 +3,22 @@
   flex-wrap: wrap;
   gap: 20px;
 }
+
+.home__buttonsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.home__button {
+  width: 333px;
+	height: 38px;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+.home__button:hover {
+	background-color: rgb(10, 144, 144);
+	color: white;
+	transition: 1s;
+}

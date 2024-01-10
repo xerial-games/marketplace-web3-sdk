@@ -1,9 +1,16 @@
 import web3Functions from "@/utils/web3_functions/web3_functions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const Item = ({ nft }) => {
+const Item = ({ nft, XerialWalletViewmodel }) => {
   const [amount, setAmount] = useState("");
+  const [loguedWith, setLoguedWith] = useState("");
 
+  useEffect(() => {
+    XerialWalletViewmodel.observer.observe(() => {
+      setLoguedWith(XerialWalletViewmodel.loguedWith || "");
+    }, []);
+  }, []);
+  
   return (
     <form
       className="atom-item__box"
@@ -13,11 +20,19 @@ const Item = ({ nft }) => {
           console.error("Please Set a Valid Amount");
           return;
         }
-        await web3Functions.purchaseNfts({
-          tokenTypeId: nft.typeId,
-          collectionAddress: nft.metadata.contract.address,
-          amount: amount,
-        });
+        if (loguedWith === "google") {
+          await XerialWalletViewmodel.purchaseNfts({
+            tokenTypeId: nft.typeId,
+            quantity: amount,
+            collectionAddress: nft.metadata.contract.address,
+          });
+        } else {
+          await web3Functions.purchaseNfts({
+            tokenTypeId: nft.typeId,
+            collectionAddress: nft.metadata.contract.address,
+            amount: amount,
+          });
+        }
       }}
     >
       <h1 className="global-style__textWithDots">Token typeId: {nft.typeId}</h1>

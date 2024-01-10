@@ -2,25 +2,17 @@ import InventoryItem from "@/atoms/InventoryItem/InventoryItem";
 import InventoryItemOnSecondaryMarket from "@/atoms/InventoryItemOnSecondaryMarket/InventoryItemOnSecondaryMarket";
 import loginWithMetamask from "@/utils/login_functions";
 import web2Functions from "@/utils/web2_functions/web2_functions";
-
-// REVIEW: this route is never read
-import web3Functions from "@/utils/web3_functions/web3_functions";
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 const clientId = process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID;
-
-// REVIEW: never read
-const handleWheel = () => {
-  window.document.activeElement.blur();
-};
+const projectDomain = process.env.NEXT_PUBLIC_PROJECT_DOMAIN;
 
 const Inventory = () => {
   const [items, setItems] = useState(null);
   // studioAddress is the Game Studio Address
   const [collections, setCollections] = useState([]);
   const [project, setProject] = useState({});
-  const [hostname, setHostname] = useState("");
   const [wallets, setWallets] = useState([]);
   const [sessionToken, setSessionToken] = useState("");
   const [userAddress, setUserAddress] = useState("");
@@ -29,14 +21,8 @@ const Inventory = () => {
   const router = useRouter();
 
   useEffect(() => {
-    setHostname(window.location.hostname);
+    load();
   }, []);
-
-  useEffect(() => {
-    if (hostname) {
-      load();
-    }
-  }, [hostname]);
 
   useEffect(() => {
     if (project && JSON.stringify(project) != "{}") {
@@ -53,7 +39,7 @@ const Inventory = () => {
 
   async function load() {
     const getProjectForDomainResponse = await web2Functions.getProjectForDomain(
-      { projectDomain: hostname }
+      { projectDomain: projectDomain }
     );
     setProject(getProjectForDomainResponse.project);
   }
@@ -203,18 +189,9 @@ const Inventory = () => {
   return (
     <div>
       <div className="inventory__buttons">
-        <button className="inventory__button" onClick={goToHome}>
-          Go to home
-        </button>
-        <button
-          className="inventory__button"
-          onClick={reloadPlayerItemsOnSecundaryMarketAndInventory}
-        >
-          Reload inventory and player market items
-        </button>
-        <button className="inventory__button" onClick={connectWallet}>
-          Connect with metamask
-        </button>
+        <button className="inventory__button" onClick={goToHome}>Go to Home</button>
+        {sessionToken && <button className="inventory__button" onClick={reloadPlayerItemsOnSecundaryMarketAndInventory}>Reload Inventory and Player Market Items</button>}
+        <button className="inventory__button" onClick={connectWallet}>Connect with MetaMask</button>
         <GoogleLogin
           theme="outline"
           width="335px"
