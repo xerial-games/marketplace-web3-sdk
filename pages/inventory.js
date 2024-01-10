@@ -171,7 +171,7 @@ const Inventory = () => {
     <div>
       <div className="inventory__buttons">
         <button className="inventory__button" onClick={goToHome}>Go to home</button>
-        <button className="inventory__button" onClick={reloadPlayerItemsOnSecundaryMarketAndInventory}>Reload inventory and player market items</button>
+        {sessionToken && <button className="inventory__button" onClick={reloadPlayerItemsOnSecundaryMarketAndInventory}>Reload inventory and player market items</button>}
         <button className="inventory__button" onClick={connectWallet}>Connect with metamask</button>
         <GoogleLogin
           theme='outline'

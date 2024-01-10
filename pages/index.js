@@ -1,25 +1,33 @@
-import Head from 'next/head'
-import web3Functions from '@/utils/web3_functions/web3_functions';
-import { useEffect, useState } from 'react'
+import Head from 'next/head';
+import { useEffect, useState } from 'react';
 import web2Functions from '@/utils/web2_functions/web2_functions';
 import Item from '@/atoms/Item/Item';
 import { useRouter } from 'next/router';
 import SecondaryMarketItem from '@/atoms/SecondaryMarketItem/SecondaryMarketItem';
+import { xerialWalletViewmodelInstance } from '@/viewmodels/instances';
+import XerialWallet from '@/atoms/XerialWallet/XerialWallet';
+import { GoogleLogin } from '@react-oauth/google';
+const clientId = process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID;
 
 export default function Home() {
   const [hostname, setHostname] = useState("");
   const [project, setProject] = useState({});
   const [listedNfts, setListedNfts] = useState([]);
   const [listedNftsOnSecondaryMarket, setListedNftsOnSecondaryMarket] = useState([]);
+  const [loguedWith, setLoguedWith] = useState("");
   const router = useRouter();
 
   useEffect(() => {
     setHostname(window.location.hostname);
+    xerialWalletViewmodelInstance.observer.observe(() => {
+      setLoguedWith(xerialWalletViewmodelInstance.loguedWith || "");
+    }, []);
   }, []);
 
   useEffect(() => {
     if (hostname) {
       load();
+      xerialWalletViewmodelInstance.loadProject();
     }
   }, [hostname]);
 
@@ -63,6 +71,19 @@ export default function Home() {
       loadListedNftsOnSecondaryMarket();
     } else console.error("Project not found.")
   }
+
+  async function connectWithGoogle(credentialResponse) {
+    try {
+      const { loguedWith, player, sessionToken, tokens, wallets } =
+      await xerialWalletViewmodelInstance.login({
+        credential: credentialResponse.credential,
+        clientId
+      });
+    } catch (error) {
+      console.error(error)
+      console.error("Error: Login Failed.");
+    }
+  }
   
   return (
     <>
@@ -72,8 +93,21 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div>
-        <button onClick={goToInventory}>Go to inventory</button>
-        <button onClick={refreshListedItems}>Refresh listed items</button>
+        <div className="home__buttonsContainer">
+          <button className="home__button" onClick={goToInventory}>Go to inventory</button>
+          <button className="home__button" onClick={refreshListedItems}>Refresh listed items</button>
+          <GoogleLogin
+            theme='outline'
+            width='335px'
+            onSuccess={connectWithGoogle}
+          
+            onError={() => {
+              console.error('Login Failed');
+            }}
+          />
+          {loguedWith && <div>Logued with: {loguedWith}</div>}
+          <XerialWallet XerialWalletViewmodel={xerialWalletViewmodelInstance}/>
+        </div>
         {project && (
           <div>
             <div>Your project is: {project.name}</div>
@@ -88,7 +122,7 @@ export default function Home() {
                 <div>There are no listed NFTs.</div>
               ) : (
               listedNfts?.map((nft) => {
-                return <Item key={nft.id} nft={nft} />;
+                return <Item key={nft.id} nft={nft} XerialWalletViewmodel={xerialWalletViewmodelInstance}/>;
               })
             )}
           </div>
@@ -101,7 +135,7 @@ export default function Home() {
               <div>There are no listed NFTs.</div>
             ) : (
               listedNftsOnSecondaryMarket?.map((nft) => {
-                return <SecondaryMarketItem key={nft.marketItemId} nft={nft}/>
+                return <SecondaryMarketItem key={nft.marketItemId} nft={nft} XerialWalletViewmodel={xerialWalletViewmodelInstance}/>
               })
             )}
           </div>
