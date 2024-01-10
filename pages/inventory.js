@@ -191,7 +191,7 @@ const Inventory = () => {
       <div className="inventory__buttons">
         <button className="inventory__button" onClick={goToHome}>Go to Home</button>
         {sessionToken && <button className="inventory__button" onClick={reloadPlayerItemsOnSecundaryMarketAndInventory}>Reload Inventory and Player Market Items</button>}
-        <button className="inventory__button" onClick={connectWallet}>Connect with Metamask</button>
+        <button className="inventory__button" onClick={connectWallet}>Connect with MetaMask</button>
         <GoogleLogin
           theme="outline"
           width="335px"
