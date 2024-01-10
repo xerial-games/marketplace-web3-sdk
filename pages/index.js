@@ -8,9 +8,9 @@ import { xerialWalletViewmodelInstance } from '@/viewmodels/instances';
 import XerialWallet from '@/atoms/XerialWallet/XerialWallet';
 import { GoogleLogin } from '@react-oauth/google';
 const clientId = process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID;
+const projectDomain = process.env.NEXT_PUBLIC_PROJECT_DOMAIN;
 
 export default function Home() {
-  const [hostname, setHostname] = useState("");
   const [project, setProject] = useState({});
   const [listedNfts, setListedNfts] = useState([]);
   const [listedNftsOnSecondaryMarket, setListedNftsOnSecondaryMarket] = useState([]);
@@ -18,18 +18,12 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    setHostname(window.location.hostname);
     xerialWalletViewmodelInstance.observer.observe(() => {
       setLoguedWith(xerialWalletViewmodelInstance.loguedWith || "");
     }, []);
+    xerialWalletViewmodelInstance.loadProject();
+    load();
   }, []);
-
-  useEffect(() => {
-    if (hostname) {
-      load();
-      xerialWalletViewmodelInstance.loadProject();
-    }
-  }, [hostname]);
 
   useEffect(() => {
     if (project && JSON.stringify(project) != "{}") {
@@ -39,7 +33,7 @@ export default function Home() {
   }, [project]);
 
   async function load() {
-    const getProjectForDomainResponse = await web2Functions.getProjectForDomain({ projectDomain: hostname });
+    const getProjectForDomainResponse = await web2Functions.getProjectForDomain({ projectDomain: projectDomain });
     setProject(getProjectForDomainResponse.project);
   }
 

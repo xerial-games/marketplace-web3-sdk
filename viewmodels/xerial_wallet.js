@@ -1,3 +1,5 @@
+const projectDomain = process.env.NEXT_PUBLIC_PROJECT_DOMAIN;
+
 export default function XerialWalletViewmodel(helpers) {
   const vm = {};
 
@@ -6,9 +8,8 @@ export default function XerialWalletViewmodel(helpers) {
   vm.sessionToken = "";
 
   vm.loadProject = async function () {
-    const hostname = helpers.dom.getDomain();
     const result = await helpers.getProjectForMarketplace({
-      projectDomain: hostname
+      projectDomain: projectDomain
     });
     if (!result.project) throw new Error("Project not found.")
     vm.setProject(result.project);
