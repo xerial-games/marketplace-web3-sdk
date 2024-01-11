@@ -10,7 +10,6 @@ const SecondaryMarketItem = ({ nft, XerialWalletViewmodel }) => {
     }, []);
   }, []);
 
-const SecondaryMarketItem = ({ nft }) => {
   return (
     <form
       className="atom-item__box"
