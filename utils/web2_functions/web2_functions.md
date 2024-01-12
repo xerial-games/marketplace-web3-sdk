@@ -196,7 +196,134 @@ Obtain the NFTs listed in the primary market.
 
 ```
 
-### 4 - getProjectForDomain:
+### 4 - getListedNftsOnSecondaryMarket
+
+Obtain the NFTs listed in the secondary market.
+
+| Param            | Description                                           |
+|------------------|-------------------------------------------------------|
+| projectAddress   | The project address associated with your project.     |
+| chain            | Can be "polygon" or "telos". 												 |
+
+**Response structure:**
+
+```json
+[
+  {
+    "tokenId": 1,
+    "price": 1,
+    "seller": "0x7d78B5a8b04151E0741875c2d6e3Cb6A82098Ac5",
+    "marketItemId": 38,
+    "metadata": {
+      "name": "NFt",
+      "description": "des",
+      "image": "https://xerial-main-bucket.s3.us-east-1.amazonaws.com/46935ee6d252d9510a71cd7452dadcb06aa6ad73433f4c3e642c541c138a436e-game%20banner.jpg",
+      "externalUrl": "http://ultra-super-game/dashboard/items/new",
+      "animationUrls": [],
+      "attributes": [
+        {
+          "type": "property",
+          "name": "Condition",
+          "value": "Fairly Worn (FW)"
+        },
+        {
+          "type": "property",
+          "name": "Rarity",
+          "value": "Legendary"
+        }
+      ],
+      "contract": {
+        "address": "0x8007604a4787E127952C275dcAcc0dAEDb2a3B97",
+        "name": "collection name",
+        "symbol": "cn",
+        "image": "https://xerial-main-bucket.s3.us-east-1.amazonaws.com/450ebc6038f65cb00973c284b893eec10c09cde7a1fd05edce21fa06493c9412-nezuko.jpg",
+        "description": "collection description",
+        "externalUrl": "http://ultra-super-game/dashboard/items/new"
+      },
+      "maxSupply": "4",
+      "edition": 1
+    }
+  }
+]
+```
+
+### 5 - getPlayerItemsOnSecondaryMarket
+
+Obtain the specific player NFTs listed in the secondary market.
+
+| Param            | Description                                                            |
+|------------------|------------------------------------------------------------------------|
+| userAddress      | The address of the user listing NFTs on the secondary market. |
+| chain            | Specifies the blockchain network (e.g., "polygon" or "telos").         |
+
+**Response structure:**
+
+```json
+[
+  {
+    "tokenId": 4,
+    "price": 1,
+    "seller": "0x7d78B5a8b04151E0741875c2d6e3Cb6A82098Ac5",
+    "marketItemId": 25,
+    "metadata": {
+      "name": "One Katowice",
+      "description": "This is the description for the One Katowice Sticker Item. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.",
+      "image": "https://xerial-main-bucket.s3.us-east-1.amazonaws.com/e5a89abbc880d212f91e051e66e1743c14982e14bd997cf70680e8e6d888e3c1-sticker-01.png",
+      "externalUrl": "https://mp-alt.vercel.app/collections/stickers",
+      "animationUrls": [],
+      "attributes": [
+        {
+          "type": "property",
+          "name": "Condition",
+          "value": "Fairly Worn (FW)"
+        },
+        {
+          "type": "property",
+          "name": "Rarity",
+          "value": "Legendary"
+        },
+        {
+          "type": "property",
+          "name": "Pattern",
+          "value": "787"
+        },
+        {
+          "type": "property",
+          "name": "Float",
+          "value": "0.18201123"
+        },
+        {
+          "type": "stat",
+          "name": "Rare Stickers",
+          "value": "+ $13.2"
+        },
+        {
+          "type": "stat",
+          "name": "Rare Float",
+          "value": "+ $731.95"
+        },
+        {
+          "type": "stat",
+          "name": "AVG Price",
+          "value": "$6,785.94"
+        }
+      ],
+      "contract": {
+        "address": "0xA091c91B8D36f1D28fF4F0D30E71C9f7BbAd90ec",
+        "name": "Stickers",
+        "symbol": "stc",
+        "image": "https://xerial-main-bucket.s3.us-east-1.amazonaws.com/eb784d6ccffe547c4830fdfa623902e3d88e780c7fc22a12e03de6f46aa884f5-stickers.png",
+        "description": "This is the parent Stickers collection. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.",
+        "externalUrl": "https://mp-alt.vercel.app/collections/stickers"
+      },
+      "maxSupply": "500",
+      "edition": 1
+    }
+  }
+]
+```
+
+### 6 - getProjectForDomain:
 
 Obtain information about your project using the configured project domain in the Dashboard.
 
@@ -204,7 +331,7 @@ Obtain information about your project using the configured project domain in the
 |-----------------|-------------------------------------------------------|
 | projectDomain   | The project domain associated with your project.  		|
 
-**Response stucture:**
+**Response structure:**
 
 ```json
 {
@@ -229,6 +356,191 @@ Obtain information about your project using the configured project domain in the
     },
     "symbol": "SPJ",
     "domain": "xerial.io"
+  }
+}
+```
+
+### 7 - loginWithGoogle:
+
+Obtain all the necessary data for authentication.
+
+| Param           | Description                                                                                                      |
+|-----------------|------------------------------------------------------------------------------------------------------------------|
+| credential     | The GoogleLogin `credentialResponse.credential`. Image at the bottom.                                             |
+| clientId        | The client ID obtained from the Google Cloud Console (https://cloud.google.com/) associated with the credential. |
+| projectId       | The project ID associated with your project.                                                                     |
+
+_Function ConnectWithGoogle example applied with React:_
+
+![ConnectWithGoogle function](./images/ConnectWithGoogleFunction.png)
+
+_GoogleLogin import example:_
+
+```js
+import { GoogleLogin } from '@react-oauth/google';
+```
+
+_Function Applied in GoogleLogin Component example:_
+
+![GoogleLogin Component](./images/GoogleLoginComponent.png)
+
+**Object structure obtained:**
+
+```js
+{
+  "sessionToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NTk2YzQzZTU2YTVhODFlMWMwZDNkMjMiLCJpYXQiOjE3MDUwNzI0NzUsIm9Ka78j6d8a6D7s8927d9ajSnjudsI6ImFjY2VzcyJ9.Hvans4Rycp2m73uF14qGCy-47xHEAHUtcHSE1H2_GhY",
+  "tokens": {
+    "access": {
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NTk2YzQzZTU2YTVhODFlMWMwZDNkMjMiLCJpYXQiOjE3MDUwNzI0NzUsIm9Ka78j6d8a6D7s8927d9ajSnjudsI6ImFjY2VzcyJ9.Hvans4Rycp2m73uF14qGCy-47xHEAHUtcHSE1H2_GhY",
+      "expires": "2024-01-12T17:34:35.725Z"
+    },
+    "refresh": {
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NTd2AdfQzZTU2YTVhODFlMWMwZDNkMjMiLCJpYXQiOjE3MDUwNzI0D2gaDsaFcCI6MTgyOT4ODQ3NSwidHlwZSI6InJlZnJlc2gifQ.CfjdmCxl7NbIB43dp72B-h2fSvx_olN-GszkwyXt0s",
+      "expires": "2027-12-22T15:14:35.726Z"
+    }
+  },
+  "player": {
+    "username": "xerial_eri_2023@gmail.com",
+    "project": "6564b4f3fa203b318f65da05",
+    "id": "6596c43e56a5a81e1c0d3d23"
+  },
+  "wallets": [
+    {
+      "user": "6596c43e56a5a81e1c0d3d23",
+      "address": "0x0f1366Jac14E17c49D928377D10dA2635A24da22",
+      "custodial": true,
+      "id": "6596c44056a5a81e1c0d3d26"
+    }
+  ],
+  "loguedWith": "google"
+}
+```
+
+### 8 - primaryPurchaseWithXerialWallet:
+
+Allows the player to buy NFTs on the Primary Market with Xerial Wallet.
+
+| Param             | Description                                       |
+|-------------------|---------------------------------------------------|
+| tokenTypeId       | The typeId of the NFT to be purchased.            |
+| quantity          | The quantity of NFTs the player wants to purchase.|
+| collectionAddress | The collection address of the NFT.                |
+| userAddress       | The player's address.                             |
+| sessionToken      | The player's sessionToken.                        |
+
+**Response structure:**
+
+```json
+{
+  "transactionHash": "0x1a9d0af42bca5be340e48843a2f7d540087d04afc19486695642d40c0ac45e11"
+}
+```
+
+### 9 - secondaryPurchaseWithXerialWallet
+
+Allow the player to buy NFTs on Secondary Market with Xerial Wallet.
+
+| Param             | Description                                       |
+|-------------------|---------------------------------------------------|
+| marketItemId      | The marketItemId of the NFT to be purchased.      |
+| userAddress       | The player's address.                             |
+| sessionToken      | The player's sessionToken.                        |
+
+**Response structure:**
+
+```json
+{
+  "transactionHash": "0x1a9d0af42bca5be340e48843a2f7d540087d04afc19486695642d40c0ac45e11"
+}
+```
+
+### 10 - delistNftOnSecondaryMarket
+
+Allow the player to delist NFTs on Secondary Market with Xerial Wallet.
+
+| Param             | Description                                       |
+|-------------------|---------------------------------------------------|
+| marketItemId      | The marketItemId of the NFT to be delisted.       |
+| userAddress       | The player's address.                             |
+| sessionToken      | The player's sessionToken.                        |
+
+**Response structure:**
+
+```json
+{
+  "transactionHash": "0x1a9d0af42bca5be340e48843a2f7d540087d04afc19486695642d40c0ac45e11"
+}
+```
+
+### 11 - listNftOnSecondaryMarket
+
+Allow the player to list NFTs on Secondary Market with Xerial Wallet.
+
+| Param             | Description                                       |
+|-------------------|---------------------------------------------------|
+| collectionAddress | The collection address of the NFT.                |
+| tokenId           | The tokenId of the NFT to be listed.              |
+| price             | The price of the NFT to be listed.                |
+| userAddress       | The player's address.                             |
+| sessionToken      | The player's sessionToken.                        |
+
+**Response structure:**
+
+```json
+{
+  "transactionHash": "0x1a9d0af42bca5be340e48843a2f7d540087d04afc19486695642d40c0ac45e11"
+}
+```
+
+### 12 - transferNft
+
+Allow the player to list NFTs on Secondary Market with Xerial Wallet.
+
+| Param             | Description                                            |
+|-------------------|--------------------------------------------------------|
+| collectionAddress | The collection address of the NFT.                     |
+| tokenId           | The tokenId of the NFT to be transferred.              |
+| to                | The player address to whom the NFT will be transferred.|
+| userAddress       | The player's address.                                  |
+
+**Response structure:**
+
+```json
+{
+  "transactionHash": "0x1a9d0af42bca5be340e48843a2f7d540087d04afc19486695642d40c0ac45e11"
+}
+```
+
+### 13 - getMaticBalance
+
+Obtain Matic balance of the specific user.
+
+| Param             | Description                                            |
+|-------------------|--------------------------------------------------------|
+| userAddress       | The player's address.                                  |
+
+**Response structure:**
+
+```json
+{
+  "balance": "0.053353126320360021"
+}
+```
+
+### 14 - getUsdcBalance
+
+Obtain balances of the specific user. Actually only obtain USDC balance.
+
+| Param             | Description                                            |
+|-------------------|--------------------------------------------------------|
+| userAddress       | The player's address.                                  |
+
+**Response structure:**
+
+```json
+{
+  "balances": {
+    "usdc": "0.84"
   }
 }
 ```
