@@ -227,7 +227,7 @@ web2Functions.transferNft = async function ({ collectionAddress, tokenId, to, us
   }
 };
 
-web2Functions.loadMaticBalance = async function ({ userAddress }) {
+web2Functions.getMaticBalance = async function ({ userAddress }) {
   if (!userAddress) throw new Error("User Wallet Not Found");
   const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/eth`);
   const resjson = await errorsManager(response);
@@ -235,7 +235,7 @@ web2Functions.loadMaticBalance = async function ({ userAddress }) {
   return Number(resjson.balance);
 };
 
-web2Functions.loadUsdcBalance = async function ({ userAddress }) {
+web2Functions.getUsdcBalance = async function ({ userAddress }) {
   if (!userAddress) throw new Error("User Wallet Not Found");
   const resTokens = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/tokens`);
   const resjsonTokens = await errorsManager(resTokens);
