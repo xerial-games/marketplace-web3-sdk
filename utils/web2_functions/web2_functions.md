@@ -522,9 +522,7 @@ Obtain Matic balance of the specific user.
 **Response structure:**
 
 ```json
-{
-  "balance": "0.053353126320360021"
-}
+"0.053353126320360021"
 ```
 
 ### 14 - getUsdcBalance
@@ -538,9 +536,5 @@ Obtain balances of the specific user. Actually only obtain USDC balance.
 **Response structure:**
 
 ```json
-{
-  "balances": {
-    "usdc": "0.84"
-  }
-}
+"0.84"
 ```
