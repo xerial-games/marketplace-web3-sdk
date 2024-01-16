@@ -1,7 +1,13 @@
+.home__principalContainer {
+  background-color: #141414;
+  padding: 20px 10px 100px 10px;
+}
+
 .home__itemsContainer {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  margin-bottom: 25px;
 }
 
 .home__buttonsContainer {
@@ -21,4 +27,22 @@
 	background-color: rgb(10, 144, 144);
 	color: white;
 	transition: 1s;
+}
+
+.home__projectDataContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.home__projectData {
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+}
+
+.home__title {
+  font-size: 26px;
+  color: #fff;
+  margin-bottom: 20px;
 }

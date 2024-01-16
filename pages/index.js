@@ -86,13 +86,13 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div>
+      <div className="home__principalContainer">
         <div className="home__buttonsContainer">
           <button className="home__button" onClick={goToInventory}>Go to Inventory</button>
           <button className="home__button" onClick={refreshListedItems}>Refresh Listed Items</button>
           <GoogleLogin
-            theme='outline'
-            width='335px'
+            theme="outline"
+            width="335px"
             onSuccess={connectWithGoogle}
           
             onError={() => {
@@ -103,27 +103,24 @@ export default function Home() {
           <XerialWallet XerialWalletViewmodel={xerialWalletViewmodelInstance}/>
         </div>
         {project && (
-          <div>
-            <div>Your project is: {project.name}</div>
-            <div>ID: {project.id}</div>
-            <div>Description: {project.description}</div>
+          <div className="home__projectDataContainer">
+            <div className="home__projectData">Your project is: {project.name}</div>
+            <div className="home__projectData">ID: {project.id}</div>
+            <div className="home__projectData">Description: {project.description}</div>
           </div>
         )}
         <div>
-          <h1>Primary Market</h1>
+          <h1 className="home__title">Primary Market</h1>
           <div className="home__itemsContainer">
             {listedNfts && listedNfts.length === 0 ? (
               <div>There are no listed NFTs</div>
             ) : (
               listedNfts?.map((nft) => {
-                return <Item key={nft.id} nft={nft} XerialWalletViewmodel={xerialWalletViewmodelInstance}/>;
+                return <Item key={nft.id} nft={nft} sellerAddress={project.address} XerialWalletViewmodel={xerialWalletViewmodelInstance}/>;
               })
             )}
           </div>
-          <hr />
-          <hr />
-          <hr />
-          <h1>Secondary market</h1>
+          <h1 className="home__title">Secondary market</h1>
           <div className="home__itemsContainer">
             {listedNftsOnSecondaryMarket && listedNftsOnSecondaryMarket.length === 0 ? (
               <div>There are no listed NFTs</div>
