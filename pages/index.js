@@ -113,7 +113,7 @@ export default function Home() {
           <h1 className="home__title">Primary Market</h1>
           <div className="home__itemsContainer">
             {listedNfts && listedNfts.length === 0 ? (
-              <div>There are no listed NFTs</div>
+              <div className="home__noListedNftsMessage">There are no listed NFTs</div>
             ) : (
               listedNfts?.map((nft) => {
                 return <Item key={nft.id} nft={nft} sellerAddress={project.address} XerialWalletViewmodel={xerialWalletViewmodelInstance}/>;
@@ -123,7 +123,7 @@ export default function Home() {
           <h1 className="home__title">Secondary market</h1>
           <div className="home__itemsContainer">
             {listedNftsOnSecondaryMarket && listedNftsOnSecondaryMarket.length === 0 ? (
-              <div>There are no listed NFTs</div>
+              <div className="home__noListedNftsMessage">There are no listed NFTs</div>
             ) : (
               listedNftsOnSecondaryMarket?.map((nft) => {
                 return <SecondaryMarketItem key={nft.marketItemId} nft={nft} XerialWalletViewmodel={xerialWalletViewmodelInstance}/>
