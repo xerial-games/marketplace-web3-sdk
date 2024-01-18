@@ -1,3 +1,8 @@
+.inventory__container {
+	background-color: #141414;
+	min-height: 100vh;
+}
+
 .inventory__buttons {
 	display: flex;
 	flex-direction: column;
@@ -5,14 +10,78 @@
 }
 
 .inventory__button {
-  width: 333px;
+	width: 333px;
 	height: 38px;
 	font-size: 16px;
 	cursor: pointer;
+	border-radius: 4px;
 }
 
 .inventory__button:hover {
 	background-color: rgb(10, 144, 144);
 	color: white;
 	transition: 1s;
+}
+
+.inventory-items__titleContainer {
+	margin-bottom: 20px;
+}
+
+.inventory-items__title {
+	font-family: "Poppins", sans-serif;
+	font-size: 42px;
+}
+
+.inventory__project-container {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	font-family: "Poppins";
+	padding: 20px;
+	width: 100%;
+}
+
+.inventory-items__generalTextSemiBold {
+	color: white;
+	font-family: "Poppins", sans-serif;
+}
+
+.inventory__items-container {
+	display: flex;
+	flex-direction: column;
+	gap: 60px;
+	font-family: "Poppins";
+	padding: 20px;
+	color: white;
+}
+
+.inventory__noLoguedMessageContainer {
+	padding-top: 20px;
+	padding-left: 20px;
+}
+
+.inventory__project-session {
+	word-wrap: break-word;
+	color: #fff;
+	font-size: 18px;
+	font-family: "Poppins", sans-serif;
+	font-weight: 400;
+}
+
+.inventory-items__buttonSell {
+	width: 100%;
+	height: fit-content;
+	padding: 12px 20px;
+	background-color: rgb(218, 18, 198);
+	border-radius: 12px;
+	border: transparent;
+	cursor: pointer;
+	color: #fff;
+	font-family: "Poppins", sans-serif;
+	font-weight: 600;
+	font-size: 14px;
+}
+
+.inventory__background {
+	background: linear-gradient(180deg, rgb(46, 45, 46) 0%, #141414 8%, #141414 100%);
 }

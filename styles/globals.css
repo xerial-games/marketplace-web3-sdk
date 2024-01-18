@@ -21,26 +21,24 @@ button {
 }
 
 h1 {
-  font-family: sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 500;
   font-size: 26px;
-  color: #000000;
-  margin-bottom: 20px;
+  color: #fff;
 }
 
 h2 {
-  font-family: sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 500;
   font-size: 20px;
-  color: #000000;
-  margin-bottom: 20px;
+  color: #fff;
 }
 
 h3 {
-  font-family: sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 500;
   font-size: 18px;
-  color: #000000;
+  color: #fff;
   margin-bottom: 20px;
 }
 
@@ -53,47 +51,69 @@ h3 {
 .atom-item__box {
   display: flex;
   flex-direction: column;
-  width: 500px;
+  width: 600px;
   gap: 12px;
   padding: 20px;
-  height: 550px;
-  background-color: rgb(64, 103, 103);
+  min-height: 550px;
+  background: linear-gradient(107deg, #24252D -3.46%, rgba(36, 37, 45, 0.25) 107.53%);
   border-radius: 20px;
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
 .atom-item__itemImage {
-  width: 150px;
-  height: 150px;
+  width: 560px;
+  height: 560px;
   object-fit: cover;
   object-position: center;
+  border-radius: 20px;
+  margin-bottom: 20px;
 }
 
 .atom-item__generalText {
-  font-family: sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 400;
   font-size: 16px;
-  color: #000;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  color: #fff;
+  word-wrap: break-word;
 }
 
 .atom-item__button {
-  min-width: fit-content;
-  width: 300px;
+  min-width: 200px;
   height: fit-content;
-  padding: 6px 12px;
+  padding: 12px 20px;
   background-color: rgb(218, 18, 198);
   border-radius: 12px;
   border: transparent;
   cursor: pointer;
   color: #fff;
-  font-family: sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 600;
   font-size: 14px;
 }
 
+.atom-item__priceMagenta {
+  color: #F0F;
+  font-size: 18px;
+}
+
+.game-shop__inputContainer {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.game-shop__input {
+  border-radius: 20px;
+  background: linear-gradient(107deg, #24252D -3.46%, rgba(36, 37, 45, 0.25) 107.53%);
+  font-size: 16px;
+  color: #fff;
+  border-color: transparent;
+  padding: 12px;
+  width: 100%
+}
+
 @import "./home.css";
 @import "./inventory.css";
-@import "../atoms/XerialWallet/XerialWallet.css"
+@import "../atoms/XerialWallet/XerialWallet.css";
+@import "../atoms/Item/item.css";
+@import "../atoms/InventoryItem/inventoryItem.css"
