@@ -1,0 +1,15 @@
+.atom-item__attributeCardContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 102px;
+  border-radius: 20px;
+  background: linear-gradient(107deg, #24252D -3.46%, rgba(36, 37, 45, 0.25) 107.53%);
+  padding: 10px 36px;
+  justify-content: center;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+}

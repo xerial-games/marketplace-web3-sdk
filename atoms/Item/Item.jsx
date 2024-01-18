@@ -38,20 +38,20 @@ const Item = ({ nft, sellerAddress, XerialWalletViewmodel }) => {
       <img className="atom-item__itemImage" src={nft.metadata.image} alt="nft img" />
       <h1 className="atom-item__generalText global-style__textWithDots">Token typeId: {nft.typeId}</h1>
       <h2 className="atom-item__generalText global-style__textWithDots">Token name: {nft.metadata.name}</h2>
-      <p className="atom-item__generalText">CollectionAddress: {nft.metadata.contract.address}</p>
-      <p className="atom-item__generalText">CollectionAddress: {nft.metadata.contract.name}</p>
+      <p className="atom-item__generalText">Collection address: {nft.metadata.contract.address}</p>
+      <p className="atom-item__generalText">Collection name: {nft.metadata.contract.name}</p>
       <p className="atom-item__generalText">Seller address: {sellerAddress}</p>
       <p className="atom-item__generalText">Owner: {sellerAddress}</p>
       <p className="atom-item__generalText">Original supply: {nft.supply}</p>
       <p className="atom-item__generalText">Available supply: {nft.supply - nft.mintedTokens}</p>
       <p className="atom-item__generalText">Minted nfts: {nft.mintedTokens}</p>
-      <p className="atom-item__generalText atom-item__priceMagenta">Price: {nft.price}</p>
+      <p className="atom-item__generalText atom-item__priceMagenta">Price: {nft.price} USDC</p>
       {nft.metadata.attributes.slice(0, 6).map((attribute, index) => {
         return (
-          <div className="game-shop__buyModalLocal__attributeCardContainer" key={index}>
-            <div className="game-shop__buyModalLocal__attributeText">Type: {attribute.type}</div>
-            <div className="game-shop__buyModalLocal__attributeText">Name: {attribute.name}</div>
-            <div className="game-shop__buyModalLocal__attributeText">Value: {attribute.value}</div>
+          <div className="atom-item__attributeCardContainer" key={index}>
+            <div className="atom-item__attributeText">Type: {attribute.type}</div>
+            <div className="atom-item__attributeText">Name: {attribute.name}</div>
+            <div className="atom-item__attributeText">Value: {attribute.value}</div>
           </div>
         )
       })}

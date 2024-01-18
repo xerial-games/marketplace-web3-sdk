@@ -112,15 +112,22 @@ const Inventory = () => {
   function Items() {
     if (!items || items.length === 0)
       return (
-        <div className="inventory-items__inventoryWithoutItems">
-          <p className="inventory-items__generalTextSemiBold inventory-items__textCenter">You don't have any assets yet</p>
-          <p className="inventory-items__generalText inventory-items__textCenter">The assets you purchase will be displayed on this page</p>
-        </div>
+        <>
+          <div className="inventory-items__titleContainer">
+            <h1 className="inventory-items__title">Your Inventory</h1>
+          </div>
+          <div className="inventory-items__inventoryWithoutItems">
+            <p className="inventory-items__generalTextSemiBold inventory-items__textCenter">You don't have any assets yet</p>
+            <p className="inventory-items__generalText inventory-items__textCenter">The assets you purchase will be displayed on this page</p>
+          </div>
+        </>
       );
 
     return (
       <div>
-        <h1>Your Inventory</h1>
+        <div className="inventory-items__titleContainer">
+          <h1 className="inventory-items__title">Your Inventory</h1>
+        </div>
         <div className="inventory-items__itemsContainer" style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
           {items.map((nft) => {
             return nft.tokenIds.map((tokenId) => {
@@ -135,15 +142,22 @@ const Inventory = () => {
   function SecondaryMarketItems() {
     if (!playerItemsOnSecondaryMarket || playerItemsOnSecondaryMarket.length === 0)
       return (
-        <div className="inventory-items__inventoryWithoutItems">
-          <p className="inventory-items__generalTextSemiBold inventory-items__textCenter">You don't have any assets yet</p>
-          <p className="inventory-items__generalText inventory-items__textCenter">The assets will be displayed on this page</p>
-        </div>
+        <>
+          <div className="inventory-items__titleContainer">
+            <h1 className="inventory-items__title">Your items listed on secondary market</h1>
+          </div>
+          <div className="inventory-items__inventoryWithoutItems">
+            <p className="inventory-items__generalTextSemiBold inventory-items__textCenter">You don't have any assets yet</p>
+            <p className="inventory-items__generalText inventory-items__textCenter">The assets will be displayed on this page</p>
+          </div>
+        </>
       );
 
     return (
       <div>
-        <h1>Your items listed on secondary market</h1>
+        <div className="inventory-items__titleContainer">
+          <h1 className="inventory-items__title">Your items listed on secondary market</h1>
+        </div>
         <div className="inventory-items__itemsContainer" style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
           {playerItemsOnSecondaryMarket?.map((nft) => {
             return <InventoryItemOnSecondaryMarket nft={nft} key={nft.metadata.contract.address + nft.tokenId} />;
@@ -154,24 +168,40 @@ const Inventory = () => {
   }
 
   return (
-    <div>
+    <div className="inventory__container">
       <div className="inventory__buttons">
-        <button className="inventory__button" onClick={goToHome}>Go to Home</button>
-        {sessionToken && <button className="inventory__button" onClick={reloadPlayerItemsOnSecundaryMarketAndInventory}>Reload Inventory and Player Market Items</button>}
-        <button className="inventory__button" onClick={connectWallet}>Connect with MetaMask</button>
-        <GoogleLogin
-          theme="outline"
-          width="335px"
-          onSuccess={connectWithGoogle}
-          onError={() => {
-            console.error("Login Failed");
-          }}
-        />
+        <div className="home__buttonsContainer">
+          <button className="inventory__button" onClick={goToHome}>Go to Home</button>
+          {sessionToken && <button className="inventory__button" onClick={reloadPlayerItemsOnSecundaryMarketAndInventory}>Reload Inventory and Player Market Items</button>}
+          <button className="inventory__button" onClick={connectWallet}>Connect with MetaMask</button>        
+          {/* <GoogleLogin
+            theme="outline"
+            width="335px"
+            onSuccess={connectWithGoogle}
+            onError={() => {
+              console.error("Login Failed");
+            }}
+          /> */}
+        </div>
       </div>
-      <p>User address: {userAddress}</p>
-      <p>SessionToken: {sessionToken}</p>
-      <Items />
-      <SecondaryMarketItems />
+      {sessionToken ? (
+        <div className="inventory__background">
+          <div className="inventory__project-container">
+            <p className="inventory__project-session">User address: {userAddress}</p>
+            <p className="inventory__project-session">SessionToken: {sessionToken}</p>
+          </div>
+          <div className="inventory__items-container">
+            <Items />
+            <SecondaryMarketItems />
+          </div>
+        </div>
+      ) : (
+        <div className="inventory__noLoguedMessageContainer">
+          <p className="inventory__project-session">
+            You are not logged in. Please log in
+          </p>
+        </div>
+      )}
     </div>
   );
 };

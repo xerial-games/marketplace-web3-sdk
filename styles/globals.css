@@ -74,9 +74,7 @@ h3 {
   font-weight: 400;
   font-size: 16px;
   color: #fff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  word-wrap: break-word;
 }
 
 .atom-item__button {
@@ -116,4 +114,6 @@ h3 {
 
 @import "./home.css";
 @import "./inventory.css";
-@import "../atoms/XerialWallet/XerialWallet.css"
+@import "../atoms/XerialWallet/XerialWallet.css";
+@import "../atoms/Item/item.css";
+@import "../atoms/InventoryItem/inventoryItem.css"
