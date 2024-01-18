@@ -28,14 +28,14 @@ const InventoryItem = ({ nft, tokenId }) => {
   async function handleSubmit(event) {
     event.preventDefault();
     if (!price) {
-      alert("Please set a valid price")
+      alert("Please set a valid price");
     } else await web3Functions.sellNftOnSecondaryMarket({ collectionAddress: nft.metadata.contract.address, tokenId, price });
   }
 
   return (
     <div className="inventory-items__container">
       <div className="inventory-items__projectContainer">
-        <img src={nft.metadata.image} alt={nft.metadata.name} className="inventory-items__image"/>
+        <img src={nft.metadata.image} alt={nft.metadata.name} className="inventory-items__image" />
         <p className="atom-item__generalText">TokenId: {tokenId}</p>
         <h2 className="atom-item__generalText global-style__textWithDots">Token name: {nft.metadata.name}</h2>
         <p className="atom-item__generalText">Collection address: {nft.metadata.contract.address}</p>
@@ -44,15 +44,7 @@ const InventoryItem = ({ nft, tokenId }) => {
       <form className="game-shop__inputContainer" onSubmit={handleSubmit}>
         <label className="inventory-items__itemLabelForInput">
           <span className="inventory-items__itemInputWithLabelTitle">Price</span>
-          <input
-            className="game-shop__input"
-            name="price"
-            type="text"
-            placeholder="N"
-            defaultValue={""}
-            onChange={(e) => onChangePrice(e.target.value)}
-            onWheel={handleWheel}
-          />
+          <input className="game-shop__input" name="price" type="text" placeholder="N" defaultValue={""} onChange={(e) => onChangePrice(e.target.value)} onWheel={handleWheel} />
         </label>
         <button className="atom-item__button">Sell</button>
       </form>

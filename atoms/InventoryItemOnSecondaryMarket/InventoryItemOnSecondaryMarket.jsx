@@ -8,7 +8,7 @@ const InventoryItemOnSecondaryMarket = ({ nft }) => {
   return (
     <div className="inventory-items__container">
       <div className="inventory-items__projectContainer">
-        <img src={nft.metadata.image} alt={nft.metadata.name} className="inventory-items__image"/>
+        <img src={nft.metadata.image} alt={nft.metadata.name} className="inventory-items__image" />
         <h1>Nft marketItemId: {nft.marketItemId}</h1>
         <h2>Nft name: {nft.metadata.name}</h2>
         <p>collectionAddress: {nft.metadata.contract.address}</p>

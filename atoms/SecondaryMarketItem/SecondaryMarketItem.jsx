@@ -33,7 +33,7 @@ const SecondaryMarketItem = ({ nft, sellerAddress, XerialWalletViewmodel }) => {
             <div className="atom-item__attributeText">Name: {attribute.name}</div>
             <div className="atom-item__attributeText">Value: {attribute.value}</div>
           </div>
-        )
+        );
       })}
       <button
         className="atom-item__button"

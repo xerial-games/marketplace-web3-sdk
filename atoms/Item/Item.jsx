@@ -10,7 +10,7 @@ const Item = ({ nft, sellerAddress, XerialWalletViewmodel }) => {
       setLoguedWith(XerialWalletViewmodel.loguedWith || "");
     }, []);
   }, []);
-  
+
   return (
     <form
       className="atom-item__box"
@@ -53,7 +53,7 @@ const Item = ({ nft, sellerAddress, XerialWalletViewmodel }) => {
             <div className="atom-item__attributeText">Name: {attribute.name}</div>
             <div className="atom-item__attributeText">Value: {attribute.value}</div>
           </div>
-        )
+        );
       })}
       <div className="game-shop__inputContainer">
         <input

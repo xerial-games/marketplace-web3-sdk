@@ -99,7 +99,7 @@ export default function Home() {
             Refresh Listed Items
           </button>
           <div className="home__loginWithGoogleContainer">
-          {!loguedWith ? (
+            {!loguedWith ? (
               <GoogleLogin
                 theme="outline"
                 width="335px"
@@ -126,19 +126,21 @@ export default function Home() {
         {project && (
           <div className="home__projectDataContainer">
             <div className="home__projectLogoAndTitleContainer">
-              <img className="home__projectLogo" src={project.logo} alt="project logo"/>
+              <img className="home__projectLogo" src={project.logo} alt="project logo" />
               <h2 className="home__projectTitle">Your project information</h2>
-              <img className="home__projectLogo" src={project.logo} alt="project logo"/>
+              <img className="home__projectLogo" src={project.logo} alt="project logo" />
             </div>
             <div className="home__projectBannerContainer">
-              <img className="home__projectBanner" src={project.userBanner}/>
+              <img className="home__projectBanner" src={project.userBanner} />
             </div>
             <div className="home__projectDataSubcontainer">
               <div className="home__projectData">ID: {project.id}</div>
               <div className="home__projectData">Name: {project.name}</div>
               <div className="home__projectData">Description: {project.description}</div>
               <div className="home__projectData">Project domain: {project.domain}</div>
-              <a className="home__projectDownloadLink" href={project.downloadLink} about="download link" target="_blank">Click to open the game download page</a>
+              <a className="home__projectDownloadLink" href={project.downloadLink} about="download link" target="_blank">
+                Click to open the game download page
+              </a>
               <div className="home__noListedNftsMessage">There is more information about your project available in the documentation</div>
             </div>
           </div>

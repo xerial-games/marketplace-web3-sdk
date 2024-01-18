@@ -13,42 +13,42 @@ const defaultInventoryTabValue = "inventory";
 const defaultTokensTabValue = "tokens";
 const defaultSecondaryMarketTabValue = "secondaryMarket";
 
-function SuccessfullyModal ({ title, description, buttonContent, onClickButton }) {
+function SuccessfullyModal({ title, description, buttonContent, onClickButton }) {
   return (
     <div className="atoms__xerial-wallet__principalContainer">
-    <div className="atoms__xerial-wallet__modal__modalPrincipalContainer">
-      <div className="atoms__xerial-wallet__modal__imageContainer">
-        <img className="atoms__xerial-wallet__modal__image" src="/assets/xerialWalletAssets/illustration.png" alt="illustration" />
+      <div className="atoms__xerial-wallet__modal__modalPrincipalContainer">
+        <div className="atoms__xerial-wallet__modal__imageContainer">
+          <img className="atoms__xerial-wallet__modal__image" src="/assets/xerialWalletAssets/illustration.png" alt="illustration" />
+        </div>
+        <div className="atoms__xerial-wallet__modal__textContainer">
+          <div className="atoms__xerial-wallet__modal__whiteText">{title}</div>
+          <div className="atoms__xerial-wallet__modal__greyText">{description}</div>
+        </div>
+        <button className="atoms__xerial-wallet__modal__buttonReturn" onClick={onClickButton}>
+          {buttonContent}
+        </button>
       </div>
-      <div className="atoms__xerial-wallet__modal__textContainer">
-        <div className="atoms__xerial-wallet__modal__whiteText">{title}</div>
-        <div className="atoms__xerial-wallet__modal__greyText">{description}</div>
-      </div>
-      <button className="atoms__xerial-wallet__modal__buttonReturn" onClick={onClickButton}>
-        {buttonContent}
-      </button>
     </div>
-    </div>
-  )
+  );
 }
 
-function ErrorModal ({ title, description, buttonContent, onClickButton }) {
+function ErrorModal({ title, description, buttonContent, onClickButton }) {
   return (
     <div className="atoms__xerial-wallet__principalContainer">
-    <div className="atoms__xerial-wallet__modal__modalPrincipalContainer">
-      <div className="atoms__xerial-wallet__modal__imageContainer">
-        <img className="atoms__xerial-wallet__modal__image" src="/assets/xerialWalletAssets/error-illustration.png" alt="error illustration" />
+      <div className="atoms__xerial-wallet__modal__modalPrincipalContainer">
+        <div className="atoms__xerial-wallet__modal__imageContainer">
+          <img className="atoms__xerial-wallet__modal__image" src="/assets/xerialWalletAssets/error-illustration.png" alt="error illustration" />
+        </div>
+        <div className="atoms__xerial-wallet__modal__textContainer">
+          <div className="atoms__xerial-wallet__modal__whiteText">{title}</div>
+          <div className="atoms__xerial-wallet__modal__greyText">{description}</div>
+        </div>
+        <button className="atoms__xerial-wallet__modal__buttonReturn" onClick={onClickButton}>
+          {buttonContent}
+        </button>
       </div>
-      <div className="atoms__xerial-wallet__modal__textContainer">
-        <div className="atoms__xerial-wallet__modal__whiteText">{title}</div>
-        <div className="atoms__xerial-wallet__modal__greyText">{description}</div>
-      </div>
-      <button className="atoms__xerial-wallet__modal__buttonReturn" onClick={onClickButton}>
-        {buttonContent}
-      </button>
     </div>
-    </div>
-  )
+  );
 }
 const XerialWallet = ({ XerialWalletViewmodel }) => {
   const [walletTab, setWalletTab] = useState(defaultInventoryTabValue);
@@ -109,20 +109,17 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
     }
   }, [loguedWith]);
 
-  async function refreshBalance () {
-    await Promise.all([
-      XerialWalletViewmodel.loadMaticBalance(),
-      XerialWalletViewmodel.loadUsdcBalance(),
-    ]);
+  async function refreshBalance() {
+    await Promise.all([XerialWalletViewmodel.loadMaticBalance(), XerialWalletViewmodel.loadUsdcBalance()]);
   }
 
-  async function reloadAllContent () {
+  async function reloadAllContent() {
     refreshBalance();
     XerialWalletViewmodel.loadInventory();
     XerialWalletViewmodel.loadPlayerItemsOnSecondaryMarket({ chain: "polygon" });
   }
 
-  async function onCloseListedNftModal () {
+  async function onCloseListedNftModal() {
     setSelectedNft({});
     setListNftActive(false);
     setSendNftActive(false);
@@ -131,7 +128,7 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
     await reloadAllContent();
   }
 
-  async function onCloseDelistedNftModal () {
+  async function onCloseDelistedNftModal() {
     setSelectedNft({});
     setListNftActive(false);
     setSendNftActive(false);
@@ -140,7 +137,7 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
     await reloadAllContent();
   }
 
-  async function onCloseTransferedNftModal () {
+  async function onCloseTransferedNftModal() {
     setSelectedNft({});
     setListNftActive(false);
     setSendNftActive(false);
@@ -152,16 +149,16 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
   async function copyText(text) {
     try {
       await navigator.clipboard.writeText(text);
-      console.log('Content copied to clipboard');
+      console.log("Content copied to clipboard");
     } catch (err) {
-      console.error('Failed to copy: ', err);
+      console.error("Failed to copy: ", err);
     }
   }
 
   function onChangeAddressToSendNft(event) {
     setAddressToSendNft(event.target.value.trim());
   }
-  
+
   function onChangeNftPrice(event) {
     if (!event.target.value) return;
     const price = Number(event.target.value.trim());
@@ -169,67 +166,56 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
   }
 
   const handleWheel = () => {
-    window.document.activeElement.blur()
+    window.document.activeElement.blur();
   };
 
   if (!player || JSON.stringify(player) === "{}") return;
 
   // if (!modalActive) return (
   //   <div className="atoms__xerial-wallet__principalContainer">
-      
+
   //   </div>
   // )
 
   if (loguedWith !== "google") return;
 
-  if (loading) return (
-    <div className="atoms__xerial-wallet__principalContainer">
-      <div className="atoms__xerial-wallet__loader__principalContainer">
-        <div></div>
-        <img className="atoms__xerial-wallet__loader__loaderImage" src="/assets/xerialWalletAssets/loader.svg" alt="loader" />
-        <div className="atoms__xerial-wallet__loader__loaderMessageContainer">
-          <div className="atoms__xerial-wallet__loader__loaderMessageGradient">Please wait</div>
-          <div className="atoms__xerial-wallet__loader__loaderMessage">{loadingMessage}</div>
+  if (loading)
+    return (
+      <div className="atoms__xerial-wallet__principalContainer">
+        <div className="atoms__xerial-wallet__loader__principalContainer">
+          <div></div>
+          <img className="atoms__xerial-wallet__loader__loaderImage" src="/assets/xerialWalletAssets/loader.svg" alt="loader" />
+          <div className="atoms__xerial-wallet__loader__loaderMessageContainer">
+            <div className="atoms__xerial-wallet__loader__loaderMessageGradient">Please wait</div>
+            <div className="atoms__xerial-wallet__loader__loaderMessage">{loadingMessage}</div>
+          </div>
         </div>
       </div>
-    </div>
-  )
+    );
 
-  if (listedNft) return (
-    <SuccessfullyModal
-      title="Asset published successfully"
-      description="Your item is now on the secondary market. It's available for other community members to purchase"
-      buttonContent="return"
-      onClickButton={onCloseListedNftModal}
-    />
-  );
+  if (listedNft)
+    return (
+      <SuccessfullyModal
+        title="Asset published successfully"
+        description="Your item is now on the secondary market. It's available for other community members to purchase"
+        buttonContent="return"
+        onClickButton={onCloseListedNftModal}
+      />
+    );
 
-  if (delistedNft) return (
-    <SuccessfullyModal
-      title="Asset successfully delisted"
-      description="You can find it in collectibles"
-      buttonContent="return"
-      onClickButton={onCloseDelistedNftModal}
-    />
-  );
+  if (delistedNft) return <SuccessfullyModal title="Asset successfully delisted" description="You can find it in collectibles" buttonContent="return" onClickButton={onCloseDelistedNftModal} />;
 
-  if (transferedNft) return (
-    <SuccessfullyModal
-      title="Asset transfered successfully"
-      description="Congratulations! Your item has been successfully transferred and is no longer in your inventory."
-      buttonContent="return"
-      onClickButton={onCloseTransferedNftModal}
-    />
-  );
+  if (transferedNft)
+    return (
+      <SuccessfullyModal
+        title="Asset transfered successfully"
+        description="Congratulations! Your item has been successfully transferred and is no longer in your inventory."
+        buttonContent="return"
+        onClickButton={onCloseTransferedNftModal}
+      />
+    );
 
-  if (errorMessageModal) return (
-    <ErrorModal
-      title="Error"
-      description={errorMessageModal}
-      buttonContent="return"
-      onClickButton={() => XerialWalletViewmodel.setErrorMessageModal("")}
-    />
-  )
+  if (errorMessageModal) return <ErrorModal title="Error" description={errorMessageModal} buttonContent="return" onClickButton={() => XerialWalletViewmodel.setErrorMessageModal("")} />;
 
   return (
     <div className="atoms__xerial-wallet__principalContainer">
@@ -239,14 +225,15 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
             <span>M</span>
             <img src="/assets/xerialWalletAssets/down-arrow.svg" alt="icon" />
           </div>
-          {
-            chainsActive &&
+          {chainsActive && (
             <div className="atoms__xerial-wallet__chainsList">
               {chains.map((chain, index) => (
-                <div className="atoms__xerial-wallet__chainInSelect" key={index} onClick={() => setChainsActive(false)}>{chain}</div>
+                <div className="atoms__xerial-wallet__chainInSelect" key={index} onClick={() => setChainsActive(false)}>
+                  {chain}
+                </div>
               ))}
             </div>
-          }
+          )}
         </div>
         <div className="atoms__xerial-wallet__username atoms__xerial-wallet__item2">{player.username.slice(0, 10) + "..."}</div>
         <div className="atoms__xerial-wallet__positionRelative">
@@ -255,10 +242,13 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
           </div>
           {optionsActive && (
             <div className="atoms__xerial-wallet__optionsContainer">
-              <div className="atoms__xerial-wallet__logoutButton" onClick={() => {
-                setWalletTab(defaultSecondaryMarketTabValue);
-                setOptionsActive(false);
-              }}>
+              <div
+                className="atoms__xerial-wallet__logoutButton"
+                onClick={() => {
+                  setWalletTab(defaultSecondaryMarketTabValue);
+                  setOptionsActive(false);
+                }}
+              >
                 Listed items
               </div>
               <div className="atoms__xerial-wallet__logoutButton" onClick={() => XerialWalletViewmodel.logout()}>
@@ -273,10 +263,14 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
           <div className="atoms__xerial-wallet__depositSection__topSideContainer">
             <button className="atoms__xerial-wallet__depositSection__cancelButton atoms__xerial-wallet__depositSection__opacityOff">Cancel</button>
             <span className="atoms__xerial-wallet__depositSection__generalText">Your address</span>
-            <button className="atoms__xerial-wallet__depositSection__cancelButton" onClick={() => setDepositActive(false)}>Cancel</button>
+            <button className="atoms__xerial-wallet__depositSection__cancelButton" onClick={() => setDepositActive(false)}>
+              Cancel
+            </button>
           </div>
           <div className="atoms__xerial-wallet__depositSection__userAddress">{wallets[0].address}</div>
-          <button className="atoms__xerial-wallet__depositSection__button" onClick={() => copyText(wallets[0].address)}>Copy Address</button>
+          <button className="atoms__xerial-wallet__depositSection__button" onClick={() => copyText(wallets[0].address)}>
+            Copy Address
+          </button>
         </div>
       )}
       {!depositActive && (!selectedNft || JSON.stringify(selectedNft) === "{}") && (
@@ -303,21 +297,13 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
           <div>
             <div className="atoms__xerial-wallet__colsAndTokenButtons">
               <div
-                className={
-                  walletTab !== defaultInventoryTabValue
-                    ? "atoms__xerial-wallet__colButton"
-                    : "atoms__xerial-wallet__colButton atoms__xerial-wallet__colButton--selected"
-                }
+                className={walletTab !== defaultInventoryTabValue ? "atoms__xerial-wallet__colButton" : "atoms__xerial-wallet__colButton atoms__xerial-wallet__colButton--selected"}
                 onClick={() => setWalletTab(defaultInventoryTabValue)}
               >
                 Collectibles
               </div>
               <div
-                className={
-                  walletTab !== defaultTokensTabValue
-                    ? "atoms__xerial-wallet__tokenButton"
-                    : "atoms__xerial-wallet__tokenButton atoms__xerial-wallet__tokenButton--selected"
-                }
+                className={walletTab !== defaultTokensTabValue ? "atoms__xerial-wallet__tokenButton" : "atoms__xerial-wallet__tokenButton atoms__xerial-wallet__tokenButton--selected"}
                 onClick={() => setWalletTab(defaultTokensTabValue)}
               >
                 Tokens
@@ -330,26 +316,26 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
             )} */}
             {walletTab === defaultInventoryTabValue && !loadingNfts && (
               <div className="atoms__xerial-wallet__inventory__nftImages">
-                {inventory?.map((nft) => (
+                {inventory?.map((nft) =>
                   nft.tokenIds.map((tokenId) => {
                     const { tokenIds, ...data } = nft;
-                    const currentNft = { ...data, tokenId }
+                    const currentNft = { ...data, tokenId };
                     return (
                       <div key={nft.metadata.contract.address + tokenId} className="atoms__xerial-wallet__inventory__nftImageContainer">
-                        <img className="atoms__xerial-wallet__inventory__nftImage" src={nft.metadata.image} alt={nft.metadata.name} onClick={() => setSelectedNft(currentNft)}/>
+                        <img className="atoms__xerial-wallet__inventory__nftImage" src={nft.metadata.image} alt={nft.metadata.name} onClick={() => setSelectedNft(currentNft)} />
                       </div>
-                    )
+                    );
                   })
-                ))}
+                )}
               </div>
             )}
             {walletTab === defaultInventoryTabValue && loadingNfts && (
               <div className="atoms__xerial-wallet__loader__miniLoaderContainer">
-               <img className="atoms__xerial-wallet__loader__loaderImage" src="/assets/xerialWalletAssets/loader.svg" alt="loader" />
-               <div className="atoms__xerial-wallet__loader__loaderMessageContainer">
-                <div className="atoms__xerial-wallet__loader__loaderMessageGradient">Please wait</div>
-                <div className="atoms__xerial-wallet__loader__loaderMessage">Loading inventory</div>
-              </div>
+                <img className="atoms__xerial-wallet__loader__loaderImage" src="/assets/xerialWalletAssets/loader.svg" alt="loader" />
+                <div className="atoms__xerial-wallet__loader__loaderMessageContainer">
+                  <div className="atoms__xerial-wallet__loader__loaderMessageGradient">Please wait</div>
+                  <div className="atoms__xerial-wallet__loader__loaderMessage">Loading inventory</div>
+                </div>
               </div>
             )}
             {walletTab === defaultTokensTabValue && !loadingBalance && (
@@ -369,17 +355,19 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
                   <div className="atoms__xerial-wallet__tokens__tokenValue">{usdcBalance ? usdcBalance.toFixed(2) : "0.0"} USDC</div>
                 </div>
                 <div>
-                  <button className="atoms__xerial-wallet__selectedNft__buttonRefresh" onClick={refreshBalance}>Reload</button>
+                  <button className="atoms__xerial-wallet__selectedNft__buttonRefresh" onClick={refreshBalance}>
+                    Reload
+                  </button>
                 </div>
               </div>
             )}
             {walletTab === defaultTokensTabValue && loadingBalance && (
               <div className="atoms__xerial-wallet__loader__miniLoaderContainer">
-               <img className="atoms__xerial-wallet__loader__loaderImage" src="/assets/xerialWalletAssets/loader.svg" alt="loader" />
-               <div className="atoms__xerial-wallet__loader__loaderMessageContainer">
-                <div className="atoms__xerial-wallet__loader__loaderMessageGradient">Please wait</div>
-                <div className="atoms__xerial-wallet__loader__loaderMessage">Loading tokens balances</div>
-              </div>
+                <img className="atoms__xerial-wallet__loader__loaderImage" src="/assets/xerialWalletAssets/loader.svg" alt="loader" />
+                <div className="atoms__xerial-wallet__loader__loaderMessageContainer">
+                  <div className="atoms__xerial-wallet__loader__loaderMessageGradient">Please wait</div>
+                  <div className="atoms__xerial-wallet__loader__loaderMessage">Loading tokens balances</div>
+                </div>
               </div>
             )}
             {/* actualizando. */}
@@ -387,16 +375,8 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
               <div className="atoms__xerial-wallet__inventory__nftImages">
                 {playerItemslistedNftsOnSecondaryMarket?.map((nft) => {
                   return (
-                    <div
-                      key={nft.metadata.contract.address + nft.tokenId}
-                      className="atoms__xerial-wallet__inventory__nftImageContainer"
-                    >
-                      <img
-                        className="atoms__xerial-wallet__inventory__nftImage"
-                        src={nft.metadata.image}
-                        alt={nft.metadata.name}
-                        onClick={() => setSelectedNft(nft)}
-                      />
+                    <div key={nft.metadata.contract.address + nft.tokenId} className="atoms__xerial-wallet__inventory__nftImageContainer">
+                      <img className="atoms__xerial-wallet__inventory__nftImage" src={nft.metadata.image} alt={nft.metadata.name} onClick={() => setSelectedNft(nft)} />
                     </div>
                   );
                 })}
@@ -409,11 +389,14 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
       {selectedNft && JSON.stringify(selectedNft) != "{}" && (
         <div>
           <div className="atoms__xerial-wallet__selectedNft__topSideContainer">
-            <button onClick={() => {
-              setListNftActive(false);
-              setSendNftActive(false);
-              setSelectedNft({});
-            }} className="atoms__xerial-wallet__selectedNft__btn-go-back">
+            <button
+              onClick={() => {
+                setListNftActive(false);
+                setSendNftActive(false);
+                setSelectedNft({});
+              }}
+              className="atoms__xerial-wallet__selectedNft__btn-go-back"
+            >
               <img src="/assets/xerialWalletAssets/go-back-icon.svg" alt="go-back icon" />
             </button>
             <h2 className="atoms__xerial-wallet__selectedNft__generalText">{selectedNft.metadata.name}</h2>
@@ -424,29 +407,32 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
           <img className="atoms__xerial-wallet__selectedNft__image" src={selectedNft.metadata.image} alt={selectedNft.metadata.name} />
           {!sendNftActive && !listNftActive && walletTab === defaultInventoryTabValue && (
             <div className="atoms__xerial-wallet__selectedNft__buttons">
-              <button className="atoms__xerial-wallet__selectedNft__button" onClick={() => setSendNftActive(true)}>Send</button>
-              <button
-                className="atoms__xerial-wallet__selectedNft__button"
-                onClick={() => setListNftActive(true)}
-              >
+              <button className="atoms__xerial-wallet__selectedNft__button" onClick={() => setSendNftActive(true)}>
+                Send
+              </button>
+              <button className="atoms__xerial-wallet__selectedNft__button" onClick={() => setListNftActive(true)}>
                 List
               </button>
             </div>
           )}
           {!sendNftActive && !listNftActive && walletTab === defaultSecondaryMarketTabValue && (
             <div className="atoms__xerial-wallet__selectedNft__buttons">
-              <button className="atoms__xerial-wallet__selectedNft__button" onClick={() => XerialWalletViewmodel.delist({ marketItemId: selectedNft.marketItemId })}>Delist</button>
+              <button className="atoms__xerial-wallet__selectedNft__button" onClick={() => XerialWalletViewmodel.delist({ marketItemId: selectedNft.marketItemId })}>
+                Delist
+              </button>
             </div>
           )}
           {sendNftActive && (
             <>
               <label className="atoms__xerial-wallet__selectedNft__transferInputLabel">
-                <textarea cols={2} type="text" onChange={onChangeAddressToSendNft} defaultValue={addressToSendNft} placeholder="Address to send NFT"/>
+                <textarea cols={2} type="text" onChange={onChangeAddressToSendNft} defaultValue={addressToSendNft} placeholder="Address to send NFT" />
                 <img src="/assets/xerialWalletAssets/polygon.svg" alt="polygon icon" />
               </label>
               <div className="atoms__xerial-wallet__selectedNft__buttons">
-                <button className="atoms__xerial-wallet__selectedNft__button" onClick={() => setSendNftActive(false)}>Cancel</button>
-                <button 
+                <button className="atoms__xerial-wallet__selectedNft__button" onClick={() => setSendNftActive(false)}>
+                  Cancel
+                </button>
+                <button
                   className="atoms__xerial-wallet__selectedNft__button"
                   onClick={() => {
                     if (!addressToSendNft) return;
@@ -466,13 +452,8 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
           {listNftActive && (
             <>
               <div className="atoms__xerial-wallet__selectedNft__inputToSellNftContainer">
-                <input
-                  className="atoms__xerial-wallet__selectedNft__inputToSellNft"
-                  type="number" onWheel={handleWheel}
-                  onChange={onChangeNftPrice}
-                  defaultValue={nftPrice} placeholder="Price"
-                />
-                <button 
+                <input className="atoms__xerial-wallet__selectedNft__inputToSellNft" type="number" onWheel={handleWheel} onChange={onChangeNftPrice} defaultValue={nftPrice} placeholder="Price" />
+                <button
                   className="atoms__xerial-wallet__selectedNft__button"
                   onClick={async () => {
                     if (!nftPrice) console.error("Please set a price.");
@@ -496,7 +477,7 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
 export default XerialWallet;
