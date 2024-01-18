@@ -196,7 +196,7 @@ const Inventory = () => {
         <div className="inventory__background">
           <div className="inventory__project-container">
             <p className="inventory__project-session">User address: {userAddress}</p>
-            <p className="inventory__project-session">SessionToken: {sessionToken}</p>
+            <p className="inventory__project-session">Session token: {sessionToken}</p>
           </div>
           <div className="inventory__items-container">
             <Items />

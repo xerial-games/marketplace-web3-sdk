@@ -9,10 +9,10 @@ const InventoryItemOnSecondaryMarket = ({ nft }) => {
     <div className="inventory-items__container">
       <div className="inventory-items__projectContainer">
         <img src={nft.metadata.image} alt={nft.metadata.name} className="inventory-items__image" />
-        <h1>Nft marketItemId: {nft.marketItemId}</h1>
-        <h2>Nft name: {nft.metadata.name}</h2>
-        <p>collectionAddress: {nft.metadata.contract.address}</p>
-        <p>collectionName: {nft.metadata.contract.name}</p>
+        <h1>Nft market itemId: {nft.marketItemId}</h1>
+        <h2>NFT name: {nft.metadata.name}</h2>
+        <p>collection address: {nft.metadata.contract.address}</p>
+        <p>collection name: {nft.metadata.contract.name}</p>
         <p className="atom-item__generalText atom-item__priceMagenta">Price: {nft.price} USDC</p>
       </div>
       <button className="inventory-items__buttonSell" type="submit" onClick={onDelistNft}>

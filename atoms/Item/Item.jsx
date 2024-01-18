@@ -44,7 +44,7 @@ const Item = ({ nft, sellerAddress, XerialWalletViewmodel }) => {
       <p className="atom-item__generalText">Owner: {sellerAddress}</p>
       <p className="atom-item__generalText">Original supply: {nft.supply}</p>
       <p className="atom-item__generalText">Available supply: {nft.supply - nft.mintedTokens}</p>
-      <p className="atom-item__generalText">Minted nfts: {nft.mintedTokens}</p>
+      <p className="atom-item__generalText">Minted NFTs: {nft.mintedTokens}</p>
       <p className="atom-item__generalText atom-item__priceMagenta">Price: {nft.price} USDC</p>
       {nft.metadata.attributes.slice(0, 6).map((attribute, index) => {
         return (
