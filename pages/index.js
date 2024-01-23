@@ -72,7 +72,7 @@ export default function Home() {
 
   async function connectWithGoogle(credentialResponse) {
     try {
-      const { loguedWith, player, sessionToken, tokens, wallets } = await xerialWalletViewmodelInstance.login({
+      await xerialWalletViewmodelInstance.login({
         credential: credentialResponse.credential,
         clientId,
       });
