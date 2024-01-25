@@ -3,14 +3,7 @@ import { useEffect, useState } from "react";
 
 const Item = ({ nft, sellerAddress, XerialWalletViewmodel }) => {
   const [amount, setAmount] = useState("");
-  const [loguedWith, setLoguedWith] = useState("");
-
-  useEffect(() => {
-    XerialWalletViewmodel.observer.observe(() => {
-      setLoguedWith(XerialWalletViewmodel.loguedWith || "");
-    }, []);
-  }, []);
-
+  
   return (
     <form
       className="atom-item__box"
@@ -20,7 +13,7 @@ const Item = ({ nft, sellerAddress, XerialWalletViewmodel }) => {
           console.error("Please Set a Valid Amount");
           return;
         }
-        if (loguedWith === "google") {
+        if (XerialWalletViewmodel.loguedWith === "google") {
           await XerialWalletViewmodel.purchaseNfts({
             tokenTypeId: nft.typeId,
             quantity: amount,
