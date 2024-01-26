@@ -2,14 +2,6 @@ import web3Functions from "@/utils/web3_functions/web3_functions";
 import { useEffect, useState } from "react";
 
 const SecondaryMarketItem = ({ nft, sellerAddress, XerialWalletViewmodel }) => {
-  const [loguedWith, setLoguedWith] = useState("");
-
-  useEffect(() => {
-    XerialWalletViewmodel.observer.observe(() => {
-      setLoguedWith(XerialWalletViewmodel.loguedWith || "");
-    }, []);
-  }, []);
-
   return (
     <form
       className="atom-item__box"
@@ -38,7 +30,7 @@ const SecondaryMarketItem = ({ nft, sellerAddress, XerialWalletViewmodel }) => {
       <button
         className="atom-item__button"
         onClick={async () => {
-          if (loguedWith === "google") {
+          if (XerialWalletViewmodel.loguedWith === "google") {
             await XerialWalletViewmodel.secondaryPurchase({
               marketItemId: nft.marketItemId.toString(),
             });
