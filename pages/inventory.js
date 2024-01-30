@@ -1,8 +1,8 @@
 import InventoryItem from "@/atoms/InventoryItem/InventoryItem";
 import InventoryItemOnSecondaryMarket from "@/atoms/InventoryItemOnSecondaryMarket/InventoryItemOnSecondaryMarket";
-import loginWithMetamask from "@/utils/login_functions";
-import web2Functions from "@/utils/web2_functions/web2_functions";
-import web3Functions from "@/utils/web3_functions/web3_functions";
+import loginWithMetamask from "@/functions/login";
+import web2Functions from "@/functions/web2/web2";
+import web3Functions from "@/functions/web3/web3";
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
