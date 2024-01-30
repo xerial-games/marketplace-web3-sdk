@@ -1,6 +1,6 @@
 import { getApiCodeAndSignCodeWithMetamask } from "@/helpers/web3";
 
-const { callApi, errorsManager, callWalletApi } = require("./call_api_functions");
+const { callApi, errorsManager, callWalletApi } = require("./call_api");
 
 const loginWithMetamask = async function ({ projectId }) {
   try {

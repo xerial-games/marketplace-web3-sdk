@@ -1,3 +1,5 @@
+import { defaultPolygonChainValue, defaultTelosChainValue } from "@/utils/defaultChainValues";
+
 const projectDomain = process.env.NEXT_PUBLIC_PROJECT_DOMAIN;
 
 export default function XerialWalletViewmodel(helpers) {
@@ -6,6 +8,7 @@ export default function XerialWalletViewmodel(helpers) {
   vm.observer = helpers.observer;
 
   vm.sessionToken = "";
+  vm.activeChain = defaultPolygonChainValue;
 
   vm.loadProject = async function () {
     const result = await helpers.getProjectForMarketplace({
@@ -239,7 +242,7 @@ export default function XerialWalletViewmodel(helpers) {
   }
   
   vm.loadInventory = async function () {
-    const userAddress = vm.wallets[0].address;
+    const userAddress = vm.getUserAddress({ chain: defaultPolygonChainValue });
     if (!userAddress) throw new Error("User wallet not found.");
     if (!vm.project.address) throw new Error("Project not found.");
     vm.loadingNfts = true;
@@ -312,7 +315,7 @@ export default function XerialWalletViewmodel(helpers) {
   vm.loadMaticBalance = async function () {
     vm.loadingBalance = true;
     vm.observer.notifyAll();
-    const userAddress = vm.wallets[0].address;
+    const userAddress = vm.getUserAddress({ chain: defaultPolygonChainValue });
     if (!userAddress) throw new Error("User wallet not found.");
     const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/eth`);
     const resjson = await response.json();
@@ -325,7 +328,7 @@ export default function XerialWalletViewmodel(helpers) {
   vm.loadUsdcBalance = async function () {
     vm.loadingBalance = true;
     vm.observer.notifyAll();
-    const userAddress = vm.wallets[0].address;
+    const userAddress = vm.getUserAddress({ chain: defaultPolygonChainValue });
     if (!userAddress) throw new Error("User wallet not found.");
 
     const resTokens = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/tokens`);
@@ -348,7 +351,7 @@ export default function XerialWalletViewmodel(helpers) {
 
   vm.transferNft = async function ({ collectionAddress, tokenId, to }) {
     try {
-      const userAddress = vm.wallets[0].address;
+      const userAddress = vm.getUserAddress({ chain: defaultPolygonChainValue });
       if (!userAddress) throw new Error("User wallet not found.");
       vm.loading = true;
       vm.loadingMessage = "Transferring your asset";
@@ -383,7 +386,7 @@ export default function XerialWalletViewmodel(helpers) {
 
   vm.listNft = async function ({ collectionAddress, tokenId, price }) {
     try {
-      const userAddress = vm.wallets[0].address;
+      const userAddress = vm.getUserAddress({ chain: defaultPolygonChainValue });
       if (!userAddress) throw new Error("User wallet not found.");
       vm.loading = true;
       vm.loadingMessage = "Publishing your asset";
@@ -420,7 +423,7 @@ export default function XerialWalletViewmodel(helpers) {
 
   vm.delist = async function ({ marketItemId }) {
     try {
-      const userAddress = vm.wallets[0].address;
+      const userAddress = vm.getUserAddress({ chain: defaultPolygonChainValue });
       if (!userAddress) throw new Error("User wallet not found.");
       vm.loading = true;
       vm.loadingMessage = "Delisting your asset";
@@ -462,7 +465,7 @@ export default function XerialWalletViewmodel(helpers) {
 
   vm.purchaseNfts = async function ({ tokenTypeId, quantity, collectionAddress }) {
     try {
-      const userAddress = vm.wallets[0].address;
+      const userAddress = vm.getUserAddress({ chain: defaultPolygonChainValue });
       if (!userAddress) throw new Error("User wallet not found.");
       vm.loading = true;
       vm.loadingMessage = "Purchasing NFT";
@@ -491,7 +494,7 @@ export default function XerialWalletViewmodel(helpers) {
 
   vm.secondaryPurchase = async function ({ marketItemId }) {
     try {
-      const userAddress = vm.wallets[0].address;
+      const userAddress = vm.getUserAddress({ chain: defaultPolygonChainValue });
       if (!userAddress) throw new Error("User wallet not found.");
       vm.loading = true;
       vm.loadingMessage = "Purchasing NFT";
@@ -521,8 +524,9 @@ export default function XerialWalletViewmodel(helpers) {
   vm.loadPlayerItemsOnSecondaryMarket = async function ({ chain }) {
     const url = `${process.env.NEXT_PUBLIC_API_HOST}/get_market_items`;
     const raw = JSON.stringify({
-      seller: vm.wallets[0].address,
-      chain
+      seller: vm.getUserAddress({ chain: defaultPolygonChainValue }),
+      chain,
+      studioAddress: vm.project.address
     });
     const response = await fetch(url, {
       method: "POST",
@@ -555,6 +559,12 @@ export default function XerialWalletViewmodel(helpers) {
     vm.setPlayer({});
     vm.setUsdc(null);
     vm.setMatic(null);
+  }
+
+  vm.getUserAddress = function ({ chain }) {
+    if (chain === defaultPolygonChainValue) return vm.wallets[0].smartAccount;
+    if (chain === defaultTelosChainValue) return vm.getUserAddress({ chain: defaultPolygonChainValue });
+    return null;
   }
 
   return vm;

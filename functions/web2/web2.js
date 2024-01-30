@@ -1,4 +1,4 @@
-import { callApi, errorsManager } from "../call_api_functions";
+import { callApi, errorsManager } from "../call_api";
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_HOST;
 const web2Functions = {};
@@ -51,11 +51,12 @@ web2Functions.getListedNftsOnSecondaryMarket = async function ({ chain, projectA
 };
 
 // Chain can be "polygon"
-web2Functions.getPlayerItemsOnSecondaryMarket = async function ({ chain, userAddress }) {
+web2Functions.getPlayerItemsOnSecondaryMarket = async function ({ chain, userAddress, studioAddress }) {
   const url = `${process.env.NEXT_PUBLIC_API_HOST}/get_market_items`;
   const raw = JSON.stringify({
     seller: userAddress,
     chain,
+    studioAddress
   });
   const response = await fetch(url, {
     method: "POST",

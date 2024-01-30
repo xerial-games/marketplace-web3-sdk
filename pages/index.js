@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import web2Functions from "@/utils/web2_functions/web2_functions";
+import web2Functions from "@/functions/web2/web2";
 import Item from "@/atoms/Item/Item";
 import { useRouter } from "next/router";
 import SecondaryMarketItem from "@/atoms/SecondaryMarketItem/SecondaryMarketItem";

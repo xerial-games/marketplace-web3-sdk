@@ -1,4 +1,4 @@
-import web3Functions from "@/utils/web3_functions/web3_functions";
+import web3Functions from "@/functions/web3/web3";
 import { useEffect, useState } from "react";
 
 const Item = ({ nft, sellerAddress, XerialWalletViewmodel }) => {
