@@ -1,3 +1,4 @@
+import { defaultPolygonChainValue } from "@/utils/defaultChainValues";
 import { useEffect, useState } from "react";
 
 function trimmedAddress(address) {
@@ -78,6 +79,7 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
   const [errorMessageModal, setErrorMessageModal] = useState(false);
   const [loadingSecondaryMarketNfts, setLoadingSecondaryMarketNfts] = useState(false);
   const [playerItemslistedNftsOnSecondaryMarket, setPlayerItemsListedOnSecondaryMarket] = useState([]);
+  const [activeChain, setActiveChain] = useState(defaultPolygonChainValue);
 
   useEffect(() => {
     setChainsActive(false);
@@ -267,8 +269,8 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
               Cancel
             </button>
           </div>
-          <div className="atoms__xerial-wallet__depositSection__userAddress">{wallets[0].address}</div>
-          <button className="atoms__xerial-wallet__depositSection__button" onClick={() => copyText(wallets[0].address)}>
+          <div className="atoms__xerial-wallet__depositSection__userAddress">{XerialWalletViewmodel.getUserAddress({ chain: activeChain })}</div>
+          <button className="atoms__xerial-wallet__depositSection__button" onClick={() => copyText(XerialWalletViewmodel.getUserAddress({ chain: activeChain }))}>
             Copy Address
           </button>
         </div>
@@ -278,9 +280,8 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
           <div>
             <div className="atoms__xerial-wallet__balanceAndAddressContainer">
               <div className="atoms__xerial-wallet__balance">{usdcBalance ? usdcBalance.toFixed(2) : "0.0"} USDC</div>
-              <div className="atoms__xerial-wallet__address">{wallets.length > 0 && trimmedAddress(wallets[0].address)}</div>
+              <div className="atoms__xerial-wallet__address">{wallets.length > 0 && trimmedAddress(XerialWalletViewmodel.getUserAddress({ chain: activeChain }))}</div>
             </div>
-            <div>Copy icon</div>
           </div>
 
           <div className="atoms__xerial-wallet__txButtons">
