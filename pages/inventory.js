@@ -65,6 +65,7 @@ const Inventory = () => {
     const items = await web2Functions.getPlayerItemsOnSecondaryMarket({
       chain: "polygon",
       userAddress: userAddress,
+      studioAddress: project.address,
     });
     setPlayerItemsOnSecondaryMarket(items);
   }
@@ -114,7 +115,7 @@ const Inventory = () => {
       return (
         <>
           <div className="inventory-items__titleContainer">
-            <h1 className="inventory-items__title">Your Inventory</h1>
+            <h1 className="inventory-items__title">Inventory</h1>
           </div>
           <div className="inventory-items__inventoryWithoutItems">
             <p className="inventory-items__generalTextSemiBold inventory-items__textCenter">You don't have any assets yet</p>
@@ -126,7 +127,7 @@ const Inventory = () => {
     return (
       <div>
         <div className="inventory-items__titleContainer">
-          <h1 className="inventory-items__title">Your Inventory</h1>
+          <h1 className="inventory-items__title">Inventory</h1>
         </div>
         <div className="inventory-items__itemsContainer" style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
           {items.map((nft) => {
@@ -144,11 +145,11 @@ const Inventory = () => {
       return (
         <>
           <div className="inventory-items__titleContainer">
-            <h1 className="inventory-items__title">Your items listed on secondary market</h1>
+            <h1 className="inventory-items__title">Items Listed on Secondary Market</h1>
           </div>
           <div className="inventory-items__inventoryWithoutItems">
             <p className="inventory-items__generalTextSemiBold inventory-items__textCenter">You don't have any assets yet</p>
-            <p className="inventory-items__generalText inventory-items__textCenter">The assets will be displayed on this page</p>
+            <p className="inventory-items__generalText inventory-items__textCenter">The assets will be listed on this page</p>
           </div>
         </>
       );
@@ -156,7 +157,7 @@ const Inventory = () => {
     return (
       <div>
         <div className="inventory-items__titleContainer">
-          <h1 className="inventory-items__title">Your items listed on secondary market</h1>
+          <h1 className="inventory-items__title">Items Listed on Secondary Market</h1>
         </div>
         <div className="inventory-items__itemsContainer" style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
           {playerItemsOnSecondaryMarket?.map((nft) => {
@@ -195,8 +196,8 @@ const Inventory = () => {
       {sessionToken ? (
         <div className="inventory__background">
           <div className="inventory__project-container">
-            <p className="inventory__project-session">User address: {userAddress}</p>
-            <p className="inventory__project-session">Session token: {sessionToken}</p>
+            <p className="inventory__project-session">User Address: {userAddress}</p>
+            <p className="inventory__project-session">Session Token: {sessionToken}</p>
           </div>
           <div className="inventory__items-container">
             <Items />

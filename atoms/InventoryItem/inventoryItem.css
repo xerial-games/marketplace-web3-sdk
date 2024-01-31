@@ -5,9 +5,14 @@
   gap: 12px;
   padding: 20px;
   min-height: 550px;
-  background: linear-gradient(107deg, #24252D -3.46%, rgba(36, 37, 45, 0.25) 107.53%);
+  background: linear-gradient(
+    107deg,
+    #24252d -3.46%,
+    rgba(36, 37, 45, 0.25) 107.53%
+  );
   border-radius: 20px;
-  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
 .inventory-items__projectContainer {
@@ -26,11 +31,11 @@
   margin-bottom: 20px;
 }
 
-.inventory-items__itemLabelForInput{
+.inventory-items__itemLabelForInput {
   width: 100%;
   color: white;
 }
 
-.inventory-items__itemInputWithLabelTitle{
+.inventory-items__itemInputWithLabelTitle {
   padding-left: 5px;
 }
