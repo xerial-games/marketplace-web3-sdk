@@ -126,8 +126,7 @@ export default function Home() {
         {project && (
           <div className="home__projectDataContainer">
             <div className="home__projectLogoAndTitleContainer">
-              <img className="home__projectLogo" src={project.logo} alt="project logo" />
-              <h2 className="home__projectTitle">Your project information</h2>
+              <h2 className="home__projectTitle">Project Information</h2>
               <img className="home__projectLogo" src={project.logo} alt="project logo" />
             </div>
             <div className="home__projectBannerContainer">
@@ -156,7 +155,7 @@ export default function Home() {
               })
             )}
           </div>
-          <h1 className="home__title">Secondary market</h1>
+          <h1 className="home__title">Secondary Market</h1>
           <div className="home__itemsContainer">
             {listedNftsOnSecondaryMarket && listedNftsOnSecondaryMarket.length === 0 ? (
               <div className="home__noListedNftsMessage">There are no listed NFTs</div>
