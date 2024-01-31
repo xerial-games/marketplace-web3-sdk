@@ -1,6 +1,6 @@
 import InventoryItem from "@/atoms/InventoryItem/InventoryItem";
 import InventoryItemOnSecondaryMarket from "@/atoms/InventoryItemOnSecondaryMarket/InventoryItemOnSecondaryMarket";
-import loginWithMetamask from "@/functions/login";
+import { loadSession, loginWithMetamask } from "@/functions/login";
 import web2Functions from "@/functions/web2/web2";
 import web3Functions from "@/functions/web3/web3";
 import { GoogleLogin } from "@react-oauth/google";
@@ -18,10 +18,12 @@ const Inventory = () => {
   const [sessionToken, setSessionToken] = useState("");
   const [userAddress, setUserAddress] = useState("");
   const [playerItemsOnSecondaryMarket, setPlayerItemsOnSecondaryMarket] = useState([]);
+  const [loguedWith, setLoguedWith] = useState("");
   const router = useRouter();
 
   useEffect(() => {
     load();
+    loadMetamaskSessionInUI();
   }, []);
 
   useEffect(() => {
@@ -82,8 +84,31 @@ const Inventory = () => {
       setWallets(wallets);
       setSessionToken(sessionToken);
       setUserAddress(userAddress);
+      setLoguedWith(loguedWith);
     } catch (error) {
       console.error("Error: Login Failed");
+    }
+  }
+
+  async function loadMetamaskSessionInUI () {
+    const response = await loadSession();
+    if (!response) return;
+    const { loguedWith, player, sessionToken, wallets } = response;
+    setWallets(wallets);
+    setSessionToken(sessionToken);
+    setUserAddress(userAddress);
+    setLoguedWith(loguedWith);
+  }
+
+  async function logoutAndClearUI () {
+    try {
+      await logout();
+      setWallets([]);
+      setSessionToken("");
+      setUserAddress("");
+      setLoguedWith("");
+    } catch (error) {
+      console.error(error.message);
     }
   }
 

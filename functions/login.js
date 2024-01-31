@@ -1,6 +1,7 @@
 import { getApiCodeAndSignCodeWithMetamask } from "@/helpers/web3";
-
-const { callApi, errorsManager, callWalletApi } = require("./call_api");
+import { SessionHelper } from "@/helpers/session";
+import { callApi, errorsManager, callWalletApi } from "./call_api";
+const sessionHelper = new SessionHelper();
 
 const loginWithMetamask = async function ({ projectId }) {
   try {
@@ -26,6 +27,7 @@ const loginWithMetamask = async function ({ projectId }) {
         },
       });
       const userResjson = await response.json();
+      sessionHelper.setSession({ tokens: resjsonAuth, loguedWith: "metamask" });
       return {
         sessionToken: resjsonAuth.access.token,
         tokens: resjsonAuth,
@@ -39,4 +41,62 @@ const loginWithMetamask = async function ({ projectId }) {
   }
 };
 
-export default loginWithMetamask;
+const loadSession = async function () {
+  try {
+    const sessionData = sessionHelper.getSession();
+    if (!sessionData) return;
+    const { tokens, loguedWith } = sessionData;
+    if (!tokens || !loguedWith) {
+      const missingParamsError = "tokens and loguedWith not found in loadSession function"
+      console.error(missingParamsError);
+      return null;
+    };
+    if (loguedWith !== "metamask") return null;
+    const dateRef = new Date(tokens.access.expires);
+    const now = new Date();
+    
+    if (dateRef < now) {
+      return null;
+    }
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_WALLET_API_HOST}/user`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "Application/json",
+          Authorization: `Bearer ${tokens.access.token}`,
+        },
+      }
+    );
+
+    const userResjson = await response.json();
+    
+    return { loguedWith, player: userResjson.user, sessionToken: tokens.access.token, tokens, wallets: userResjson.wallets }
+  } catch (error) {
+    console.log(error);
+    // throw new Error("Error to login.");
+  }
+}
+
+const logout = async function () {
+  const sessionData = sessionHelper.getSession();
+  if (!sessionData) {
+    console.log("You are not logged in");
+    return;
+  }
+  const refreshToken = sessionData.tokens.refresh.token;
+  const raw = JSON.stringify({ refreshToken })
+  const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/auth/logout`, {
+    method: "POST",
+    body: raw,
+    headers: {
+      "Content-Type": "Application/json"
+    }
+  });
+
+  if (response.status.toString()[0] != '2') throw new Error("Error to logout");
+  sessionHelper.deleteSession();
+}
+
+export { loginWithMetamask, loadSession, logout };

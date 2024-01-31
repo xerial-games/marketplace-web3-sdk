@@ -1,6 +1,8 @@
+import { SessionHelper } from "@/helpers/session";
 import { defaultPolygonChainValue, defaultTelosChainValue } from "@/utils/defaultChainValues";
 
 const projectDomain = process.env.NEXT_PUBLIC_PROJECT_DOMAIN;
+const sessionHelper = new SessionHelper();
 
 export default function XerialWalletViewmodel(helpers) {
   const vm = {};
@@ -82,24 +84,28 @@ export default function XerialWalletViewmodel(helpers) {
           },
         });
         const userResjson = await response.json();
+        sessionHelper.setSession({ tokens: resjsonAuth, loguedWith: "google" });
         vm.setPlayer(userResjson.user);
         vm.setWallets(userResjson.wallets);
         vm.setLoguedWith("google");
-      } else throw new Error("Auth player failed.")
+      } else throw new Error("Auth player failed")
     } catch (error) {
       console.log(error);
-      throw new Error("Error to login.");
+      throw new Error("Error to login");
     }
   }
 
-  vm.loadSession = async function ({ tokens, loguedWith }) {
+  vm.loadSession = async function () {
     try {
-      
+      const sessionResponse = sessionHelper.getSession();
+      if (!sessionResponse) return;
+      const { tokens, loguedWith } = sessionResponse;
       if (!tokens || !loguedWith) {
         const missingParamsError = "please send tokens and loguedWith params for chargeSession function."
         console.error(missingParamsError);
         throw new Error(missingParamsError);
       };
+      if (loguedWith !== "google") return;
       vm.setSessionToken(tokens.access.token);
       vm.setTokens(tokens);
       const response = await fetch(
@@ -195,6 +201,7 @@ export default function XerialWalletViewmodel(helpers) {
       }
     });
     if (response.status.toString()[0] != '2') throw new Error("Error to logout.");
+    sessionHelper.deleteSession();
     vm.setSessionToken("");
     vm.setLoguedWith("");
     vm.setTokens({});

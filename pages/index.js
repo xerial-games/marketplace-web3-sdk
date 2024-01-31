@@ -7,6 +7,7 @@ import SecondaryMarketItem from "@/atoms/SecondaryMarketItem/SecondaryMarketItem
 import { xerialWalletViewmodelInstance } from "@/viewmodels/instances";
 import XerialWallet from "@/atoms/XerialWallet/XerialWallet";
 import { GoogleLogin } from "@react-oauth/google";
+import { loadSession, loginWithMetamask, logout } from "@/functions/login";
 const clientId = process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID;
 const projectDomain = process.env.NEXT_PUBLIC_PROJECT_DOMAIN;
 
@@ -17,6 +18,9 @@ export default function Home() {
   const [loguedWith, setLoguedWith] = useState("");
   const [loadingProject, setLoadingProject] = useState(false);
   const [activeXerialWallet, setActiveXerialWallet] = useState(false);
+  const [wallets, setWallets] = useState([]);
+  const [sessionToken, setSessionToken] = useState("");
+  const [userAddress, setUserAddress] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -25,6 +29,8 @@ export default function Home() {
     }, []);
     xerialWalletViewmodelInstance.loadProject();
     load();
+    loadMetamaskSessionInUI();
+    xerialWalletViewmodelInstance.loadSession();
   }, []);
 
   useEffect(() => {
@@ -33,6 +39,43 @@ export default function Home() {
       loadListedNftsOnSecondaryMarket();
     }
   }, [project]);
+
+  async function loadMetamaskSessionInUI () {
+    const response = await loadSession();
+    if (!response) return;
+    const { loguedWith, player, sessionToken, wallets } = response;
+    setWallets(wallets);
+    setSessionToken(sessionToken);
+    setUserAddress(userAddress);
+    setLoguedWith(loguedWith);
+  }
+
+  async function logoutAndClearUI () {
+    try {
+      await logout();
+      setWallets([]);
+      setSessionToken("");
+      setUserAddress("");
+      setLoguedWith("");
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
+  
+  async function connectWallet() {
+    try {
+      const { loguedWith, player, sessionToken, tokens, wallets } = await loginWithMetamask({ projectId: project.id });
+      const userAddress = wallets[0].address;
+      if (!userAddress) throw new Error("User Address Not Found");
+      setWallets(wallets);
+      setSessionToken(sessionToken);
+      setUserAddress(userAddress);
+      setLoguedWith(loguedWith);
+    } catch (error) {
+      console.error("Error: Login Failed");
+    }
+  }
 
   async function load() {
     setLoadingProject(true);
@@ -65,8 +108,10 @@ export default function Home() {
 
   function refreshListedItems() {
     if (project && JSON.stringify(project) != "{}") {
+      setLoadingProject(true);
       loadListedNfts();
       loadListedNftsOnSecondaryMarket();
+      setLoadingProject(false);
     } else console.error("Project Not Found");
   }
 
@@ -90,11 +135,9 @@ export default function Home() {
     return (
       <div className="home__principalContainer">
         <div className="home__buttonsContainer">
-          {!loguedWith && (
-            <button className="home__button" onClick={goToInventory}>
-              Go to Inventory
-            </button>
-          )}
+          <button className="home__button" onClick={goToInventory}>
+            Go to Inventory
+          </button>
           <button className="home__button" onClick={refreshListedItems}>
             Refresh Listed Items
           </button>
@@ -113,7 +156,7 @@ export default function Home() {
                 {activeXerialWallet ? "Close xerial wallet" : "Open xerial wallet"}
               </button>
             ) : (
-              <button>You logued with {loguedWith}</button>
+              <button className="inventory__button">You logued with {loguedWith}</button>
             )}
             {loguedWith === "google" && activeXerialWallet && (
               <div className="home__xerialWalletContainer">
@@ -121,6 +164,16 @@ export default function Home() {
               </div>
             )}
           </div>
+          {!loguedWith && (
+            <button className="inventory__button" onClick={connectWallet}>
+              Connect with MetaMask
+            </button>
+          )}
+          {loguedWith === "metamask" && (
+            <button className="inventory__button" onClick={logoutAndClearUI}>
+              logout
+            </button>
+          )}
         </div>
         {/* {loguedWith && <div className="home__noListedNftsMessage" style={{marginBottom: 20, marginTop: 20}}>Logued with: {loguedWith}</div>} */}
         {project && (
