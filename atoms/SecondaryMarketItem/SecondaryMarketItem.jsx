@@ -11,7 +11,7 @@ const SecondaryMarketItem = ({ nft, sellerAddress, XerialWalletViewmodel }) => {
     >
       <img className="atom-item__itemImage" src={nft.metadata.image} alt="nft img" />
       <h1 className="atom-item__generalText global-style__textWithDots">Token Id: {nft.tokenId}</h1>
-      <h2 className="atom-item__generalText global-style__textWithDots">Token name: {nft.metadata.name}</h2>
+      <h2 className="atom-item__generalText global-style__textWithDots">Name: {nft.metadata.name}</h2>
       <p className="atom-item__generalText">Collection address: {nft.metadata.contract.address}</p>
       <p className="atom-item__generalText">Collection name: {nft.metadata.contract.name}</p>
       <p className="atom-item__generalText">Seller address: {nft.seller}</p>
