@@ -1,6 +1,6 @@
 import { getApiCodeAndSignCodeWithMetamask } from "@/helpers/web3";
 import { SessionHelper } from "@/helpers/session";
-import { callApi, errorsManager, callWalletApi } from "./call_api";
+import { callApi, errorsManager, callWalletApi } from "@/functions/call_api";
 const sessionHelper = new SessionHelper();
 
 const loginWithMetamask = async function ({ projectId }) {
