@@ -1,6 +1,6 @@
 import InventoryItem from "@/atoms/InventoryItem/InventoryItem";
 import InventoryItemOnSecondaryMarket from "@/atoms/InventoryItemOnSecondaryMarket/InventoryItemOnSecondaryMarket";
-import loginWithMetamask from "@/functions/login";
+import { loadSession, loginWithMetamask, logout } from "@/functions/login";
 import web2Functions from "@/functions/web2/web2";
 import web3Functions from "@/functions/web3/web3";
 import { GoogleLogin } from "@react-oauth/google";
@@ -18,10 +18,12 @@ const Inventory = () => {
   const [sessionToken, setSessionToken] = useState("");
   const [userAddress, setUserAddress] = useState("");
   const [playerItemsOnSecondaryMarket, setPlayerItemsOnSecondaryMarket] = useState([]);
+  const [loguedWith, setLoguedWith] = useState("");
   const router = useRouter();
 
   useEffect(() => {
     load();
+    loadMetamaskSessionInUI();
   }, []);
 
   useEffect(() => {
@@ -83,8 +85,33 @@ const Inventory = () => {
       setWallets(wallets);
       setSessionToken(sessionToken);
       setUserAddress(userAddress);
+      setLoguedWith(loguedWith);
     } catch (error) {
       console.error("Error: Login Failed");
+    }
+  }
+
+  async function loadMetamaskSessionInUI () {
+    const response = await loadSession();
+    if (!response) return;
+    const { loguedWith, player, sessionToken, wallets } = response;
+    setWallets(wallets);
+    setSessionToken(sessionToken);
+    setUserAddress(userAddress);
+    setLoguedWith(loguedWith);
+  }
+
+  async function logoutAndClearUI () {
+    try {
+      await logout();
+      setItems([]);
+      setPlayerItemsOnSecondaryMarket([]);
+      setWallets([]);
+      setSessionToken("");
+      setUserAddress("");
+      setLoguedWith("");
+    } catch (error) {
+      console.error(error.message);
     }
   }
 
@@ -180,9 +207,15 @@ const Inventory = () => {
               Reload Inventory and Player Market Items
             </button>
           )}
-          <button className="inventory__button" onClick={connectWallet}>
-            Connect with MetaMask
-          </button>
+          {!loguedWith ? (
+            <button className="inventory__button" onClick={connectWallet}>
+              Connect with MetaMask
+            </button>
+          ) : (
+            <button className="inventory__button" onClick={logoutAndClearUI}>
+              logout
+            </button>
+          )}
           {/* <GoogleLogin
             theme="outline"
             width="335px"
