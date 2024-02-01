@@ -463,7 +463,6 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
                       tokenId: selectedNft.tokenId,
                       price: nftPrice,
                     });
-                    // falta un loading luego de listar....
                   }}
                 >
                   Sell
@@ -471,7 +470,7 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
               </div>
               <div className="atoms__xerial-wallet__selectedNft__nftCollectionNameContainer">
                 <div className="atoms__xerial-wallet__selectedNft__nftCollectionName--title">Collection</div>
-                <div className="atoms__xerial-wallet__selectedNft__nftCollectionName">NZK</div>
+                <div className="atoms__xerial-wallet__selectedNft__nftCollectionName">{selectedNft.metadata.contract.name}</div>
               </div>
             </>
           )}
