@@ -171,7 +171,7 @@ export default function Home() {
           )}
           {loguedWith === "metamask" && (
             <button className="inventory__button" onClick={logoutAndClearUI}>
-              logout
+              Logout
             </button>
           )}
         </div>

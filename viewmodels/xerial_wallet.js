@@ -119,12 +119,13 @@ export default function XerialWalletViewmodel(helpers) {
         }
       );
       const userResjson = await response.json();
+      if (response.status.toString()[0] != "2") throw userResjson;
       vm.setPlayer(userResjson.user);
       vm.setWallets(userResjson.wallets);
       vm.setLoguedWith(loguedWith);
     } catch (error) {
-      console.log(error);
-      throw new Error("Error to login.");
+      console.error("Error in load session function:", error.message);
+      return null;
     }
   }
 

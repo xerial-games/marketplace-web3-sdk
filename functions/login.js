@@ -42,40 +42,37 @@ const loginWithMetamask = async function ({ projectId }) {
 };
 
 const loadSession = async function () {
-  try {
-    const sessionData = sessionHelper.getSession();
-    if (!sessionData) return;
-    const { tokens, loguedWith } = sessionData;
-    if (!tokens || !loguedWith) {
-      const missingParamsError = "tokens and loguedWith not found in loadSession function"
-      console.error(missingParamsError);
-      return null;
-    };
-    if (loguedWith !== "metamask") return null;
-    const dateRef = new Date(tokens.access.expires);
-    const now = new Date();
-    
-    if (dateRef < now) {
-      return null;
-    }
+  const sessionData = sessionHelper.getSession();
+  if (!sessionData) return;
+  const { tokens, loguedWith } = sessionData;
+  if (!tokens || !loguedWith) {
+    const missingParamsError = "tokens and loguedWith not found in loadSession function"
+    console.error(missingParamsError);
+    return null;
+  };
+  if (loguedWith !== "metamask") return null;
+  const dateRef = new Date(tokens.access.expires);
+  const now = new Date();
+  
+  if (dateRef < now) {
+    return null;
+  }
 
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_WALLET_API_HOST}/user`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "Application/json",
-          Authorization: `Bearer ${tokens.access.token}`,
-        },
-      }
-    );
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/user`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "Application/json",
+        Authorization: `Bearer ${tokens.access.token}`,
+      },
+    });
 
     const userResjson = await response.json();
-    
-    return { loguedWith, player: userResjson.user, sessionToken: tokens.access.token, tokens, wallets: userResjson.wallets }
+    if (response.status.toString()[0] != "2") throw userResjson;
+    return { loguedWith, player: userResjson.user, sessionToken: tokens.access.token, tokens, wallets: userResjson.wallets };
   } catch (error) {
-    console.log(error);
-    // throw new Error("Error to login.");
+    console.error("Error in load session function:", error.message);
+    return null;
   }
 }
 
