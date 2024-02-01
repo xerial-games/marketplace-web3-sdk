@@ -1,6 +1,6 @@
 import InventoryItem from "@/atoms/InventoryItem/InventoryItem";
 import InventoryItemOnSecondaryMarket from "@/atoms/InventoryItemOnSecondaryMarket/InventoryItemOnSecondaryMarket";
-import { loadSession, loginWithMetamask } from "@/functions/login";
+import { loadSession, loginWithMetamask, logout } from "@/functions/login";
 import web2Functions from "@/functions/web2/web2";
 import web3Functions from "@/functions/web3/web3";
 import { GoogleLogin } from "@react-oauth/google";
@@ -104,6 +104,8 @@ const Inventory = () => {
   async function logoutAndClearUI () {
     try {
       await logout();
+      setItems([]);
+      setPlayerItemsOnSecondaryMarket([]);
       setWallets([]);
       setSessionToken("");
       setUserAddress("");
@@ -205,9 +207,15 @@ const Inventory = () => {
               Reload Inventory and Player Market Items
             </button>
           )}
-          <button className="inventory__button" onClick={connectWallet}>
-            Connect with MetaMask
-          </button>
+          {!loguedWith ? (
+            <button className="inventory__button" onClick={connectWallet}>
+              Connect with MetaMask
+            </button>
+          ) : (
+            <button className="inventory__button" onClick={logoutAndClearUI}>
+              logout
+            </button>
+          )}
           {/* <GoogleLogin
             theme="outline"
             width="335px"
