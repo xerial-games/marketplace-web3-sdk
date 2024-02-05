@@ -37,7 +37,7 @@ const loginWithMetamask = async function ({ projectId }) {
       };
     } else throw new Error("Auth Tokens Not Found");
   } catch (error) {
-    console.error(error);
+    console.error("Error in loginWithMetamask function. Reason: ", error.message);
   }
 };
 
@@ -71,7 +71,7 @@ const loadSession = async function () {
     if (response.status.toString()[0] != "2") throw userResjson;
     return { loguedWith, player: userResjson.user, sessionToken: tokens.access.token, tokens, wallets: userResjson.wallets };
   } catch (error) {
-    console.error("Error in load session function:", error.message);
+    console.error("Error in loadSession function. Reason: ", error.message);
     return null;
   }
 }

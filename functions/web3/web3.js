@@ -74,7 +74,7 @@ web3Functions.secondaryMarketPurchase = async function ({ marketplaceNftId }) {
     const purchaseTransactionWaited = await purchaseTransaction.wait();
     console.log(purchaseTransactionWaited);
   } catch (error) {
-    console.error("Error to purchase NFT in Secondary Market");
+    console.error("Error to purchase NFT in Secondary Market. Reason: ", error.message);
     throw new Error(error.message);
   }
 };
@@ -95,7 +95,7 @@ web3Functions.sellNftOnSecondaryMarket = async function ({ collectionAddress, to
     const createMarketItemTransactionWaited = await createMarketItemTransaction.wait();
     console.log(createMarketItemTransactionWaited);
   } catch (error) {
-    console.error("Error to publish your NFT in Secondary Market");
+    console.error("Error to publish your NFT in Secondary Market. Reason: ", error.message);
     throw new Error(error.message);
   }
 };
@@ -110,7 +110,7 @@ web3Functions.delistNftOnSecondaryMarket = async function ({ marketplaceNftId })
     const cancelMarketItemTransactionWaited = await cancelMarketItemTransaction.wait();
     console.log(cancelMarketItemTransactionWaited);
   } catch (error) {
-    console.error("Error to cancel NFT in Secondary Market");
+    console.error("Error to cancel NFT in Secondary Market. Reason: ", error.message);
     throw new Error(error.message);
   }
 };
