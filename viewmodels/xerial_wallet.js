@@ -107,6 +107,14 @@ export default function XerialWalletViewmodel(helpers) {
         throw new Error(missingParamsError);
       };
       if (loguedWith !== "google") return;
+
+      const dateRef = new Date(tokens.access.expires);
+      const now = new Date();
+      
+      if (dateRef < now) {
+        return null;
+      }
+      
       vm.setSessionToken(tokens.access.token);
       vm.setTokens(tokens);
       const response = await fetch(
