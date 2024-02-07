@@ -135,6 +135,44 @@ const Inventory = () => {
     }
   }
 
+  function PageButtons ({ content }) {
+    useEffect(() => {
+      console.log(content)
+    }, []);
+
+    const PageNumbers = () => {
+      let currentPage = 1;
+      let limit = 20;
+      const pageNumbers = [];
+
+      // Pagination logic
+      const indexOfLastPurchase = currentPage * limit;
+      const indexOfFirstPurchase = indexOfLastPurchase - limit;
+      const currentPurchases = content.slice(indexOfFirstPurchase, indexOfLastPurchase);
+
+      const totalPages = Math.ceil(content.length / limit);
+
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(
+          <button
+            key={i}
+            onClick={() => handlePaginationClick(i)}
+            className={currentPage === i ? 'active' : ''}
+          >
+            {i}
+          </button>
+        );
+      }
+
+      return pageNumbers;
+    };
+    return (
+      <div>
+        <PageNumbers limit={20}/>
+      </div>
+    )
+  }
+
   function goToHome() {
     router.push("/");
   }
@@ -164,6 +202,15 @@ const Inventory = () => {
               return <InventoryItem nft={nft} key={nft.metadata.contract.address + tokenId} tokenId={tokenId} />;
             });
           })}
+          <div>
+            <PageButtons
+              content={items.map((nft) => {
+                return nft.tokenIds.map((tokenId) => {
+                  return { ...nft, tokenId };
+                });
+              }).flat()}
+            />
+          </div>
         </div>
       </div>
     );
