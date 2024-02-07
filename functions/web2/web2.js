@@ -19,6 +19,7 @@ web2Functions.getInventory = async ({ address, studioAddress, chain }) => {
     const resjson = await errorsManager(response);
     return resjson;
   } catch (error) {
+    console.error("Error in getInventory function. Reason: " +  error.message);
     throw new Error("Error: Get Inventory Failed");
   }
 };

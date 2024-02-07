@@ -58,7 +58,7 @@ export default function Home() {
       setUserAddress("");
       setLoguedWith("");
     } catch (error) {
-      console.error(error.message);
+      console.error("Error in logoutAndClearUI function. Reason: " +  error.message);
     }
   }
 
@@ -74,6 +74,7 @@ export default function Home() {
       setLoguedWith(loguedWith);
     } catch (error) {
       console.error("Error: Login Failed");
+      console.error("Error in connectWallet function. Reason: " +  error.message);
     }
   }
 
@@ -122,8 +123,7 @@ export default function Home() {
         clientId,
       });
     } catch (error) {
-      console.error(error);
-      console.error("Error: Login Failed.");
+      console.error("Error in connectWithGoogle function. Reason ", error.message);
     }
   }
 
