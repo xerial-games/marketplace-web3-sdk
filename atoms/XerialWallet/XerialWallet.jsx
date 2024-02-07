@@ -153,7 +153,7 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
       await navigator.clipboard.writeText(text);
       console.log("Content copied to clipboard");
     } catch (err) {
-      console.error("Error to copy text. Reason: ", err.message);
+      console.error("Error to copy text. Reason: " +  err.message);
     }
   }
 

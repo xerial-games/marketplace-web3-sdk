@@ -58,7 +58,7 @@ export default function Home() {
       setUserAddress("");
       setLoguedWith("");
     } catch (error) {
-      console.error("Error in logoutAndClearUI function. Reason: ", error.message);
+      console.error("Error in logoutAndClearUI function. Reason: " +  error.message);
     }
   }
 
@@ -74,7 +74,7 @@ export default function Home() {
       setLoguedWith(loguedWith);
     } catch (error) {
       console.error("Error: Login Failed");
-      console.error("Error in connectWallet function. Reason: ", error.message);
+      console.error("Error in connectWallet function. Reason: " +  error.message);
     }
   }
 
