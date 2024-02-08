@@ -48,7 +48,7 @@ npm i ethers@5.7
 
 - We appreciate any contribution. If you find a bug or have any suggestions, feel free to open an issue or submit a pull request on [GitHub](https://github.com/xerial-games/marketplace-web3-sdk).
 
-- When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change. You can learn more about how you can contribute to this project in the [Contribution Guide](https://github.com/xerial-games/marketplace-web3-sdk/blob/develop/CONTRIBUTING.MD).
+- When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change. You can learn more about how you can contribute to this project in the [Contribution Guide](CONTRIBUTING.md).
 
 Thank you for using the Xerial Marketplace SDK! 💫
 
