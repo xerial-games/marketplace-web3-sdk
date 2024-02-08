@@ -48,6 +48,6 @@ The following dependency is required for other developers to implement the funct
 
 - When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change. You can learn more about how you can contribute to this project in the [Contribution Guide](https://github.com/xerial-games/marketplace-web3-sdk/blob/develop/CONTRIBUTING.MD).
 
-- Thank you for using the Xerial Wallet SDK for JavaScript! 💫
+- Thank you for using the Xerial Marketplace SDK! 💫
 
 Made with ❤️ by [Xerial Team](https://github.com/xerial-games)
