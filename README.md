@@ -38,10 +38,12 @@ yarn dev
 
 ## Project dependencies
 
-The following dependency is required for other developers to implement the functionality in their own repositories, by copying and incorporating the functional parts of this repository and installing "ethers" as well. We are currently using this version as it is the stable version at the moment:
+The following dependency is required for other developers to implement the functionality in their own repositories, by copying and incorporating the functional parts of this repository and installing `ethers` as well. We are currently using this version `"ethers": "5.7"` as it is the stable version at the moment:
 
-- "ethers": "5.7"
-
+- Use the following commmand to install it:
+```bash
+npm i ethers@5.7
+```
 ## Contributions ✨
 
 - We appreciate any contribution. If you find a bug or have any suggestions, feel free to open an issue or submit a pull request on [GitHub](https://github.com/xerial-games/marketplace-web3-sdk).
