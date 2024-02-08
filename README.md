@@ -34,8 +34,6 @@ yarn install
 npm run dev
 # with yarn
 yarn dev
-# with python
-pnpm dev
 ```
 
 ## Project dependencies
