@@ -64,6 +64,12 @@ NEXT_PUBLIC_POLYGON_USDC_CONTRACT=0x940fd6321c0fF00BB8459367B953170811711f8B
 
 You can find more complete documentation about the Marketplace and ohter interesting services here: [Xerial GitBook docs](https://xerial.gitbook.io/xerial-doc/intro/introduction)
 
+## Wallet interaction
+
+To interact with the `Xerial Wallet` you need to send `MATIC` or `USDC` to your address. At the moment it is manual process.
+
+`Coming soon`: we are in the process of adding payment gateways that allow the user to buy any currency through any `TDC, Banks and/or Neobanks`.
+
 ## Blockchain features
 
 1. Gasless Transactions: we use `Paymaster`, `Account Abstraction ERC-4337` and `Gas Tank` to perform transactions and sponsoring the gas of users, with each user having their own Smart Account.
@@ -71,6 +77,14 @@ You can find more complete documentation about the Marketplace and ohter interes
 2. Dynamic NFTs: we provide an interface to allow updating NFTs, this is only done by the `Game Studio`, the player can see if his NFT has changes and can buy the evolution it has had over time.
 
 `Coming soon`: we will add `Multichain` purchases with a single sign, i.e. you will be able to make purchases in different chains at the same time wrapped in one sign.
+
+## Infrastructure partnerships
+
+we focus on speed and security for end-user interaction, that's why we choose the best in the market:
+
+- [Biconomy](https://biconomy.io/)
+- [Quicknode](https://www.quicknode.com/)
+- [AWS](https://aws.amazon.com/)
 
 ## Contributions ✨
 
