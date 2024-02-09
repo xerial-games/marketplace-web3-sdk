@@ -110,11 +110,7 @@ const Inventory = () => {
       setLoguedWith(loguedWith);
     } catch (error) {
       console.error("Error: Login Failed");
-<<<<<<< HEAD
-      console.error("Error in connectWallet function. Reason: ", error.message);
-=======
       console.error("Error in connectWallet function. Reason: " +  error.message);
->>>>>>> 982a3e564693e9fd9f2df14822df64b58ee77069
     }
   }
 
@@ -138,11 +134,7 @@ const Inventory = () => {
       setUserAddress("");
       setLoguedWith("");
     } catch (error) {
-<<<<<<< HEAD
-      console.error("Error in logoutAndClearUI function. Reason: ", error.message);
-=======
       console.error("Error in logoutAndClearUI function. Reason: " +  error.message);
->>>>>>> 982a3e564693e9fd9f2df14822df64b58ee77069
     }
   }
 
@@ -161,11 +153,7 @@ const Inventory = () => {
       setUserAddress(userAddress);
     } catch (error) {
       console.error("Error: Login Failed");
-<<<<<<< HEAD
-      console.error("Error in connectWithGoogle function. Reason: ", error.message);
-=======
       console.error("Error in connectWithGoogle function. Reason: " +  error.message);
->>>>>>> 982a3e564693e9fd9f2df14822df64b58ee77069
     }
   }
 
