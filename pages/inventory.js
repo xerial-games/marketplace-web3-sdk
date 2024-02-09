@@ -2,7 +2,6 @@ import InventoryItem from "@/atoms/InventoryItem/InventoryItem";
 import InventoryItemOnSecondaryMarket from "@/atoms/InventoryItemOnSecondaryMarket/InventoryItemOnSecondaryMarket";
 import { loadSession, loginWithMetamask, logout } from "@/functions/login";
 import web2Functions from "@/functions/web2/web2";
-import web3Functions from "@/functions/web3/web3";
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -11,7 +10,6 @@ const projectDomain = process.env.NEXT_PUBLIC_PROJECT_DOMAIN;
 
 const Inventory = () => {
   const [items, setItems] = useState(null);
-  // studioAddress is the Game Studio Address
   const [collections, setCollections] = useState([]);
   const [project, setProject] = useState({});
   const [wallets, setWallets] = useState([]);
