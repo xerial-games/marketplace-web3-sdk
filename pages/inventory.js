@@ -96,6 +96,7 @@ const Inventory = () => {
     const response = await loadSession();
     if (!response) return;
     const { loguedWith, player, sessionToken, wallets } = response;
+    const userAddress = wallets[0].address;
     setWallets(wallets);
     setSessionToken(sessionToken);
     setUserAddress(userAddress);
