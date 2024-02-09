@@ -91,7 +91,11 @@ export default function XerialWalletViewmodel(helpers) {
       } else throw new Error("Auth player failed")
     } catch (error) {
       console.error("Error: Login Failed");
+<<<<<<< HEAD
       console.error("Error in login function. Reason: ", error.message);
+=======
+      console.error("Error in login function. Reason: " +  error.message);
+>>>>>>> 982a3e564693e9fd9f2df14822df64b58ee77069
       throw new Error("Error to login");
     }
   }
@@ -133,7 +137,11 @@ export default function XerialWalletViewmodel(helpers) {
       vm.setWallets(userResjson.wallets);
       vm.setLoguedWith(loguedWith);
     } catch (error) {
+<<<<<<< HEAD
       console.error("Error in load session function. Reason: ", error.message);
+=======
+      console.error("Error in load session function. Reason: " +  error.message);
+>>>>>>> 982a3e564693e9fd9f2df14822df64b58ee77069
       return null;
     }
   }
@@ -162,7 +170,11 @@ export default function XerialWalletViewmodel(helpers) {
         vm.observer.notifyAll();
       } else throw new Error("Error to login.");
     } catch (error) {
+<<<<<<< HEAD
       console.error("Error in authenticateWithGoogleAndGetTokens function. Reason: ", error.message);
+=======
+      console.error("Error in authenticateWithGoogleAndGetTokens function. Reason: " +  error.message);
+>>>>>>> 982a3e564693e9fd9f2df14822df64b58ee77069
     }
   }
 
@@ -196,7 +208,11 @@ export default function XerialWalletViewmodel(helpers) {
         const sessionResponseJson = await response.json();
       } else throw new Error("Error to login.");
     } catch (error) {
+<<<<<<< HEAD
       console.error("Error in authenticateWithMetamaskAndGetTokens function. Reason: ", error.message);
+=======
+      console.error("Error in authenticateWithMetamaskAndGetTokens function. Reason: " +  error.message);
+>>>>>>> 982a3e564693e9fd9f2df14822df64b58ee77069
     }
   }
 
@@ -325,7 +341,11 @@ export default function XerialWalletViewmodel(helpers) {
         vm.setLoguedWith("metamask");
       } else throw new Error("Auth tokens not found.");
     } catch (error) {
+<<<<<<< HEAD
       console.error("Error in loginWithMetamask function. Reason: ", error.message);
+=======
+      console.error("Error in loginWithMetamask function. Reason: " +  error.message);
+>>>>>>> 982a3e564693e9fd9f2df14822df64b58ee77069
     }
   }
 
@@ -392,7 +412,11 @@ export default function XerialWalletViewmodel(helpers) {
       vm.loading = false;
       vm.loadingMessage = "";
       vm.setErrorMessageModal("Error to transfer nft. Please try again later");
+<<<<<<< HEAD
       console.error("Error in transferNft function. Reason: ", error.message);
+=======
+      console.error("Error in transferNft function. Reason: " +  error.message);
+>>>>>>> 982a3e564693e9fd9f2df14822df64b58ee77069
       vm.observer.notifyAll();
     }
   }
@@ -428,7 +452,11 @@ export default function XerialWalletViewmodel(helpers) {
       vm.loading = false;
       vm.loadingMessage = "";
       vm.setErrorMessageModal("Your asset could not be published. Please try again later");
+<<<<<<< HEAD
       console.error("Error in listNft function. Reason: ", error.message);
+=======
+      console.error("Error in listNft function. Reason: " +  error.message);
+>>>>>>> 982a3e564693e9fd9f2df14822df64b58ee77069
       vm.observer.notifyAll();
       console.error("List nft failed.");
     }
@@ -467,7 +495,11 @@ export default function XerialWalletViewmodel(helpers) {
       vm.loadingMessage = "";
       vm.setErrorMessageModal("Your asset could not be delisted. Please try again later");
       vm.observer.notifyAll();
+<<<<<<< HEAD
       console.error("Error in delist function. Reason: ", error.message);
+=======
+      console.error("Error in delist function. Reason: " +  error.message);
+>>>>>>> 982a3e564693e9fd9f2df14822df64b58ee77069
     }
   }
 
@@ -508,7 +540,7 @@ export default function XerialWalletViewmodel(helpers) {
       vm.loading = false;
       vm.loadingMessage = "";
       vm.observer.notifyAll();
-      console.error("Error in purchaseNfts function. Reason: ", error.message);
+      console.error("Error in purchaseNfts function. Reason: " +  error.message);
     }
   }
 
@@ -538,7 +570,11 @@ export default function XerialWalletViewmodel(helpers) {
       vm.loading = false;
       vm.loadingMessage = "";
       vm.observer.notifyAll();
+<<<<<<< HEAD
       console.error("Error in secondaryPurchase function. Reason: ", error.message);
+=======
+      console.error("Error in secondaryPurchase function. Reason: " +  error.message);
+>>>>>>> 982a3e564693e9fd9f2df14822df64b58ee77069
     }
   }
 
