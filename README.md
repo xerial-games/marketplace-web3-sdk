@@ -32,15 +32,6 @@ yarn dev
 
 - You can now go to this URL in your browser and see your code running locally: `http://localhost:3000`
 
-## Project dependencies
-
-The following dependency is required for other developers to implement the functionality in their own repositories, by copying and incorporating the functional parts of this repository and installing `ethers` as well. We are currently using this version `"ethers": "5.7"` as it is the stable version at the moment:
-
-- Use the following commmand to install it:
-```bash
-npm i ethers@5.7
-```
-
 # Frontend details
 
 The `@` in paths works as a form of remapping, this helps us to use short and precise paths, thus making the code neater.
