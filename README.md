@@ -95,3 +95,4 @@ we focus on speed and security for end-user interaction, that's why we choose th
 Thank you for using the Xerial Marketplace SDK! 💫
 
 Made with ❤️ by [Xerial Team](https://github.com/xerial-games)
+
