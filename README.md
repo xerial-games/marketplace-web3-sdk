@@ -36,6 +36,8 @@ npm run dev
 yarn dev
 ```
 
+- You can now go to this URL in your browser and see your code running locally: `http://localhost:3000`
+
 ## Project dependencies
 
 The following dependency is required for other developers to implement the functionality in their own repositories, by copying and incorporating the functional parts of this repository and installing `ethers` as well. We are currently using this version `"ethers": "5.7"` as it is the stable version at the moment:
