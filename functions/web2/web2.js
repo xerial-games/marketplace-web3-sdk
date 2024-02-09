@@ -1,4 +1,4 @@
-import { callApi, errorsManager } from "@/functions/call_api";
+import { callApi, errorsManager } from "@/functions/callApi";
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_HOST;
 const web2Functions = {};
