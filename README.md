@@ -16,13 +16,7 @@ This repository was essentially created to help developers implement the `Xerial
 - Using `npm`:
 
 ```bash
-npm install
-```
-
-- Using `yarn`:
-
-```bash
-yarn install
+npm ci
 ```
 
 ## Run project
@@ -95,4 +89,3 @@ we focus on speed and security for end-user interaction, that's why we choose th
 Thank you for using the Xerial Marketplace SDK! 💫
 
 Made with ❤️ by [Xerial Team](https://github.com/xerial-games)
-
