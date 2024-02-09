@@ -1,4 +1,4 @@
-import { callWalletApi } from "@/functions/call_api";
+import { callWalletApi } from "@/functions/callApi";
 import { ethers } from "ethers";
 
 const checkEthereumExistInUI = function () {

@@ -1,9 +1,8 @@
 import { ethers, BigNumber } from "ethers";
-import usdcAbi from "@/web3_abis/usdc_abi";
-import marketplaceABI from "@/web3_abis/marketplace_abi";
-import collectionAbi from "@/web3_abis/collection_abi";
+import usdcAbi from "@/web3-abis/usdcAbi";
+import marketplaceABI from "@/web3-abis/marketplaceAbi";
+import collectionAbi from "@/web3-abis/collectionAbi";
 const usdcAddress = process.env.NEXT_PUBLIC_POLYGON_USDC_CONTRACT;
-const marketplaceContractAddress = process.env.NEXT_PUBLIC_POLYGON_MARKETPLACE_CONTRACT;
 const ethereum = globalThis.ethereum;
 const checkEthereumExistInUI = function () {
   if (!globalThis.ethereum) throw Error("There is no ethereum in window / MetaMask is not installed");
