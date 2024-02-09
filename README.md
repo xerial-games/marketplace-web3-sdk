@@ -36,6 +36,8 @@ npm run dev
 yarn dev
 ```
 
+- You can now go to this URL in your browser and see your code running locally: `http://localhost:3000`
+
 ## Project dependencies
 
 The following dependency is required for other developers to implement the functionality in their own repositories, by copying and incorporating the functional parts of this repository and installing `ethers` as well. We are currently using this version `"ethers": "5.7"` as it is the stable version at the moment:
@@ -44,6 +46,21 @@ The following dependency is required for other developers to implement the funct
 ```bash
 npm i ethers@5.7
 ```
+
+## Environment variables
+
+To run your project smoothly, you must have the acrode environment variables, as described here at [.env.example](.env.example) we suggest you use the address of our Marketplace and USDC contracts that we have already deployed on Polygon's Test Network `(Mumbai)`:
+
+```bash
+NEXT_PUBLIC_POLYGON_MARKETPLACE_CONTRACT=0x729BdBbef17E3DaCC6dD8EB325E1bce40699Ab27
+NEXT_PUBLIC_POLYGON_USDC_CONTRACT=0x940fd6321c0fF00BB8459367B953170811711f8B
+```
+
+## GitBook documentation
+
+You can find more complete documentation about the Marketplace and ohter interesting services here: [Xerial GitBook docs](https://xerial.gitbook.io/xerial-doc/intro/introduction)
+
+
 ## Contributions ✨
 
 - We appreciate any contribution. If you find a bug or have any suggestions, feel free to open an issue or submit a pull request on [GitHub](https://github.com/xerial-games/marketplace-web3-sdk).
