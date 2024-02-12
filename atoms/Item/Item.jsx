@@ -20,10 +20,10 @@ const Item = ({ nft, sellerAddress, XerialWalletViewmodel }) => {
             collectionAddress: nft.metadata.contract.address,
           });
         } else {
-          await web3Functions.purchaseNfts({
+          await web3Functions.purchaseNft({
             tokenTypeId: nft.typeId,
             collectionAddress: nft.metadata.contract.address,
-            amount: amount,
+            quantity: amount,
           });
         }
       }}

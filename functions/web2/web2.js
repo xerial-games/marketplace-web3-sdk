@@ -35,39 +35,49 @@ web2Functions.getListedNfts = async function ({ chain, projectId }) {
 
 // Chain can be "polygon"
 web2Functions.getListedNftsOnSecondaryMarket = async function ({ chain, projectAddress }) {
-  const url = `${process.env.NEXT_PUBLIC_API_HOST}/get_market_items`;
-  const raw = JSON.stringify({
-    studioAddress: projectAddress,
-    chain,
-  });
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: raw,
-  });
-  const resjson = await response.json();
-  return resjson;
+  try {
+    const url = `${process.env.NEXT_PUBLIC_API_HOST}/get_market_items`;
+    const raw = JSON.stringify({
+      studioAddress: projectAddress,
+      chain,
+    });
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: raw,
+    });
+    const resjson = await response.json();
+    return resjson;
+  } catch (error) {
+    console.error("Error in getListedNftsOnSecondaryMarket function. Reason: " +  error.message);
+    throw new Error(error.message);
+  }
 };
 
 // Chain can be "polygon"
 web2Functions.getPlayerItemsOnSecondaryMarket = async function ({ chain, userAddress, studioAddress }) {
-  const url = `${process.env.NEXT_PUBLIC_API_HOST}/get_market_items`;
-  const raw = JSON.stringify({
-    seller: userAddress,
-    chain,
-    studioAddress
-  });
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: raw,
-  });
-  const resjson = await response.json();
-  return resjson;
+  try {
+    const url = `${process.env.NEXT_PUBLIC_API_HOST}/get_market_items`;
+    const raw = JSON.stringify({
+      seller: userAddress,
+      chain,
+      studioAddress
+    });
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: raw,
+    });
+    const resjson = await response.json();
+    if (response.status.toString()[0] != "2") throw resjson;
+    return resjson;
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
 web2Functions.getProjectForDomain = async function ({ projectDomain }) {
