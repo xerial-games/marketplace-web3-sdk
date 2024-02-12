@@ -2,7 +2,6 @@ import InventoryItem from "@/atoms/InventoryItem/InventoryItem";
 import InventoryItemOnSecondaryMarket from "@/atoms/InventoryItemOnSecondaryMarket/InventoryItemOnSecondaryMarket";
 import { loadSession, loginWithMetamask, logout } from "@/functions/login";
 import web2Functions from "@/functions/web2/web2";
-import web3Functions from "@/functions/web3/web3";
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -14,7 +13,6 @@ const Inventory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentItems, setCurrentItems] = useState([]);
   const [limit, setLimit] = useState(20);
-  // studioAddress is the Game Studio Address
   const [collections, setCollections] = useState([]);
   const [project, setProject] = useState({});
   const [wallets, setWallets] = useState([]);
@@ -118,6 +116,7 @@ const Inventory = () => {
     const response = await loadSession();
     if (!response) return;
     const { loguedWith, player, sessionToken, wallets } = response;
+    const userAddress = wallets[0].address;
     setWallets(wallets);
     setSessionToken(sessionToken);
     setUserAddress(userAddress);
