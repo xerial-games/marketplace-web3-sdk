@@ -48,14 +48,14 @@ const Inventory = () => {
         });
       }).flat() || [];
 
-      const currentPurchases = formattedItems.slice(0, 20).map((nft) => {
+      const currentPurchases = formattedItems.slice(0, limit).map((nft) => {
         if (nft.tokenIds) {
           let { tokenIds, ...nftWithoutTokenIds } = nft;
           return nftWithoutTokenIds;
         }
         return nft;
       });
-      setCurrentItems(currentPurchases.slice(0, 20));
+      setCurrentItems(currentPurchases.slice(0, limit));
     }
   }, [items]);
 
@@ -156,7 +156,14 @@ const Inventory = () => {
     }
   }
 
-  function PageButtons ({ content }) {
+  function scrollToElement (id) {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  function PageButtons ({ content, extraAction }) {
     const handlePaginationClick = (page) => {
       const indexOfLastPurchase = page * limit;
       const indexOfFirstPurchase = indexOfLastPurchase - limit;
@@ -173,16 +180,42 @@ const Inventory = () => {
       const pageNumbers = [];
       const totalPages = Math.ceil(content.length / limit);
 
-      for (let i = 1; i <= totalPages; i++) {
+      if (currentPage > 1) {
         pageNumbers.push(
           <button
-            key={i}
-            onClick={() => handlePaginationClick(i)}
-            className={currentPage === i ? "inventory-items__page inventory-items__pageActive" : "inventory-items__page"}
+            key={1}
+            onClick={() => { handlePaginationClick(1); if (extraAction) {
+              extraAction();
+            } }}
+            className={currentPage === 1 ? "inventory-items__page inventory-items__pageActive" : "inventory-items__page"}
           >
-            {i}
+            {1}
           </button>
         );
+        pageNumbers.push(
+          <button
+            key={"???"}
+            className={"inventory-items__page"}
+          >
+            ...
+          </button>
+        );
+      }
+
+      for (let i = 1; i <= totalPages; i++) {
+        if (i >= currentPage && i < currentPage + 9) {
+          pageNumbers.push(
+            <button
+              key={i}
+              onClick={() => { handlePaginationClick(i); if (extraAction) {
+                extraAction();
+              } }}
+              className={currentPage === i ? "inventory-items__page inventory-items__pageActive" : "inventory-items__page"}
+            >
+              {i}
+            </button>
+          );
+        }
       }
 
       return pageNumbers;
@@ -216,7 +249,7 @@ const Inventory = () => {
     return (
       <div>
         <div className="inventory-items__titleContainer">
-          <h1 className="inventory-items__title">Inventory</h1>
+          <h1 className="inventory-items__title" id="inventory">Inventory</h1>
         </div>
         <div className="inventory-items__itemsContainer" style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
           {currentItems.map((nft) => {
@@ -293,20 +326,18 @@ const Inventory = () => {
             <p className="inventory__project-session">Session Token: {sessionToken}</p>
           </div>
           <div className="inventory__items-container">
-            <PageButtons
-              content={items?.map((nft) => {
-                return nft.tokenIds.map((tokenId) => {
-                  return { ...nft, tokenId };
-                });
-              }).flat() || []}
-            />
             <Items />
             <PageButtons
-              content={items?.map((nft) => {
-                return nft.tokenIds.map((tokenId) => {
-                  return { ...nft, tokenId };
-                });
-              }).flat() || []}
+              content={
+                items
+                  ?.map((nft) => {
+                    return nft.tokenIds.map((tokenId) => {
+                      return { ...nft, tokenId };
+                    });
+                  })
+                  .flat() || []
+              }
+              extraAction={() => scrollToElement("inventory")}
             />
             <SecondaryMarketItems />
           </div>
