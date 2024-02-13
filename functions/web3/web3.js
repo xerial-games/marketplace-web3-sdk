@@ -79,7 +79,7 @@ web3Functions.purchaseNft = async function ({ tokenTypeId, quantity, collectionA
       const resTx = await tx.wait();
     }
 
-    const purchaseTransaction = await marketplace.connect(signer).primaryPurchase(nft);
+    const purchaseTransaction = await marketplace.connect(signer).primaryPurchase([{ tokenTypeId, quantity, collectionAddress }]);
     const purchaseTransactionWaited = await purchaseTransaction.wait();
     console.log(purchaseTransactionWaited);
   } catch (error) {
