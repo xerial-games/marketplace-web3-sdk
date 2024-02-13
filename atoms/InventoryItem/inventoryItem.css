@@ -39,3 +39,22 @@
 .inventory-items__itemInputWithLabelTitle {
   padding-left: 5px;
 }
+
+.inventory-items__page {
+  width: 30px;
+  font-size: 18px;
+  color: #000;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.inventory-items__pageActive {
+  background-color: #f0f;
+  color: #fff;
+}
+
+.inventory-items__pageNumberContainer {
+	display: flex;
+	justify-content: center;
+}
