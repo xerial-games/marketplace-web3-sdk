@@ -70,7 +70,7 @@ const Inventory = () => {
       });
       setPlayerItemsOnSecondaryMarket(items);
     } catch (error) {
-      console.error("error to load playerItemsOnSecondaryMarket")
+      console.error("Error to load playerItemsOnSecondaryMarket")
     }
   }
 

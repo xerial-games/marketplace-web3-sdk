@@ -35,8 +35,7 @@ web3Functions.purchaseNfts = async function (nfts) {
     }
 
     const usdcAddress = process.env.NEXT_PUBLIC_POLYGON_USDC_CONTRACT;
-    // const marketplaceAddress = process.env.NEXT_PUBLIC_POLYGON_MARKETPLACE_CONTRACT;
-    const marketplaceAddress = "0x77533EA81cd5CAAeE87E1D489261B4B1740DfAd2";
+    const marketplaceAddress = process.env.NEXT_PUBLIC_POLYGON_MARKETPLACE_CONTRACT;
     if (!marketplaceAddress) throw new Error("Marketplace Address Not Found");
     if (!usdcAddress) throw new Error("USDC Address Not Found");
     const { provider, signer } = await connectToMetaMask();
