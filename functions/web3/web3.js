@@ -25,13 +25,20 @@ async function connectToMetaMask() {
 
 const web3Functions = {};
 
-web3Functions.purchaseNfts = async function ({ tokenTypeId, amount, collectionAddress }) {
+// Allow to buy multiple types of NFTs
+web3Functions.purchaseNfts = async function (nfts) {
   try {
+    for (const nft of nfts) {
+      const { tokenTypeId, quantity, collectionAddress } = nft;
+      if (!tokenTypeId || !quantity || !collectionAddress) {
+        throw new Error("Each object in the array must have the properties tokenTypeId, quantity and collectionAddress");
+      }
+    }
+
     const usdcAddress = process.env.NEXT_PUBLIC_POLYGON_USDC_CONTRACT;
     const marketplaceAddress = process.env.NEXT_PUBLIC_POLYGON_MARKETPLACE_CONTRACT;
     if (!marketplaceAddress) throw new Error("Marketplace Address Not Found");
     if (!usdcAddress) throw new Error("USDC Address Not Found");
-    if (!tokenTypeId || !collectionAddress || !amount) throw new Error("All Parameters Are Required");
     const { provider, signer } = await connectToMetaMask();
     const usdc = new ethers.Contract(usdcAddress, usdcAbi, provider);
     const marketplace = new ethers.Contract(marketplaceAddress, marketplaceABI, provider);
@@ -45,7 +52,36 @@ web3Functions.purchaseNfts = async function ({ tokenTypeId, amount, collectionAd
       const resTx = await tx.wait();
     }
 
-    const purchaseTransaction = await marketplace.connect(signer).primaryPurchase(collectionAddress, tokenTypeId, amount);
+    const purchaseTransaction = await marketplace.connect(signer).primaryPurchase(nfts);
+    const purchaseTransactionWaited = await purchaseTransaction.wait();
+    console.log(purchaseTransactionWaited);
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+// Allow to buy a single type of NFTs
+web3Functions.purchaseNft = async function ({ tokenTypeId, quantity, collectionAddress }) {
+  try {
+    const usdcAddress = process.env.NEXT_PUBLIC_POLYGON_USDC_CONTRACT;
+    const marketplaceAddress = process.env.NEXT_PUBLIC_POLYGON_MARKETPLACE_CONTRACT;
+    if (!marketplaceAddress) throw new Error("Marketplace Address Not Found");
+    if (!usdcAddress) throw new Error("USDC Address Not Found");
+    if (!tokenTypeId || !collectionAddress || !quantity) throw new Error("All Parameters Are Required");
+    const { provider, signer } = await connectToMetaMask();
+    const usdc = new ethers.Contract(usdcAddress, usdcAbi, provider);
+    const marketplace = new ethers.Contract(marketplaceAddress, marketplaceABI, provider);
+
+    // Querying how much USDC the market can access from my wallet
+    const tx = await usdc.allowance(await signer.getAddress(), marketplaceAddress);
+    if (!(Number(tx.toString()) > 0)) {
+      // USDC permission
+      const maxNumber = BigNumber.from(2).pow(256).sub(1);
+      const tx = await usdc.connect(signer).approve(marketplaceAddress, maxNumber);
+      const resTx = await tx.wait();
+    }
+
+    const purchaseTransaction = await marketplace.connect(signer).primaryPurchase([{ tokenTypeId, quantity, collectionAddress }]);
     const purchaseTransactionWaited = await purchaseTransaction.wait();
     console.log(purchaseTransactionWaited);
   } catch (error) {

@@ -84,12 +84,16 @@ const Inventory = () => {
   }
 
   async function loadPlayerItemsOnSecondaryMarket() {
-    const items = await web2Functions.getPlayerItemsOnSecondaryMarket({
-      chain: "polygon",
-      userAddress: userAddress,
-      studioAddress: project.address,
-    });
-    setPlayerItemsOnSecondaryMarket(items);
+    try {
+      const items = await web2Functions.getPlayerItemsOnSecondaryMarket({
+        chain: "polygon",
+        userAddress: userAddress,
+        studioAddress: project.address,
+      });
+      setPlayerItemsOnSecondaryMarket(items);
+    } catch (error) {
+      console.error("Error to load playerItemsOnSecondaryMarket")
+    }
   }
 
   async function reloadPlayerItemsOnSecundaryMarketAndInventory() {
