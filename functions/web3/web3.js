@@ -25,6 +25,7 @@ async function connectToMetaMask() {
 
 const web3Functions = {};
 
+// Allow to buy multiple types of NFTs
 web3Functions.purchaseNfts = async function (nfts) {
   try {
     for (const nft of nfts) {
@@ -59,6 +60,7 @@ web3Functions.purchaseNfts = async function (nfts) {
   }
 };
 
+// Allow to buy a single type of NFTs
 web3Functions.purchaseNft = async function ({ tokenTypeId, quantity, collectionAddress }) {
   try {
     const usdcAddress = process.env.NEXT_PUBLIC_POLYGON_USDC_CONTRACT;
