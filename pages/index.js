@@ -4,14 +4,14 @@ import web2Functions from "@/functions/web2/web2";
 import Item from "@/atoms/Item/Item";
 import { useRouter } from "next/router";
 import SecondaryMarketItem from "@/atoms/SecondaryMarketItem/SecondaryMarketItem";
-import { xerialWalletViewmodelInstance } from "@/viewmodels/instances";
 import XerialWallet from "@/atoms/XerialWallet/XerialWallet";
 import { GoogleLogin } from "@react-oauth/google";
 import { loadSession, loginWithMetamask, logout } from "@/functions/login";
+import { defaultPolygonChainValue, defaultTelosChainValue } from "@/utils/defaultChainValues";
 const clientId = process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID;
 const projectDomain = process.env.NEXT_PUBLIC_PROJECT_DOMAIN;
 
-export default function Home() {
+export default function Home({ XerialWalletViewmodel, activeChain, handleActiveChain }) {
   const [project, setProject] = useState({});
   const [listedNfts, setListedNfts] = useState([]);
   const [listedNftsOnSecondaryMarket, setListedNftsOnSecondaryMarket] = useState([]);
@@ -22,15 +22,16 @@ export default function Home() {
   const [sessionToken, setSessionToken] = useState("");
   const [userAddress, setUserAddress] = useState("");
   const router = useRouter();
-
+  
   useEffect(() => {
-    xerialWalletViewmodelInstance.observer.observe(() => {
-      setLoguedWith(xerialWalletViewmodelInstance.loguedWith || "");
+    XerialWalletViewmodel.observer.restart();
+    XerialWalletViewmodel.observer.observe(() => {
+      setLoguedWith(XerialWalletViewmodel.loguedWith || "");
     }, []);
-    xerialWalletViewmodelInstance.loadProject();
+    XerialWalletViewmodel.loadProject();
     load();
     loadMetamaskSessionInUI();
-    xerialWalletViewmodelInstance.loadSession();
+    XerialWalletViewmodel.loadSession();
   }, []);
 
   useEffect(() => {
@@ -118,7 +119,7 @@ export default function Home() {
 
   async function connectWithGoogle(credentialResponse) {
     try {
-      await xerialWalletViewmodelInstance.login({
+      await XerialWalletViewmodel.login({
         credential: credentialResponse.credential,
         clientId,
       });
@@ -137,6 +138,9 @@ export default function Home() {
         <div className="home__buttonsContainer">
           <button className="home__button" onClick={goToInventory}>
             Go to Inventory
+          </button>
+          <button className="home__button" onClick={() => handleActiveChain(activeChain === defaultPolygonChainValue ? defaultTelosChainValue : defaultPolygonChainValue)}>
+            Change active chain to {activeChain === defaultPolygonChainValue ? defaultTelosChainValue : defaultPolygonChainValue}
           </button>
           <button className="home__button" onClick={refreshListedItems}>
             Refresh Listed Items
@@ -160,7 +164,7 @@ export default function Home() {
             )}
             {loguedWith === "google" && activeXerialWallet && (
               <div className="home__xerialWalletContainer">
-                <XerialWallet XerialWalletViewmodel={xerialWalletViewmodelInstance} />
+                <XerialWallet XerialWalletViewmodel={XerialWalletViewmodel} />
               </div>
             )}
           </div>
@@ -204,7 +208,7 @@ export default function Home() {
               <div className="home__noListedNftsMessage">There are no listed NFTs</div>
             ) : (
               listedNfts?.map((nft) => {
-                return <Item key={nft.id} nft={nft} sellerAddress={project.address} XerialWalletViewmodel={xerialWalletViewmodelInstance} />;
+                return <Item key={nft.id} nft={nft} sellerAddress={project.address} XerialWalletViewmodel={XerialWalletViewmodel} />;
               })
             )}
           </div>
@@ -214,7 +218,7 @@ export default function Home() {
               <div className="home__noListedNftsMessage">There are no listed NFTs</div>
             ) : (
               listedNftsOnSecondaryMarket?.map((nft) => {
-                return <SecondaryMarketItem key={nft.marketItemId} nft={nft} XerialWalletViewmodel={xerialWalletViewmodelInstance} />;
+                return <SecondaryMarketItem key={nft.marketItemId} nft={nft} XerialWalletViewmodel={XerialWalletViewmodel} />;
               })
             )}
           </div>
