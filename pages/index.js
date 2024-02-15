@@ -202,26 +202,30 @@ export default function Home({ XerialWalletViewmodel, activeChain, handleActiveC
           </div>
         )}
         <section className="home__marketplaceSection">
-          <h1 className="home__title">Primary Market</h1>
-          <div className="home__itemsContainer">
-            {listedNfts && listedNfts.length === 0 ? (
-              <div className="home__noListedNftsMessage">There are no listed NFTs</div>
-            ) : (
-              listedNfts?.map((nft) => {
-                return <Item key={nft.id} nft={nft} sellerAddress={project.address} XerialWalletViewmodel={XerialWalletViewmodel} />;
-              })
-            )}
-          </div>
-          <h1 className="home__title">Secondary Market</h1>
-          <div className="home__itemsContainer">
-            {listedNftsOnSecondaryMarket && listedNftsOnSecondaryMarket.length === 0 ? (
-              <div className="home__noListedNftsMessage">There are no listed NFTs</div>
-            ) : (
-              listedNftsOnSecondaryMarket?.map((nft) => {
-                return <SecondaryMarketItem key={nft.marketItemId} nft={nft} XerialWalletViewmodel={XerialWalletViewmodel} />;
-              })
-            )}
-          </div>
+          {activeChain === defaultPolygonChainValue && (
+            <>
+              <h1 className="home__title">Primary Market</h1>
+              <div className="home__itemsContainer">
+                {listedNfts && listedNfts.length === 0 ? (
+                  <div className="home__noListedNftsMessage">There are no listed NFTs</div>
+                ) : (
+                  listedNfts?.map((nft) => {
+                    return <Item key={nft.id} nft={nft} sellerAddress={project.address} XerialWalletViewmodel={XerialWalletViewmodel} />;
+                  })
+                )}
+              </div>
+              <h1 className="home__title">Secondary Market</h1>
+              <div className="home__itemsContainer">
+                {listedNftsOnSecondaryMarket && listedNftsOnSecondaryMarket.length === 0 ? (
+                  <div className="home__noListedNftsMessage">There are no listed NFTs</div>
+                ) : (
+                  listedNftsOnSecondaryMarket?.map((nft) => {
+                    return <SecondaryMarketItem key={nft.marketItemId} nft={nft} XerialWalletViewmodel={XerialWalletViewmodel} />;
+                  })
+                )}
+              </div>
+            </>
+          )}
         </section>
       </div>
     );

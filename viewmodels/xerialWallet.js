@@ -496,7 +496,7 @@ export default function XerialWalletViewmodel(helpers) {
       vm.loading = true;
       vm.loadingMessage = "Purchasing NFT";
       vm.observer.notifyAll();
-      const raw = JSON.stringify({ typeId: tokenTypeId, quantity, collectionAddress });
+      const raw = JSON.stringify({ purchases: [{ typeId: tokenTypeId, quantity, collectionAddress }] });
       const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/primary-purchase`, {
         method: "POST",
         body: raw,
