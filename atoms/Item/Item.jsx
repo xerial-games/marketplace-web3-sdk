@@ -1,9 +1,8 @@
 import web3Functions from "@/functions/web3/web3";
 import { useEffect, useState } from "react";
 
-const Item = ({ nft, sellerAddress, XerialWalletViewmodel }) => {
+const Item = ({ nft, sellerAddress, XerialWalletViewmodel, activeChain }) => {
   const [amount, setAmount] = useState("");
-
   return (
     <form
       className="atom-item__box"
@@ -24,6 +23,7 @@ const Item = ({ nft, sellerAddress, XerialWalletViewmodel }) => {
             tokenTypeId: nft.typeId,
             collectionAddress: nft.metadata.contract.address,
             quantity: amount,
+            chain: activeChain
           });
         }
       }}

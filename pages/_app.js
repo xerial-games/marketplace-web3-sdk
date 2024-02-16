@@ -6,7 +6,7 @@ import { xerialWalletViewmodelInstance } from "@/viewmodels/instances";
 
 const clientId = process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID;
 export default function App({ Component, pageProps }) {
-  const [activeChain, setActiveChain] = useState(xerialWalletViewmodelInstance.activeChain);
+  const [activeChain, setActiveChain] = useState(xerialWalletViewmodelInstance.activeChain || defaultPolygonChainValue);
   return (
     <GoogleOAuthProvider clientId={clientId}>
       <Component

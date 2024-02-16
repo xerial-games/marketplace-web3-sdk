@@ -11,7 +11,7 @@ function validateNumberWithDecimals(number) {
   return regex.test(number);
 }
 
-const InventoryItem = ({ nft, tokenId }) => {
+const InventoryItem = ({ nft, tokenId, activeChain }) => {
   const [price, setPrice] = useState("");
 
   function onChangePrice(value) {
@@ -29,7 +29,7 @@ const InventoryItem = ({ nft, tokenId }) => {
     event.preventDefault();
     if (!price) {
       alert("Please set a valid price");
-    } else await web3Functions.sellNftOnSecondaryMarket({ collectionAddress: nft.metadata.contract.address, tokenId, price });
+    } else await web3Functions.sellNftOnSecondaryMarket({ collectionAddress: nft.metadata.contract.address, tokenId, price, chain: activeChain });
   }
 
   return (

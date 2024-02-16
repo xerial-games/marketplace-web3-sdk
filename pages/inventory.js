@@ -2,16 +2,19 @@ import InventoryItem from "@/atoms/InventoryItem/InventoryItem";
 import InventoryItemOnSecondaryMarket from "@/atoms/InventoryItemOnSecondaryMarket/InventoryItemOnSecondaryMarket";
 import { loadSession, loginWithMetamask, logout } from "@/functions/login";
 import web2Functions from "@/functions/web2/web2";
+import { defaultPolygonChainValue, defaultTelosChainValue } from "@/utils/defaultChainValues";
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 const clientId = process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID;
 const projectDomain = process.env.NEXT_PUBLIC_PROJECT_DOMAIN;
 
-const Inventory = () => {
+const Inventory = ({ activeChain, handleActiveChain }) => {
   const [items, setItems] = useState(null);
+  const [itemsInTelos, setItemsInTelos] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentItems, setCurrentItems] = useState([]);
+  const [currentItemsInTelos, setCurrentItemsInTelos] = useState([]);
   const [limit, setLimit] = useState(20);
   const [collections, setCollections] = useState([]);
   const [project, setProject] = useState({});
@@ -19,6 +22,7 @@ const Inventory = () => {
   const [sessionToken, setSessionToken] = useState("");
   const [userAddress, setUserAddress] = useState("");
   const [playerItemsOnSecondaryMarket, setPlayerItemsOnSecondaryMarket] = useState([]);
+  const [playerItemsOnSecondaryMarketInTelos, setPlayerItemsOnSecondaryMarketInTelos] = useState([]);
   const [loguedWith, setLoguedWith] = useState("");
   const router = useRouter();
 
@@ -36,7 +40,9 @@ const Inventory = () => {
   useEffect(() => {
     if (sessionToken) {
       loadInventory();
+      loadInventoryInTelos();
       loadPlayerItemsOnSecondaryMarket();
+      loadPlayerItemsOnSecondaryMarketInTelos();
     }
   }, [sessionToken]);
 
@@ -59,6 +65,25 @@ const Inventory = () => {
     }
   }, [items]);
 
+  useEffect(() => {
+    if (itemsInTelos && itemsInTelos.length > 0) {
+      const formattedItemsInTelos = itemsInTelos?.map((nft) => {
+        return nft.tokenIds.map((tokenId) => {
+          return { ...nft, tokenId };
+        });
+      }).flat() || [];
+
+      const currentPurchases = formattedItemsInTelos.slice(0, limit).map((nft) => {
+        if (nft.tokenIds) {
+          let { tokenIds, ...nftWithoutTokenIds } = nft;
+          return nftWithoutTokenIds;
+        }
+        return nft;
+      });
+      setCurrentItemsInTelos(currentPurchases.slice(0, limit));
+    }
+  }, [itemsInTelos]);
+
   async function load() {
     const getProjectForDomainResponse = await web2Functions.getProjectForDomain({ projectDomain: projectDomain });
     setProject(getProjectForDomainResponse.project);
@@ -74,7 +99,7 @@ const Inventory = () => {
       const inventory = await web2Functions.getInventory({
         address: userAddress,
         studioAddress: project.address,
-        chain: "polygon",
+        chain: defaultPolygonChainValue,
       });
 
       setItems(inventory);
@@ -83,10 +108,24 @@ const Inventory = () => {
     }
   }
 
+  async function loadInventoryInTelos() {
+    try {
+      const inventory = await web2Functions.getInventory({
+        address: userAddress,
+        studioAddress: project.address,
+        chain: defaultTelosChainValue,
+      });
+
+      setItemsInTelos(inventory);
+    } catch (error) {
+      console.error("Error in loadInventoryInTelos function. Reason: " +  error.message);
+    }
+  }
+
   async function loadPlayerItemsOnSecondaryMarket() {
     try {
       const items = await web2Functions.getPlayerItemsOnSecondaryMarket({
-        chain: "polygon",
+        chain: defaultPolygonChainValue,
         userAddress: userAddress,
         studioAddress: project.address,
       });
@@ -96,9 +135,24 @@ const Inventory = () => {
     }
   }
 
-  async function reloadPlayerItemsOnSecundaryMarketAndInventory() {
+  async function loadPlayerItemsOnSecondaryMarketInTelos() {
+    try {
+      const items = await web2Functions.getPlayerItemsOnSecondaryMarket({
+        chain: defaultTelosChainValue,
+        userAddress: userAddress,
+        studioAddress: project.address,
+      });
+      setPlayerItemsOnSecondaryMarketInTelos(items);
+    } catch (error) {
+      console.error("Error to load playerItemsOnSecondaryMarket")
+    }
+  }
+
+  async function reloadPlayerItemsOnSecondaryMarketAndInventory() {
     loadPlayerItemsOnSecondaryMarket();
+    loadPlayerItemsOnSecondaryMarketInTelos();
     loadInventory();
+    loadInventoryInTelos();
   }
 
   async function connectWallet() {
@@ -177,7 +231,13 @@ const Inventory = () => {
       });
 
       setCurrentPage(page);
-      setCurrentItems(currentPurchases);
+      if (activeChain === defaultPolygonChainValue) {
+        setCurrentItems(currentPurchases);
+      }
+
+      if (activeChain === defaultTelosChainValue) {
+        setCurrentItems(currentPurchases);
+      }
     }
 
     const PageNumbers = () => {
@@ -237,59 +297,125 @@ const Inventory = () => {
   }
 
   function Items() {
-    if (!currentItems || currentItems.length === 0)
-      return (
-        <>
-          <div className="inventory-items__titleContainer">
-            <h1 className="inventory-items__title">Inventory</h1>
-          </div>
-          <div className="inventory-items__inventoryWithoutItems">
-            <p className="inventory-items__generalTextSemiBold inventory-items__textCenter">You don't have any assets yet</p>
-            <p className="inventory-items__generalText inventory-items__textCenter">The assets you purchase will be displayed on this page</p>
-          </div>
-        </>
-      );
+    if (activeChain === defaultPolygonChainValue) {
+      if (!currentItems || currentItems.length === 0)
+        return (
+          <>
+            <div className="inventory-items__titleContainer">
+              <h1 className="inventory-items__title">Inventory</h1>
+            </div>
+            <div className="inventory-items__inventoryWithoutItems">
+              <p className="inventory-items__generalTextSemiBold inventory-items__textCenter">You don't have any assets yet</p>
+              <p className="inventory-items__generalText inventory-items__textCenter">The assets you purchase will be displayed on this page</p>
+            </div>
+          </>
+        );
 
-    return (
-      <div>
-        <div className="inventory-items__titleContainer">
-          <h1 className="inventory-items__title" id="inventory">Inventory</h1>
+      return (
+        <div>
+          <div className="inventory-items__titleContainer">
+            <h1 className="inventory-items__title" id="inventory">
+              Inventory
+            </h1>
+          </div>
+          <div className="inventory-items__itemsContainer" style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
+            {currentItems.map((nft) => {
+              return <InventoryItem nft={nft} key={nft.metadata.contract.address + nft.tokenId} tokenId={nft.tokenId} />;
+            })}
+          </div>
         </div>
-        <div className="inventory-items__itemsContainer" style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
-          {currentItems.map((nft) => {
-            return <InventoryItem nft={nft} key={nft.metadata.contract.address + nft.tokenId} tokenId={nft.tokenId} />;
-          })}
+      );
+    }
+
+    if (activeChain === defaultTelosChainValue) {
+      if (!currentItemsInTelos || currentItemsInTelos.length === 0)
+        return (
+          <>
+            <div className="inventory-items__titleContainer">
+              <h1 className="inventory-items__title">Inventory</h1>
+            </div>
+            <div className="inventory-items__inventoryWithoutItems">
+              <p className="inventory-items__generalTextSemiBold inventory-items__textCenter">You don't have any assets yet</p>
+              <p className="inventory-items__generalText inventory-items__textCenter">The assets you purchase will be displayed on this page</p>
+            </div>
+          </>
+        );
+
+      return (
+        <div>
+          <div className="inventory-items__titleContainer">
+            <h1 className="inventory-items__title" id="inventory">
+              Inventory
+            </h1>
+          </div>
+          <div className="inventory-items__itemsContainer" style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
+            {currentItemsInTelos.map((nft) => {
+              return <InventoryItem nft={nft} key={nft.metadata.contract.address + nft.tokenId} tokenId={nft.tokenId} activeChain={activeChain} />;
+            })}
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 
   function SecondaryMarketItems() {
-    if (!playerItemsOnSecondaryMarket || playerItemsOnSecondaryMarket.length === 0)
+    if (activeChain === defaultPolygonChainValue) {
+      if (!playerItemsOnSecondaryMarket || playerItemsOnSecondaryMarket.length === 0)
+        return (
+          <>
+            <div className="inventory-items__titleContainer">
+              <h1 className="inventory-items__title">Items Listed on Secondary Market</h1>
+            </div>
+            <div className="inventory-items__inventoryWithoutItems">
+              <p className="inventory-items__generalTextSemiBold inventory-items__textCenter">You don't have any assets yet</p>
+              <p className="inventory-items__generalText inventory-items__textCenter">The assets will be listed on this page</p>
+            </div>
+          </>
+        );
+
       return (
-        <>
+        <div>
           <div className="inventory-items__titleContainer">
             <h1 className="inventory-items__title">Items Listed on Secondary Market</h1>
           </div>
-          <div className="inventory-items__inventoryWithoutItems">
-            <p className="inventory-items__generalTextSemiBold inventory-items__textCenter">You don't have any assets yet</p>
-            <p className="inventory-items__generalText inventory-items__textCenter">The assets will be listed on this page</p>
+          <div className="inventory-items__itemsContainer" style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
+            {playerItemsOnSecondaryMarket?.map((nft) => {
+              return <InventoryItemOnSecondaryMarket nft={nft} key={nft.metadata.contract.address + nft.tokenId} activeChain={activeChain}/>;
+            })}
           </div>
-        </>
+        </div>
       );
+    }
 
-    return (
-      <div>
-        <div className="inventory-items__titleContainer">
-          <h1 className="inventory-items__title">Items Listed on Secondary Market</h1>
+    if (activeChain === defaultTelosChainValue) {
+      if (!playerItemsOnSecondaryMarketInTelos || playerItemsOnSecondaryMarketInTelos.length === 0)
+        return (
+          <>
+            <div className="inventory-items__titleContainer">
+              <h1 className="inventory-items__title">Items Listed on Secondary Market</h1>
+            </div>
+            <div className="inventory-items__inventoryWithoutItems">
+              <p className="inventory-items__generalTextSemiBold inventory-items__textCenter">You don't have any assets yet</p>
+              <p className="inventory-items__generalText inventory-items__textCenter">The assets will be listed on this page</p>
+            </div>
+          </>
+        );
+
+      return (
+        <div>
+          <div className="inventory-items__titleContainer">
+            <h1 className="inventory-items__title">Items Listed on Secondary Market</h1>
+          </div>
+          <div className="inventory-items__itemsContainer" style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
+            {playerItemsOnSecondaryMarketInTelos?.map((nft) => {
+              return <InventoryItemOnSecondaryMarket nft={nft} key={nft.metadata.contract.address + nft.tokenId} activeChain={activeChain}/>;
+            })}
+          </div>
         </div>
-        <div className="inventory-items__itemsContainer" style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
-          {playerItemsOnSecondaryMarket?.map((nft) => {
-            return <InventoryItemOnSecondaryMarket nft={nft} key={nft.metadata.contract.address + nft.tokenId} />;
-          })}
-        </div>
-      </div>
-    );
+      );
+    }
+
+    return <div>Error</div>;
   }
 
   return (
@@ -299,8 +425,11 @@ const Inventory = () => {
           <button className="inventory__button" onClick={goToHome}>
             Go to Home
           </button>
+          <button className="home__button" onClick={() => handleActiveChain(activeChain === defaultPolygonChainValue ? defaultTelosChainValue : defaultPolygonChainValue)}>
+            Change active chain to {activeChain === defaultPolygonChainValue ? defaultTelosChainValue : defaultPolygonChainValue}
+          </button>
           {sessionToken && (
-            <button className="inventory__button" onClick={reloadPlayerItemsOnSecundaryMarketAndInventory}>
+            <button className="inventory__button" onClick={reloadPlayerItemsOnSecondaryMarketAndInventory}>
               Reload Inventory and Player Market Items
             </button>
           )}
@@ -331,18 +460,34 @@ const Inventory = () => {
           </div>
           <div className="inventory__items-container">
             <Items />
-            <PageButtons
-              content={
-                items
-                  ?.map((nft) => {
-                    return nft.tokenIds.map((tokenId) => {
-                      return { ...nft, tokenId };
-                    });
-                  })
-                  .flat() || []
-              }
-              extraAction={() => scrollToElement("inventory")}
-            />
+            {activeChain === defaultPolygonChainValue && (
+              <PageButtons
+                content={
+                  items
+                    ?.map((nft) => {
+                      return nft.tokenIds.map((tokenId) => {
+                        return { ...nft, tokenId };
+                      });
+                    })
+                    .flat() || []
+                }
+                extraAction={() => scrollToElement("inventory")}
+              />
+            )}
+            {activeChain === defaultTelosChainValue && (
+              <PageButtons
+                content={
+                  itemsInTelos
+                    ?.map((nft) => {
+                      return nft.tokenIds.map((tokenId) => {
+                        return { ...nft, tokenId };
+                      });
+                    })
+                    .flat() || []
+                }
+                extraAction={() => scrollToElement("inventory")}
+              />
+            )}
             <SecondaryMarketItems />
           </div>
         </div>

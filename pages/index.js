@@ -14,7 +14,9 @@ const projectDomain = process.env.NEXT_PUBLIC_PROJECT_DOMAIN;
 export default function Home({ XerialWalletViewmodel, activeChain, handleActiveChain }) {
   const [project, setProject] = useState({});
   const [listedNfts, setListedNfts] = useState([]);
+  const [listedNftsInTelos, setListedNftsInTelos] = useState([]);
   const [listedNftsOnSecondaryMarket, setListedNftsOnSecondaryMarket] = useState([]);
+  const [listedNftsOnSecondaryMarketInTelos, setListedNftsOnSecondaryMarketInTelos] = useState([]);
   const [loguedWith, setLoguedWith] = useState("");
   const [loadingProject, setLoadingProject] = useState(false);
   const [activeXerialWallet, setActiveXerialWallet] = useState(false);
@@ -22,7 +24,6 @@ export default function Home({ XerialWalletViewmodel, activeChain, handleActiveC
   const [sessionToken, setSessionToken] = useState("");
   const [userAddress, setUserAddress] = useState("");
   const router = useRouter();
-  
   useEffect(() => {
     XerialWalletViewmodel.observer.restart();
     XerialWalletViewmodel.observer.observe(() => {
@@ -37,7 +38,9 @@ export default function Home({ XerialWalletViewmodel, activeChain, handleActiveC
   useEffect(() => {
     if (project && JSON.stringify(project) != "{}") {
       loadListedNfts();
+      loadListedNftsInTelos();
       loadListedNftsOnSecondaryMarket();
+      loadListedNftsOnSecondaryMarketInTelos();
     }
   }, [project]);
 
@@ -88,20 +91,38 @@ export default function Home({ XerialWalletViewmodel, activeChain, handleActiveC
 
   async function loadListedNfts() {
     const getListedNftsResponse = await web2Functions.getListedNfts({
-      chain: "polygon",
+      chain: defaultPolygonChainValue,
       projectId: project.id,
     });
 
     setListedNfts(getListedNftsResponse);
   }
 
+  async function loadListedNftsInTelos() {
+    const getListedNftsResponse = await web2Functions.getListedNfts({
+      chain: defaultTelosChainValue,
+      projectId: project.id,
+    });
+
+    setListedNftsInTelos(getListedNftsResponse);
+  }
+
   async function loadListedNftsOnSecondaryMarket() {
     const getListedNftsOnSecondaryMarket = await web2Functions.getListedNftsOnSecondaryMarket({
-      chain: "polygon",
+      chain: defaultPolygonChainValue,
       projectAddress: project.address,
     });
 
     setListedNftsOnSecondaryMarket(getListedNftsOnSecondaryMarket);
+  }
+
+  async function loadListedNftsOnSecondaryMarketInTelos() {
+    const getListedNftsOnSecondaryMarket = await web2Functions.getListedNftsOnSecondaryMarket({
+      chain: defaultTelosChainValue,
+      projectAddress: project.address,
+    });
+
+    setListedNftsOnSecondaryMarketInTelos(getListedNftsOnSecondaryMarket);
   }
 
   function goToInventory() {
@@ -112,7 +133,9 @@ export default function Home({ XerialWalletViewmodel, activeChain, handleActiveC
     if (project && JSON.stringify(project) != "{}") {
       setLoadingProject(true);
       loadListedNfts();
+      loadListedNftsInTelos();
       loadListedNftsOnSecondaryMarket();
+      loadListedNftsOnSecondaryMarketInTelos();
       setLoadingProject(false);
     } else console.error("Project Not Found");
   }
@@ -210,7 +233,7 @@ export default function Home({ XerialWalletViewmodel, activeChain, handleActiveC
                   <div className="home__noListedNftsMessage">There are no listed NFTs</div>
                 ) : (
                   listedNfts?.map((nft) => {
-                    return <Item key={nft.id} nft={nft} sellerAddress={project.address} XerialWalletViewmodel={XerialWalletViewmodel} />;
+                    return <Item key={nft.id} nft={nft} sellerAddress={project.address} XerialWalletViewmodel={XerialWalletViewmodel} activeChain={activeChain}/>;
                   })
                 )}
               </div>
@@ -220,7 +243,31 @@ export default function Home({ XerialWalletViewmodel, activeChain, handleActiveC
                   <div className="home__noListedNftsMessage">There are no listed NFTs</div>
                 ) : (
                   listedNftsOnSecondaryMarket?.map((nft) => {
-                    return <SecondaryMarketItem key={nft.marketItemId} nft={nft} XerialWalletViewmodel={XerialWalletViewmodel} />;
+                    return <SecondaryMarketItem key={nft.marketItemId} nft={nft} XerialWalletViewmodel={XerialWalletViewmodel} activeChain={activeChain}/>;
+                  })
+                )}
+              </div>
+            </>
+          )}
+          {activeChain === defaultTelosChainValue && (
+            <>
+              <h1 className="home__title">Primary Market</h1>
+              <div className="home__itemsContainer">
+                {listedNftsInTelos && listedNftsInTelos.length === 0 ? (
+                  <div className="home__noListedNftsMessage">There are no listed NFTs</div>
+                ) : (
+                  listedNftsInTelos?.map((nft) => {
+                    return <Item key={nft.id} nft={nft} sellerAddress={project.address} XerialWalletViewmodel={XerialWalletViewmodel} activeChain={activeChain} />;
+                  })
+                )}
+              </div>
+              <h1 className="home__title">Secondary Market</h1>
+              <div className="home__itemsContainer">
+                {listedNftsOnSecondaryMarketInTelos && listedNftsOnSecondaryMarketInTelos.length === 0 ? (
+                  <div className="home__noListedNftsMessage">There are no listed NFTs</div>
+                ) : (
+                  listedNftsOnSecondaryMarketInTelos?.map((nft) => {
+                    return <SecondaryMarketItem key={nft.marketItemId} nft={nft} XerialWalletViewmodel={XerialWalletViewmodel} activeChain={activeChain} />;
                   })
                 )}
               </div>

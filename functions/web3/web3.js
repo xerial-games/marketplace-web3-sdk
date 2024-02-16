@@ -2,11 +2,143 @@ import { ethers, BigNumber } from "ethers";
 import usdcAbi from "@/web3-abis/usdcAbi";
 import marketplaceABI from "@/web3-abis/marketplaceAbi";
 import collectionAbi from "@/web3-abis/collectionAbi";
+import { defaultPolygonChainValue, defaultTelosChainValue } from "@/utils/defaultChainValues";
+import telosGasLimit from "@/utils/telosGasLimit";
 const usdcAddress = process.env.NEXT_PUBLIC_POLYGON_USDC_CONTRACT;
 const ethereum = globalThis.ethereum;
 const checkEthereumExistInUI = function () {
   if (!globalThis.ethereum) throw Error("There is no ethereum in window / MetaMask is not installed");
 };
+
+function getUsdcAddress (chain) {
+  if (chain === defaultPolygonChainValue) return process.env.NEXT_PUBLIC_POLYGON_USDC_CONTRACT;
+  if (chain === defaultTelosChainValue) return process.env.NEXT_PUBLIC_TELOS_USDC_CONTRACT;
+  throw new Error("Chain Isn't Valid")
+}
+
+function getMarketplaceAddress(chain) {
+  if (chain === defaultPolygonChainValue) return process.env.NEXT_PUBLIC_POLYGON_MARKETPLACE_CONTRACT;
+  if (chain === defaultTelosChainValue) return process.env.NEXT_PUBLIC_TELOS_MARKETPLACE_CONTRACT;
+  throw new Error("Chain Isn't Valid")
+}
+
+function formatBigNumberToString(bigNumberToFormat) {
+  return BigNumber.from(bigNumberToFormat).toString()
+}
+
+function formatToBigNumber(contentToFormat) {
+  return BigNumber.from(contentToFormat);
+}
+
+async function checkTelosNetwork () {
+  const ethereum = window.ethereum;
+  if (!ethereum) throw new Error("Metamask Isn't Installed");
+  try {
+
+  await ethereum.enable();
+
+  const chainId = await ethereum.request({
+    method: "eth_chainId",
+  });
+
+  const chainIdHex = process.env.NEXT_PUBLIC_TELOS_CHAIN_ID_HEX;
+  
+  if (chainId === chainIdHex) {
+    console.log(
+      "User is on the Telos Test Network"
+    );
+  } else {
+    console.log("User is not on the Telos Test Network");
+
+    await ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: chainIdHex }],
+    });
+  }
+  } catch (error) {
+    const chainIdHex = process.env.NEXT_PUBLIC_TELOS_CHAIN_ID_HEX;
+    console.error("Error verifying the Telos testnet network. Reason: ", error.message);
+    if (error.code === 4902) {
+      // Error 4902 indicates that the user attempted to switch to an Ethereum network
+      // that is not configured in MetaMask.
+      try {
+        await ethereum.request({
+          method: "wallet_addEthereumChain",
+          params: [
+            {
+              chainId: chainIdHex,
+              chainName: "Telos testnet",
+              nativeCurrency: {
+                name: "TLOS",
+                symbol: "TLOS",
+                decimals: 18,
+              },
+              rpcUrls: ["https://testnet.telos.net/evm"],
+              blockExplorerUrls: ["https://testnet.teloscan.io/"],
+            },
+          ],
+        });
+        console.log("The user has been asked to add the Telos testnet network");
+      } catch (error) {
+        console.error("Error to add Telos tesnet network. Reason: ", error);
+      }
+    }
+  }
+} 
+
+async function checkMumbaiNetwork() {
+  const ethereum = window.ethereum;
+  if (!ethereum) throw new Error("Metamask Isn't Installed");
+  try {
+    const chainIdHex = process.env.NEXT_PUBLIC_POLYGON_CHAIN_ID_HEX;
+
+    await ethereum.enable();
+
+    const chainId = await ethereum.request({
+      method: "eth_chainId",
+    });
+
+
+    if (chainId === chainIdHex) {
+      console.log("User is on the Polygon Test Network");
+    } else {
+      console.log("User is not on the Polygon Test Network");
+
+      await ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: chainIdHex }],
+      });
+    }
+  } catch (error) {
+    const chainIdHex = process.env.NEXT_PUBLIC_POLYGON_CHAIN_ID_HEX;
+    console.error("Error al verificar la red de Mumbai:", error);
+    if (error.code === 4902) {
+      // Error 4902 indicates that the user attempted to switch to an Ethereum network
+      // that is not configured in MetaMask.
+      try {
+        await ethereum.request({
+          method: "wallet_addEthereumChain",
+          params: [
+            {
+              chainId: chainIdHex,
+              chainName: "Mumbai Testnet",
+              nativeCurrency: {
+                name: "Matic",
+                symbol: "MATIC",
+                decimals: 18,
+              },
+              rpcUrls: ["https://rpc-mumbai.maticvigil.com/"],
+              blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
+            },
+          ],
+        });
+        console.log("The user has been asked to add the Mumbai network");
+      } catch (error) {
+        console.error("Error to add Mumbai network. Reason: ", error);
+      }
+    }
+  }
+}
 
 async function connectToMetaMask() {
   // Check if MetaMask is installed
@@ -26,7 +158,7 @@ async function connectToMetaMask() {
 const web3Functions = {};
 
 // Allow to buy multiple types of NFTs
-web3Functions.purchaseNfts = async function (nfts) {
+web3Functions.purchaseNfts = async function (nfts, chain) {
   try {
     for (const nft of nfts) {
       const { tokenTypeId, quantity, collectionAddress } = nft;
@@ -35,8 +167,13 @@ web3Functions.purchaseNfts = async function (nfts) {
       }
     }
 
-    const usdcAddress = process.env.NEXT_PUBLIC_POLYGON_USDC_CONTRACT;
-    const marketplaceAddress = process.env.NEXT_PUBLIC_POLYGON_MARKETPLACE_CONTRACT;
+    if (chain === defaultPolygonChainValue) {
+      await checkMumbaiNetwork();
+    } else if (chain === defaultTelosChainValue)
+      await checkTelosNetwork();
+
+    const usdcAddress = getUsdcAddress(chain);
+    const marketplaceAddress = getMarketplaceAddress(chain);
     if (!marketplaceAddress) throw new Error("Marketplace Address Not Found");
     if (!usdcAddress) throw new Error("USDC Address Not Found");
     const { provider, signer } = await connectToMetaMask();
@@ -61,12 +198,17 @@ web3Functions.purchaseNfts = async function (nfts) {
 };
 
 // Allow to buy a single type of NFTs
-web3Functions.purchaseNft = async function ({ tokenTypeId, quantity, collectionAddress }) {
+web3Functions.purchaseNft = async function ({ tokenTypeId, quantity, collectionAddress, chain }) {
   try {
-    const usdcAddress = process.env.NEXT_PUBLIC_POLYGON_USDC_CONTRACT;
-    const marketplaceAddress = process.env.NEXT_PUBLIC_POLYGON_MARKETPLACE_CONTRACT;
+    if (chain === defaultPolygonChainValue) {
+      await checkMumbaiNetwork();
+    } else if (chain === defaultTelosChainValue)
+      await checkTelosNetwork();
+    else throw new Error("Invalid Chain");
+    const usdcAddress = getUsdcAddress(chain);
+    const marketplaceAddress = getMarketplaceAddress(chain);
     if (!marketplaceAddress) throw new Error("Marketplace Address Not Found");
-    if (!usdcAddress) throw new Error("USDC Address Not Found");
+    if (!usdcAddress) throw new Error("USDC address is invalid");
     if (!tokenTypeId || !collectionAddress || !quantity) throw new Error("All Parameters Are Required");
     const { provider, signer } = await connectToMetaMask();
     const usdc = new ethers.Contract(usdcAddress, usdcAbi, provider);
@@ -114,9 +256,13 @@ web3Functions.secondaryMarketPurchase = async function ({ marketplaceNftId }) {
   }
 };
 
-web3Functions.sellNftOnSecondaryMarket = async function ({ collectionAddress, tokenId, price }) {
+web3Functions.sellNftOnSecondaryMarket = async function ({ collectionAddress, tokenId, price, chain }) {
   try {
-    const marketplaceAddress = process.env.NEXT_PUBLIC_POLYGON_MARKETPLACE_CONTRACT;
+    if (chain === defaultPolygonChainValue) {
+      await checkMumbaiNetwork();
+    } else if (chain === defaultTelosChainValue)
+      await checkTelosNetwork();
+    const marketplaceAddress = getMarketplaceAddress(chain);
     const { provider, signer } = await connectToMetaMask();
     const marketplace = new ethers.Contract(marketplaceAddress, marketplaceABI, provider);
     const collectionContract = new ethers.Contract(collectionAddress, collectionAbi, provider);
@@ -135,13 +281,19 @@ web3Functions.sellNftOnSecondaryMarket = async function ({ collectionAddress, to
   }
 };
 
-web3Functions.delistNftOnSecondaryMarket = async function ({ marketplaceNftId }) {
+web3Functions.delistNftOnSecondaryMarket = async function ({ marketplaceNftId, chain }) {
   try {
-    const marketplaceAddress = process.env.NEXT_PUBLIC_POLYGON_MARKETPLACE_CONTRACT;
+    if (chain === defaultPolygonChainValue) {
+      await checkMumbaiNetwork();
+    } else if (chain === defaultTelosChainValue)
+      await checkTelosNetwork();
+    const marketplaceAddress = getMarketplaceAddress(chain);
     const { provider, signer } = await connectToMetaMask();
     const marketplace = new ethers.Contract(marketplaceAddress, marketplaceABI, provider);
 
-    const cancelMarketItemTransaction = await marketplace.connect(signer).cancelMarketItem(marketplaceNftId);
+    let cancelMarketItemTransaction;
+    if (chain === defaultTelosChainValue) cancelMarketItemTransaction = await marketplace.connect(signer).cancelMarketItem(marketplaceNftId, { gasLimit: telosGasLimit });
+    else cancelMarketItemTransaction = await marketplace.connect(signer).cancelMarketItem(marketplaceNftId);
     const cancelMarketItemTransactionWaited = await cancelMarketItemTransaction.wait();
     console.log(cancelMarketItemTransactionWaited);
   } catch (error) {
