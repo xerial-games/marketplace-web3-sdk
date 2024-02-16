@@ -258,7 +258,7 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
             )}
           </div>
         </div>
-        <div className="atoms__xerial-wallet__username atoms__xerial-wallet__item2">{player.username.slice(0, 10) + "..."}</div>
+        <div className="atoms__xerial-wallet__username atoms__xerial-wallet__item2">{player.identifier.slice(0, 10) + "..."}</div>
         <div className="atoms__xerial-wallet__positionRelative">
           <div className="atoms__xerial-wallet__item3" onClick={() => setOptionsActive(!optionsActive)}>
             <img className="atoms__xerial-wallet__optionsIcon" src="/assets/xerialWalletAssets/options-icon.svg" alt="icon" />
