@@ -1,7 +1,7 @@
 import web3Functions from "@/functions/web3/web3";
 import { useEffect, useState } from "react";
 
-const SecondaryMarketItem = ({ nft, sellerAddress, XerialWalletViewmodel }) => {
+const SecondaryMarketItem = ({ nft, sellerAddress, XerialWalletViewmodel, activeChain }) => {
   return (
     <form
       className="atom-item__box"
@@ -37,6 +37,7 @@ const SecondaryMarketItem = ({ nft, sellerAddress, XerialWalletViewmodel }) => {
           } else
             await web3Functions.secondaryMarketPurchase({
               marketplaceNftId: nft.marketItemId.toString(),
+              chain: activeChain
             });
         }}
       >

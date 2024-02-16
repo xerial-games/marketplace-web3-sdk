@@ -231,9 +231,14 @@ web3Functions.purchaseNft = async function ({ tokenTypeId, quantity, collectionA
   }
 };
 
-web3Functions.secondaryMarketPurchase = async function ({ marketplaceNftId }) {
+web3Functions.secondaryMarketPurchase = async function ({ marketplaceNftId, chain }) {
   try {
-    const marketplaceAddress = process.env.NEXT_PUBLIC_POLYGON_MARKETPLACE_CONTRACT;
+    if (chain === defaultPolygonChainValue) {
+      await checkMumbaiNetwork();
+    } else if (chain === defaultTelosChainValue)
+      await checkTelosNetwork();
+    const marketplaceAddress = getMarketplaceAddress(chain);
+    const usdcAddress = getUsdcAddress(chain);
     const { provider, signer } = await connectToMetaMask();
     const usdc = new ethers.Contract(usdcAddress, usdcAbi, provider);
     const marketplace = new ethers.Contract(marketplaceAddress, marketplaceABI, provider);
@@ -246,8 +251,9 @@ web3Functions.secondaryMarketPurchase = async function ({ marketplaceNftId }) {
       const tx = await usdc.connect(signer).approve(marketplaceAddress, maxNumber);
       const resTx = await tx.wait();
     }
-
-    const purchaseTransaction = await marketplace.connect(signer).secondaryPurchase(marketplaceNftId);
+    let purchaseTransaction;
+    if (chain === defaultPolygonChainValue) purchaseTransaction = await marketplace.connect(signer).secondaryPurchase(marketplaceNftId);
+    else purchaseTransaction = await marketplace.connect(signer).secondaryPurchase(marketplaceNftId, { gasLimit: telosGasLimit });
     const purchaseTransactionWaited = await purchaseTransaction.wait();
     console.log(purchaseTransactionWaited);
   } catch (error) {
