@@ -69,7 +69,7 @@ async function checkTelosNetwork () {
         });
         console.log("The user has been asked to add the Telos Network");
       } catch (error) {
-        console.error("Error to add Telos tesnet network. Reason: " + error);
+        console.error("Error to add Telos Network. Reason: " + error);
       }
     }
   }
