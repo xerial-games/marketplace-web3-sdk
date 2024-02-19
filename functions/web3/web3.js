@@ -75,7 +75,7 @@ async function checkTelosNetwork () {
   }
 } 
 
-async function checkMumbaiNetwork() {
+async function checkPolygonNetwork() {
   const ethereum = window.ethereum;
   if (!ethereum) throw new Error("Metamask Isn't Installed");
   try {
@@ -109,9 +109,9 @@ async function checkMumbaiNetwork() {
           method: "wallet_addEthereumChain",
           params: getAddEthereumChainParam(defaultPolygonChainValue, chainIdHex),
         });
-        console.log("The user has been asked to add the Mumbai network");
+        console.log("The user has been asked to add the Polygon Network");
       } catch (error) {
-        console.error("Error to add Mumbai network. Reason: " + error);
+        console.error("Error to add Polygon Network. Reason: " + error);
       }
     }
   }
@@ -145,7 +145,7 @@ web3Functions.purchaseNfts = async function (nfts, chain) {
     }
 
     if (chain === defaultPolygonChainValue) {
-      await checkMumbaiNetwork();
+      await checkPolygonNetwork();
     } else if (chain === defaultTelosChainValue)
       await checkTelosNetwork();
 
@@ -178,7 +178,7 @@ web3Functions.purchaseNfts = async function (nfts, chain) {
 web3Functions.purchaseNft = async function ({ tokenTypeId, quantity, collectionAddress, chain }) {
   try {
     if (chain === defaultPolygonChainValue) {
-      await checkMumbaiNetwork();
+      await checkPolygonNetwork();
     } else if (chain === defaultTelosChainValue)
       await checkTelosNetwork();
     else throw new Error("Invalid Chain");
@@ -211,7 +211,7 @@ web3Functions.purchaseNft = async function ({ tokenTypeId, quantity, collectionA
 web3Functions.secondaryMarketPurchase = async function ({ marketplaceNftId, chain }) {
   try {
     if (chain === defaultPolygonChainValue) {
-      await checkMumbaiNetwork();
+      await checkPolygonNetwork();
     } else if (chain === defaultTelosChainValue)
       await checkTelosNetwork();
     const marketplaceAddress = getMarketplaceAddress(chain);
@@ -242,7 +242,7 @@ web3Functions.secondaryMarketPurchase = async function ({ marketplaceNftId, chai
 web3Functions.sellNftOnSecondaryMarket = async function ({ collectionAddress, tokenId, price, chain }) {
   try {
     if (chain === defaultPolygonChainValue) {
-      await checkMumbaiNetwork();
+      await checkPolygonNetwork();
     } else if (chain === defaultTelosChainValue)
       await checkTelosNetwork();
     const marketplaceAddress = getMarketplaceAddress(chain);
@@ -267,7 +267,7 @@ web3Functions.sellNftOnSecondaryMarket = async function ({ collectionAddress, to
 web3Functions.delistNftOnSecondaryMarket = async function ({ marketplaceNftId, chain }) {
   try {
     if (chain === defaultPolygonChainValue) {
-      await checkMumbaiNetwork();
+      await checkPolygonNetwork();
     } else if (chain === defaultTelosChainValue)
       await checkTelosNetwork();
     const marketplaceAddress = getMarketplaceAddress(chain);
