@@ -4,6 +4,7 @@ import marketplaceABI from "@/web3-abis/marketplaceAbi";
 import collectionAbi from "@/web3-abis/collectionAbi";
 import { defaultPolygonChainValue, defaultTelosChainValue } from "@/utils/defaultChainValues";
 import telosGasLimit from "@/utils/telosGasLimit";
+import getAddEthereumChainParam from "@/utils/addEthereumChainParams";
 const usdcAddress = process.env.NEXT_PUBLIC_POLYGON_USDC_CONTRACT;
 const ethereum = globalThis.ethereum;
 const checkEthereumExistInUI = function () {
@@ -45,10 +46,10 @@ async function checkTelosNetwork () {
   
   if (chainId === chainIdHex) {
     console.log(
-      "User is on the Telos Test Network"
+      "User is on the Telos Network"
     );
   } else {
-    console.log("User is not on the Telos Test Network");
+    console.log("User is not on the Telos Network");
 
     await ethereum.request({
         method: "wallet_switchEthereumChain",
@@ -57,28 +58,16 @@ async function checkTelosNetwork () {
   }
   } catch (error) {
     const chainIdHex = process.env.NEXT_PUBLIC_TELOS_CHAIN_ID_HEX;
-    console.error("Error verifying the Telos testnet network. Reason: ", error.message);
+    console.error("Error verifying the Telos Network. Reason: ", error.message);
     if (error.code === 4902) {
       // Error 4902 indicates that the user attempted to switch to an Ethereum network
       // that is not configured in MetaMask.
       try {
         await ethereum.request({
           method: "wallet_addEthereumChain",
-          params: [
-            {
-              chainId: chainIdHex,
-              chainName: "Telos testnet",
-              nativeCurrency: {
-                name: "TLOS",
-                symbol: "TLOS",
-                decimals: 18,
-              },
-              rpcUrls: ["https://testnet.telos.net/evm"],
-              blockExplorerUrls: ["https://testnet.teloscan.io/"],
-            },
-          ],
+          params: getAddEthereumChainParam(defaultTelosChainValue, chainIdHex),
         });
-        console.log("The user has been asked to add the Telos testnet network");
+        console.log("The user has been asked to add the Telos Network");
       } catch (error) {
         console.error("Error to add Telos tesnet network. Reason: ", error);
       }
@@ -100,9 +89,9 @@ async function checkMumbaiNetwork() {
 
 
     if (chainId === chainIdHex) {
-      console.log("User is on the Polygon Test Network");
+      console.log("User is on the Polygon Network");
     } else {
-      console.log("User is not on the Polygon Test Network");
+      console.log("User is not on the Polygon Network");
 
       await ethereum.request({
         method: "wallet_switchEthereumChain",
@@ -111,26 +100,14 @@ async function checkMumbaiNetwork() {
     }
   } catch (error) {
     const chainIdHex = process.env.NEXT_PUBLIC_POLYGON_CHAIN_ID_HEX;
-    console.error("Error al verificar la red de Mumbai:", error);
+    console.error("Error verifying the Telos Network. Reason: ", error.message);
     if (error.code === 4902) {
       // Error 4902 indicates that the user attempted to switch to an Ethereum network
       // that is not configured in MetaMask.
       try {
         await ethereum.request({
           method: "wallet_addEthereumChain",
-          params: [
-            {
-              chainId: chainIdHex,
-              chainName: "Mumbai Testnet",
-              nativeCurrency: {
-                name: "Matic",
-                symbol: "MATIC",
-                decimals: 18,
-              },
-              rpcUrls: ["https://rpc-mumbai.maticvigil.com/"],
-              blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
-            },
-          ],
+          params: getAddEthereumChainParam(defaultPolygonChainValue, chainIdHex),
         });
         console.log("The user has been asked to add the Mumbai network");
       } catch (error) {
