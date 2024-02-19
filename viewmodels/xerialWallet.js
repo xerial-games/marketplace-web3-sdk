@@ -177,7 +177,6 @@ export default function XerialWalletViewmodel(helpers) {
       const loginAttemptId = helpers.dom.getLoginAttemptIdFromQuery();
       if (!loginAttemptId) throw new Error("Login attempt id not found in URL.");
       const { publicKey, signature } = await helpers.web3.getApiCodeAndSignCodeWithMetamask();
-      // Quiza esto necesite el projectId <= (Revisar).
       const raw = JSON.stringify({ address: publicKey, signature });
       const resAuth = await fetch(
         `${process.env.NEXT_PUBLIC_WALLET_API_HOST}/auth/metamask`,

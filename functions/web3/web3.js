@@ -185,7 +185,7 @@ web3Functions.purchaseNft = async function ({ tokenTypeId, quantity, collectionA
     const usdcAddress = getUsdcAddress(chain);
     const marketplaceAddress = getMarketplaceAddress(chain);
     if (!marketplaceAddress) throw new Error("Marketplace Address Not Found");
-    if (!usdcAddress) throw new Error("USDC address is invalid");
+    if (!usdcAddress) throw new Error("USDC Address Is Invalid");
     if (!tokenTypeId || !collectionAddress || !quantity) throw new Error("All Parameters Are Required");
     const { provider, signer } = await connectToMetaMask();
     const usdc = new ethers.Contract(usdcAddress, usdcAbi, provider);

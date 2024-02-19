@@ -144,7 +144,7 @@ const Inventory = ({ activeChain, handleActiveChain }) => {
       });
       setPlayerItemsOnSecondaryMarketInTelos(items);
     } catch (error) {
-      console.error("Error to load playerItemsOnSecondaryMarket")
+      console.error("Error to load playerItemsOnSecondaryMarketInTelos function. Reason: " +  error.message);
     }
   }
 
