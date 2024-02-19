@@ -58,7 +58,7 @@ async function checkTelosNetwork () {
   }
   } catch (error) {
     const chainIdHex = process.env.NEXT_PUBLIC_TELOS_CHAIN_ID_HEX;
-    console.error("Error verifying the Telos Network. Reason: ", error.message);
+    console.error("Error verifying the Telos Network. Reason: " + error.message);
     if (error.code === 4902) {
       // Error 4902 indicates that the user attempted to switch to an Ethereum network
       // that is not configured in MetaMask.
@@ -69,7 +69,7 @@ async function checkTelosNetwork () {
         });
         console.log("The user has been asked to add the Telos Network");
       } catch (error) {
-        console.error("Error to add Telos tesnet network. Reason: ", error);
+        console.error("Error to add Telos tesnet network. Reason: " + error);
       }
     }
   }
@@ -100,7 +100,7 @@ async function checkMumbaiNetwork() {
     }
   } catch (error) {
     const chainIdHex = process.env.NEXT_PUBLIC_POLYGON_CHAIN_ID_HEX;
-    console.error("Error verifying the Telos Network. Reason: ", error.message);
+    console.error("Error verifying the Telos Network. Reason: " + error.message);
     if (error.code === 4902) {
       // Error 4902 indicates that the user attempted to switch to an Ethereum network
       // that is not configured in MetaMask.
@@ -111,7 +111,7 @@ async function checkMumbaiNetwork() {
         });
         console.log("The user has been asked to add the Mumbai network");
       } catch (error) {
-        console.error("Error to add Mumbai network. Reason: ", error);
+        console.error("Error to add Mumbai network. Reason: " + error);
       }
     }
   }
