@@ -62,7 +62,7 @@ function getEthereumChainParam(chain) {
   if (chain === defaultPolygonChainValue && environment === "staging") return ethereumChainParams.polygonTest;
   if (chain === defaultTelosChainValue && environment === "production") return ethereumChainParams.telos;
   if (chain === defaultTelosChainValue && environment === "staging") return ethereumChainParams.telosTest;
-  throw new Error("ethereumChainParam Is Invalid");
+  throw new Error("Error in getEthereumChainParam function. Reason: ethereumChainParam Is Invalid");
 }
 
 export default getEthereumChainParam;
