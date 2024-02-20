@@ -1,8 +1,8 @@
 import web3Functions from "@/functions/web3/web3";
 
-const InventoryItemOnSecondaryMarket = ({ nft }) => {
+const InventoryItemOnSecondaryMarket = ({ nft, activeChain }) => {
   async function onDelistNft() {
-    await web3Functions.delistNftOnSecondaryMarket({ marketplaceNftId: nft.marketItemId });
+    await web3Functions.delistNftOnSecondaryMarket({ marketplaceNftId: nft.marketItemId, chain: activeChain });
   }
 
   return (
