@@ -5,7 +5,7 @@ const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
 const ethereumChainParams = {
   polygonTest: [
     {
-      chainId: null,
+      chainId: "0x13881",
       chainName: "Polygon Test",
       nativeCurrency: {
         name: "MATIC",
@@ -18,7 +18,7 @@ const ethereumChainParams = {
   ],
   polygon: [
     {
-      chainId: null,
+      chainId: "0x89",
       chainName: "Polygon Mainnet",
       nativeCurrency: {
         name: "MATIC",
@@ -31,7 +31,7 @@ const ethereumChainParams = {
   ],
   telosTest: [
     {
-      chainId: null,
+      chainId: "0x29",
       chainName: "Telos Test",
       nativeCurrency: {
         name: "TLOS",
@@ -44,7 +44,7 @@ const ethereumChainParams = {
   ],
   telos: [
     {
-      chainId: null,
+      chainId: "0x28",
       chainName: "Telos Mainnet",
       nativeCurrency: {
         name: "TLOS",
@@ -57,15 +57,12 @@ const ethereumChainParams = {
   ],
 };
 
-function getEthereumChainParam(chain, chainIdHex) {
-  let ethereumChainParam;
-  if (chain === defaultPolygonChainValue && environment === "production") ethereumChainParam = ethereumChainParams.polygon;
-  if (chain === defaultPolygonChainValue && environment === "staging") ethereumChainParam = ethereumChainParams.polygonTest;
-  if (chain === defaultTelosChainValue && environment === "production") ethereumChainParam = ethereumChainParams.telos;
-  if (chain === defaultTelosChainValue && environment === "staging") ethereumChainParam = ethereumChainParams.telosTest;
-  if (!ethereumChainParam) throw new Error("ethereumChainParam Is Invalid");
-  ethereumChainParam[0].chainId = chainIdHex;
-  return ethereumChainParam;
+function getEthereumChainParam(chain) {
+  if (chain === defaultPolygonChainValue && environment === "production") return ethereumChainParams.polygon;
+  if (chain === defaultPolygonChainValue && environment === "staging") return ethereumChainParams.polygonTest;
+  if (chain === defaultTelosChainValue && environment === "production") return ethereumChainParams.telos;
+  if (chain === defaultTelosChainValue && environment === "staging") return ethereumChainParams.telosTest;
+  throw new Error("ethereumChainParam Is Invalid");
 }
 
 export default getEthereumChainParam;

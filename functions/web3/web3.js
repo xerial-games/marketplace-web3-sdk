@@ -57,7 +57,6 @@ async function checkTelosNetwork () {
     });
   }
   } catch (error) {
-    const chainIdHex = process.env.NEXT_PUBLIC_TELOS_CHAIN_ID_HEX;
     console.error("Error verifying the Telos Network. Reason: " + error.message);
     if (error.code === 4902) {
       // Error 4902 indicates that the user attempted to switch to an Ethereum network
@@ -65,7 +64,7 @@ async function checkTelosNetwork () {
       try {
         await ethereum.request({
           method: "wallet_addEthereumChain",
-          params: getEthereumChainParam(defaultTelosChainValue, chainIdHex),
+          params: getEthereumChainParam(defaultTelosChainValue),
         });
         console.log("The user has been asked to add the Telos Network");
       } catch (error) {
@@ -99,7 +98,6 @@ async function checkPolygonNetwork() {
       });
     }
   } catch (error) {
-    const chainIdHex = process.env.NEXT_PUBLIC_POLYGON_CHAIN_ID_HEX;
     console.error("Error verifying the Telos Network. Reason: " + error.message);
     if (error.code === 4902) {
       // Error 4902 indicates that the user attempted to switch to an Ethereum network
@@ -107,7 +105,7 @@ async function checkPolygonNetwork() {
       try {
         await ethereum.request({
           method: "wallet_addEthereumChain",
-          params: getEthereumChainParam(defaultPolygonChainValue, chainIdHex),
+          params: getEthereumChainParam(defaultPolygonChainValue),
         });
         console.log("The user has been asked to add the Polygon Network");
       } catch (error) {
