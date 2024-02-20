@@ -2,11 +2,11 @@ import { defaultPolygonChainValue, defaultTelosChainValue } from "./defaultChain
 
 const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
 
-const addEthereumChainParams = {
+const ethereumChainParams = {
   polygonTest: [
     {
       chainId: null,
-      chainName: "Mumbai Testnet",
+      chainName: "Polygon Test",
       nativeCurrency: {
         name: "MATIC",
         symbol: "MATIC",
@@ -32,7 +32,7 @@ const addEthereumChainParams = {
   telosTest: [
     {
       chainId: null,
-      chainName: "Telos testnet",
+      chainName: "Telos Test",
       nativeCurrency: {
         name: "TLOS",
         symbol: "TLOS",
@@ -57,15 +57,15 @@ const addEthereumChainParams = {
   ],
 };
 
-function getAddEthereumChainParam(chain, chainIdHex) {
-  let addEthereumChainParam;
-  if (chain === defaultPolygonChainValue && environment === "production") addEthereumChainParam = addEthereumChainParams.polygon;
-  if (chain === defaultPolygonChainValue && environment === "staging") addEthereumChainParam = addEthereumChainParams.polygonTest;
-  if (chain === defaultTelosChainValue && environment === "production") addEthereumChainParam = addEthereumChainParams.telos;
-  if (chain === defaultTelosChainValue && environment === "staging") addEthereumChainParam = addEthereumChainParams.telosTest;
-  if (!addEthereumChainParam) throw new Error("addEthereumChainParam Is Invalid");
-  addEthereumChainParam[0].chainId = chainIdHex;
-  return addEthereumChainParam;
+function getEthereumChainParam(chain, chainIdHex) {
+  let ethereumChainParam;
+  if (chain === defaultPolygonChainValue && environment === "production") ethereumChainParam = ethereumChainParams.polygon;
+  if (chain === defaultPolygonChainValue && environment === "staging") ethereumChainParam = ethereumChainParams.polygonTest;
+  if (chain === defaultTelosChainValue && environment === "production") ethereumChainParam = ethereumChainParams.telos;
+  if (chain === defaultTelosChainValue && environment === "staging") ethereumChainParam = ethereumChainParams.telosTest;
+  if (!ethereumChainParam) throw new Error("ethereumChainParam Is Invalid");
+  ethereumChainParam[0].chainId = chainIdHex;
+  return ethereumChainParam;
 }
 
-export default getAddEthereumChainParam;
+export default getEthereumChainParam;

@@ -4,7 +4,7 @@ import marketplaceABI from "@/web3-abis/marketplaceAbi";
 import collectionAbi from "@/web3-abis/collectionAbi";
 import { defaultPolygonChainValue, defaultTelosChainValue } from "@/utils/defaultChainValues";
 import telosGasLimit from "@/utils/telosGasLimit";
-import getAddEthereumChainParam from "@/utils/addEthereumChainParams";
+import getEthereumChainParam from "@/utils/getEthereumChainParam";
 const usdcAddress = process.env.NEXT_PUBLIC_POLYGON_USDC_CONTRACT;
 const ethereum = globalThis.ethereum;
 const checkEthereumExistInUI = function () {
@@ -65,7 +65,7 @@ async function checkTelosNetwork () {
       try {
         await ethereum.request({
           method: "wallet_addEthereumChain",
-          params: getAddEthereumChainParam(defaultTelosChainValue, chainIdHex),
+          params: getEthereumChainParam(defaultTelosChainValue, chainIdHex),
         });
         console.log("The user has been asked to add the Telos Network");
       } catch (error) {
@@ -107,7 +107,7 @@ async function checkPolygonNetwork() {
       try {
         await ethereum.request({
           method: "wallet_addEthereumChain",
-          params: getAddEthereumChainParam(defaultPolygonChainValue, chainIdHex),
+          params: getEthereumChainParam(defaultPolygonChainValue, chainIdHex),
         });
         console.log("The user has been asked to add the Polygon Network");
       } catch (error) {
