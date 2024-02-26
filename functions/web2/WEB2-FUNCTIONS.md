@@ -524,17 +524,3 @@ Obtain Matic balance of the specific user.
 ```json
 "0.053353126320360021"
 ```
-
-### 14 - getUsdcBalance
-
-Obtain balances of the specific user. Actually only obtain USDC balance.
-
-| Param             | Description                                            |
-|-------------------|--------------------------------------------------------|
-| userAddress       | The player's address.                                  |
-
-**Response structure:**
-
-```json
-"0.84"
-```
