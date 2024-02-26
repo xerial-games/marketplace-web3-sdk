@@ -1,0 +1,68 @@
+.error-message__modal-overlay {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  animation: enterInWindow 2s ease;
+  z-index: 100;
+}
+
+@keyframes enterInWindow {
+  0% {
+    right: -500px;
+  }
+  100% {
+    right: 10px;
+  }
+}
+
+.error-message__errorContainer {
+  border-radius: 20px;
+  min-width: 200px;
+  max-width: 350px;
+  width: fit-content;
+  height: fit-content;
+  padding: 10px 20px;
+  background-color: rgba(192, 29, 23, 1);
+  border: 1px solid #000000;
+  display: flex;
+  gap: 40px;
+}
+
+.error-message__buttonClose {
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: transparent;
+  cursor: pointer;
+  margin-bottom: auto;
+  margin-top: 4px;
+  display: block;
+  line-height: 100%;
+}
+
+.error-message__svg {
+  min-width: 25px;
+  min-height: 25px;
+}
+
+.error-message__errorImgAndMessageContainer {
+  display: flex;
+  gap: 10px;
+}
+
+.error-message__error {
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: #ffffff;
+  word-break: break-word;
+  hyphens: auto;
+  padding-top: 2px;
+  font-style: italic;
+}
+
+.error-message__error span {
+  font-weight: 600;
+  font-style: normal;
+}

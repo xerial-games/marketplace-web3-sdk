@@ -116,4 +116,5 @@ h3 {
 @import "@/styles/inventory.css";
 @import "@/atoms/XerialWallet/XerialWallet.css";
 @import "@/atoms/Item/item.css";
-@import "@/atoms/InventoryItem/inventoryItem.css"
+@import "@/atoms/InventoryItem/inventoryItem.css";
+@import "@/atoms/ErrorMessage/ErrorMessage.css";
