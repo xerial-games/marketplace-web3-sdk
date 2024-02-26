@@ -62,18 +62,17 @@ To interact with the `Xerial Wallet` you need to send `MATIC` or `USDC` to your 
 
 ## Blockchain features
 
-1. Gasless Transactions: we use `Paymaster`, `Account Abstraction ERC-4337` and `Gas Tank` to perform transactions and sponsoring the gas of users, with each user having their own Smart Account.
+1. Fiat payments: we offer users to buy their NFTs through fiat payments without the need to interact with cryptocurrencies, eliminating all the friction.
 
 2. Dynamic NFTs: we provide an interface to allow updating NFTs, this is only done by the `Game Studio`, the player can see if his NFT has changes and can buy the evolution it has had over time.
-
-`Coming soon`: we will add `Multichain` purchases with a single sign, i.e. you will be able to make purchases in different chains at the same time wrapped in one sign.
 
 ## Infrastructure partnerships
 
 we focus on speed and security for end-user interaction, that's why we choose the best in the market:
 
-- [Biconomy](https://biconomy.io/)
+- [Polygon](https://polygon.technology/)
 - [AWS](https://aws.amazon.com/)
+- [Ramp](https://ramp.com/)
 
 ## Contributions ✨
 
