@@ -1,6 +1,6 @@
-# Xerial Marketplace SDK
+# Introduction
 
-This repository was essentially created to help developers implement the `Xerial Marketplace` functions in the personal Marketplaces of each `Game Studios`.
+Welcome to the `Xerial Marketplace SDK` this repository was essentially created to help developers implement the `Xerial Marketplace` functions in the personal Marketplaces of each `Game Studio`.
 
 ## SDK functions
 - [web3](functions/web2/WEB2-FUNCTIONS.md) It's necesary use your MetaMask to use.
