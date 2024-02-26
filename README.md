@@ -43,11 +43,11 @@ The `@` in paths works as a form of remapping, this helps us to use short and pr
 
 ## Environment variables
 
-To run your project smoothly, you must have the acrode environment variables, as described here at [.env.example](.env.example) we suggest you use the address of our Marketplace and USDC contracts that we have already deployed on Polygon's Test Network `(Mumbai)`:
+To run your project smoothly, you must have the acrode environment variables, as described here at [.env.example](.env.example) we suggest you use the address of our Marketplace contract that we have already deployed on Polygon's Test Network `(Mumbai)`:
 
 ```bash
+// REVIEW: not updated
 NEXT_PUBLIC_POLYGON_MARKETPLACE_CONTRACT=0x729BdBbef17E3DaCC6dD8EB325E1bce40699Ab27
-NEXT_PUBLIC_POLYGON_USDC_CONTRACT=0x940fd6321c0fF00BB8459367B953170811711f8B
 ```
 
 ## GitBook documentation
@@ -56,9 +56,8 @@ You can find more complete documentation about the Marketplace and ohter interes
 
 ## Wallet interaction
 
-To interact with the `Xerial Wallet` you need to send `MATIC` or `USDC` to your address. At the moment it is manual process.
-
-`Coming soon`: we are in the process of adding payment gateways that allow the user to buy any currency through any `TDC, Banks and/or Neobanks`.
+To interact with the `Xerial Wallet` and tokens, you can buy `MATIC` with fiat money through our service.
+You can pay with TDC, banks, neobanks and more!
 
 ## Blockchain features
 
