@@ -11,6 +11,11 @@ This repository was essentially created to help developers implement the `Xerial
 - Essential files for implementing `Marketplace` functions can be found in the /utils folder.
 - The /pages folder includes some implementation examples.
 
+### Differences between tokenId and tokenTypeId
+
+- `tokenId`: identifies a specific unique NFT within a collection.
+- `tokenTypeId`: identifies the type to which that NFT belongs within the same collection.
+
 ## Install dependencies
 
 - Using `npm`:
