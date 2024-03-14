@@ -37,6 +37,7 @@ const SecondaryMarketItem = ({ nft, sellerAddress, XerialWalletViewmodel, active
         await web3Functions.secondaryMarketPurchase({
           marketplaceNftId: nft.marketItemId.toString(),
           chain: activeChain,
+          price: nft.price
         });
     } catch (error) {
       handlePurchaseError(error);

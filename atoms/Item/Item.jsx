@@ -46,6 +46,7 @@ const Item = ({ nft, sellerAddress, XerialWalletViewmodel, activeChain }) => {
           collectionAddress: nft.metadata.contract.address,
           quantity: amount,
           chain: activeChain,
+          price: nft.price,
         });
       }
     } catch (error) {
