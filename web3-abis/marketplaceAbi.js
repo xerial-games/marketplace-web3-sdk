@@ -1,16 +1,11 @@
 const marketplaceABI = [
 	{
 		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_usdc",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "_xerialComissionWallet",
-				"type": "address"
-			}
+		{
+			"internalType": "address",
+			"name": "_xerialComissionWallet",
+			"type": "address"
+		}
 		],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
@@ -22,7 +17,32 @@ const marketplaceABI = [
 	},
 	{
 		"inputs": [],
+		"name": "IncorrectPaymentAmount",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "InsufficientFundsForSeller",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "InsufficientFundsForStudioComission",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "InsufficientFundsForXerialComission",
+		"type": "error"
+	},
+	{
+		"inputs": [],
 		"name": "MarketItemDoesNotExist",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "MintingFailed",
 		"type": "error"
 	},
 	{
@@ -63,12 +83,12 @@ const marketplaceABI = [
 	{
 		"anonymous": false,
 		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "marketItemId",
-				"type": "uint256"
-			}
+		{
+			"indexed": false,
+			"internalType": "uint256",
+			"name": "marketItemId",
+			"type": "uint256"
+		}
 		],
 		"name": "MarketItemCancelled",
 		"type": "event"
@@ -76,42 +96,42 @@ const marketplaceABI = [
 	{
 		"anonymous": false,
 		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "marketItemId",
-				"type": "uint256"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "nftContract",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "studio",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "seller",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "price",
-				"type": "uint256"
-			}
+		{
+			"indexed": false,
+			"internalType": "uint256",
+			"name": "marketItemId",
+			"type": "uint256"
+		},
+		{
+			"indexed": true,
+			"internalType": "address",
+			"name": "nftContract",
+			"type": "address"
+		},
+		{
+			"indexed": false,
+			"internalType": "uint256",
+			"name": "tokenId",
+			"type": "uint256"
+		},
+		{
+			"indexed": true,
+			"internalType": "address",
+			"name": "studio",
+			"type": "address"
+		},
+		{
+			"indexed": true,
+			"internalType": "address",
+			"name": "seller",
+			"type": "address"
+		},
+		{
+			"indexed": false,
+			"internalType": "uint256",
+			"name": "price",
+			"type": "uint256"
+		}
 		],
 		"name": "MarketItemCreated",
 		"type": "event"
@@ -119,18 +139,18 @@ const marketplaceABI = [
 	{
 		"anonymous": false,
 		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "previousOwner",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
+		{
+			"indexed": true,
+			"internalType": "address",
+			"name": "previousOwner",
+			"type": "address"
+		},
+		{
+			"indexed": true,
+			"internalType": "address",
+			"name": "newOwner",
+			"type": "address"
+		}
 		],
 		"name": "OwnershipTransferred",
 		"type": "event"
@@ -138,48 +158,48 @@ const marketplaceABI = [
 	{
 		"anonymous": false,
 		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "nftContract",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256[]",
-				"name": "tokenIds",
-				"type": "uint256[]"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "studio",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "buyer",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "unitPrice",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "totalPrice",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "income",
-				"type": "uint256"
-			}
+		{
+			"indexed": true,
+			"internalType": "address",
+			"name": "nftContract",
+			"type": "address"
+		},
+		{
+			"indexed": false,
+			"internalType": "uint256[]",
+			"name": "tokenIds",
+			"type": "uint256[]"
+		},
+		{
+			"indexed": true,
+			"internalType": "address",
+			"name": "studio",
+			"type": "address"
+		},
+		{
+			"indexed": true,
+			"internalType": "address",
+			"name": "buyer",
+			"type": "address"
+		},
+		{
+			"indexed": false,
+			"internalType": "uint256",
+			"name": "unitPrice",
+			"type": "uint256"
+		},
+		{
+			"indexed": false,
+			"internalType": "uint256",
+			"name": "totalPrice",
+			"type": "uint256"
+		},
+		{
+			"indexed": false,
+			"internalType": "uint256",
+			"name": "income",
+			"type": "uint256"
+		}
 		],
 		"name": "PrimaryPurchase",
 		"type": "event"
@@ -187,59 +207,59 @@ const marketplaceABI = [
 	{
 		"anonymous": false,
 		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "nftContract",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "studio",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "seller",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "buyer",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "price",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "royalty",
-				"type": "uint256"
-			}
+		{
+			"indexed": true,
+			"internalType": "address",
+			"name": "nftContract",
+			"type": "address"
+		},
+		{
+			"indexed": false,
+			"internalType": "uint256",
+			"name": "tokenId",
+			"type": "uint256"
+		},
+		{
+			"indexed": true,
+			"internalType": "address",
+			"name": "studio",
+			"type": "address"
+		},
+		{
+			"indexed": false,
+			"internalType": "address",
+			"name": "seller",
+			"type": "address"
+		},
+		{
+			"indexed": true,
+			"internalType": "address",
+			"name": "buyer",
+			"type": "address"
+		},
+		{
+			"indexed": false,
+			"internalType": "uint256",
+			"name": "price",
+			"type": "uint256"
+		},
+		{
+			"indexed": false,
+			"internalType": "uint256",
+			"name": "royalty",
+			"type": "uint256"
+		}
 		],
 		"name": "SecondaryPurchase",
 		"type": "event"
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "marketItemId",
-				"type": "uint256"
-			}
+		{
+			"internalType": "uint256",
+			"name": "marketItemId",
+			"type": "uint256"
+		}
 		],
 		"name": "cancelMarketItem",
 		"outputs": [],
@@ -248,21 +268,21 @@ const marketplaceABI = [
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "address",
-				"name": "nftContractAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "price",
-				"type": "uint256"
-			}
+		{
+			"internalType": "address",
+			"name": "nftContractAddress",
+			"type": "address"
+		},
+		{
+			"internalType": "uint256",
+			"name": "tokenId",
+			"type": "uint256"
+		},
+		{
+			"internalType": "uint256",
+			"name": "price",
+			"type": "uint256"
+		}
 		],
 		"name": "createMarketItem",
 		"outputs": [],
@@ -271,130 +291,65 @@ const marketplaceABI = [
 	},
 	{
 		"inputs": [
+		{
+			"components": [
 			{
 				"internalType": "address",
-				"name": "seller",
+				"name": "collectionAddress",
 				"type": "address"
 			},
 			{
+				"internalType": "uint256",
+				"name": "tokenTypeId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "quantity",
+				"type": "uint256"
+			},
+			{
 				"internalType": "address",
-				"name": "studio",
+				"name": "receiver",
 				"type": "address"
 			}
+			],
+			"internalType": "struct MarketplaceStorage.Drop[]",
+			"name": "drops",
+			"type": "tuple[]"
+		}
+		],
+		"name": "drop",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+		{
+			"internalType": "address",
+			"name": "seller",
+			"type": "address"
+		},
+		{
+			"internalType": "address",
+			"name": "studio",
+			"type": "address"
+		}
 		],
 		"name": "getMarketItemsBySeller",
 		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "marketItemId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "seller",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "price",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "metadataURI",
-						"type": "string"
-					}
-				],
-				"internalType": "struct MarketplaceStorage.MarketItemMetadata[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "studio",
-				"type": "address"
-			}
-		],
-		"name": "getMarketItemsByStudio",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "marketItemId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "seller",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "price",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "metadataURI",
-						"type": "string"
-					}
-				],
-				"internalType": "struct MarketplaceStorage.MarketItemMetadata[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "marketItemIdToMarketItem",
-		"outputs": [
+		{
+			"components": [
 			{
 				"internalType": "uint256",
 				"name": "marketItemId",
 				"type": "uint256"
 			},
 			{
-				"internalType": "address",
-				"name": "nftContractAddress",
-				"type": "address"
-			},
-			{
 				"internalType": "uint256",
 				"name": "tokenId",
 				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "studio",
-				"type": "address"
 			},
 			{
 				"internalType": "address",
@@ -407,10 +362,148 @@ const marketplaceABI = [
 				"type": "uint256"
 			},
 			{
-				"internalType": "bool",
-				"name": "inSale",
-				"type": "bool"
+				"internalType": "string",
+				"name": "metadataURI",
+				"type": "string"
 			}
+			],
+			"internalType": "struct MarketplaceStorage.MarketItemMetadata[]",
+			"name": "",
+			"type": "tuple[]"
+		}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+		{
+			"internalType": "address",
+			"name": "studio",
+			"type": "address"
+		}
+		],
+		"name": "getMarketItemsByStudio",
+		"outputs": [
+		{
+			"components": [
+			{
+				"internalType": "uint256",
+				"name": "marketItemId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "seller",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "metadataURI",
+				"type": "string"
+			}
+			],
+			"internalType": "struct MarketplaceStorage.MarketItemMetadata[]",
+			"name": "",
+			"type": "tuple[]"
+		}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+		{
+			"internalType": "address",
+			"name": "studio",
+			"type": "address"
+		}
+		],
+		"name": "getStudioComission",
+		"outputs": [
+		{
+			"internalType": "uint256",
+			"name": "",
+			"type": "uint256"
+		}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+		{
+			"internalType": "uint256",
+			"name": "tier",
+			"type": "uint256"
+		}
+		],
+		"name": "getTierComission",
+		"outputs": [
+		{
+			"internalType": "uint256",
+			"name": "",
+			"type": "uint256"
+		}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+		{
+			"internalType": "uint256",
+			"name": "",
+			"type": "uint256"
+		}
+		],
+		"name": "marketItemIdToMarketItem",
+		"outputs": [
+		{
+			"internalType": "uint256",
+			"name": "marketItemId",
+			"type": "uint256"
+		},
+		{
+			"internalType": "address",
+			"name": "nftContractAddress",
+			"type": "address"
+		},
+		{
+			"internalType": "uint256",
+			"name": "tokenId",
+			"type": "uint256"
+		},
+		{
+			"internalType": "address",
+			"name": "studio",
+			"type": "address"
+		},
+		{
+			"internalType": "address",
+			"name": "seller",
+			"type": "address"
+		},
+		{
+			"internalType": "uint256",
+			"name": "price",
+			"type": "uint256"
+		},
+		{
+			"internalType": "bool",
+			"name": "inSale",
+			"type": "bool"
+		}
 		],
 		"stateMutability": "view",
 		"type": "function"
@@ -419,43 +512,43 @@ const marketplaceABI = [
 		"inputs": [],
 		"name": "owner",
 		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
+		{
+			"internalType": "address",
+			"name": "",
+			"type": "address"
+		}
 		],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [
+		{
+			"components": [
 			{
-				"components": [
-					{
-						"internalType": "address",
-						"name": "collectionAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "tokenTypeId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "quantity",
-						"type": "uint256"
-					}
-				],
-				"internalType": "struct MarketplaceStorage.Purchase[]",
-				"name": "purchases",
-				"type": "tuple[]"
+				"internalType": "address",
+				"name": "collectionAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenTypeId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "quantity",
+				"type": "uint256"
 			}
+			],
+			"internalType": "struct MarketplaceStorage.Purchase[]",
+			"name": "purchases",
+			"type": "tuple[]"
+		}
 		],
 		"name": "primaryPurchase",
 		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -467,29 +560,29 @@ const marketplaceABI = [
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "marketItemId",
-				"type": "uint256"
-			}
+		{
+			"internalType": "uint256",
+			"name": "marketItemId",
+			"type": "uint256"
+		}
 		],
 		"name": "secondaryPurchase",
 		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "address",
-				"name": "studio",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "comission",
-				"type": "uint256"
-			}
+		{
+			"internalType": "address",
+			"name": "studio",
+			"type": "address"
+		},
+		{
+			"internalType": "uint256",
+			"name": "comission",
+			"type": "uint256"
+		}
 		],
 		"name": "setStudioComission",
 		"outputs": [],
@@ -498,16 +591,16 @@ const marketplaceABI = [
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "address",
-				"name": "studio",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tier",
-				"type": "uint256"
-			}
+		{
+			"internalType": "address",
+			"name": "studio",
+			"type": "address"
+		},
+		{
+			"internalType": "uint256",
+			"name": "tier",
+			"type": "uint256"
+		}
 		],
 		"name": "setStudioTier",
 		"outputs": [],
@@ -516,16 +609,16 @@ const marketplaceABI = [
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "tier",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "comission",
-				"type": "uint256"
-			}
+		{
+			"internalType": "uint256",
+			"name": "tier",
+			"type": "uint256"
+		},
+		{
+			"internalType": "uint256",
+			"name": "comission",
+			"type": "uint256"
+		}
 		],
 		"name": "setTierComission",
 		"outputs": [],
@@ -534,15 +627,41 @@ const marketplaceABI = [
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
+		{
+			"internalType": "address",
+			"name": "_xerialComissionWallet",
+			"type": "address"
+		}
+		],
+		"name": "setXerialComissionWallet",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+		{
+			"internalType": "address",
+			"name": "newOwner",
+			"type": "address"
+		}
 		],
 		"name": "transferOwnership",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "xerialComissionWallet",
+		"outputs": [
+		{
+			"internalType": "address",
+			"name": "",
+			"type": "address"
+		}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	}
 ];

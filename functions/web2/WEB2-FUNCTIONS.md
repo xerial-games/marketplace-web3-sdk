@@ -200,10 +200,10 @@ Obtain the NFTs listed in the primary market.
 
 Obtain the NFTs listed in the secondary market.
 
-| Param            | Description                                           |
-|------------------|-------------------------------------------------------|
-| projectAddress   | The project address associated with your project.     |
-| chain            | Can be "polygon" or "telos". 												 |
+| Param            | Description                                                   |
+|------------------|---------------------------------------------------------------|
+| projectAddress   | The project address associated with your project.             |
+| chain            | Specifies the blockchain network (e.g., "polygon" or "telos").|
 
 **Response structure:**
 
@@ -253,7 +253,7 @@ Obtain the specific player NFTs listed in the secondary market.
 
 | Param            | Description                                                            |
 |------------------|------------------------------------------------------------------------|
-| userAddress      | The address of the user listing NFTs on the secondary market. |
+| userAddress      | The address of the user listing NFTs on the secondary market.          |
 | chain            | Specifies the blockchain network (e.g., "polygon" or "telos").         |
 
 **Response structure:**
@@ -517,6 +517,7 @@ Obtain Matic balance of the specific user.
 
 | Param             | Description                                            |
 |-------------------|--------------------------------------------------------|
+| userAddress       | The player's address.                                  |
 | userAddress       | The player's address.                                  |
 
 **Response structure:**

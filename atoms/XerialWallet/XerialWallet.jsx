@@ -1,5 +1,5 @@
 import { defaultPolygonChainValue, defaultTelosChainValue } from "@/utils/defaultChainValues";
-import { polygonImg, telosImg, usdcImg } from "@/utils/images";
+import { polygonImg, telosImg } from "@/utils/images";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -65,7 +65,6 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
   const [wallets, setWallets] = useState([]);
   const [inventory, setInventory] = useState([]);
   const [maticBalance, setMaticBalance] = useState(null);
-  const [usdcBalance, setUsdcBalance] = useState(null);
   const [depositActive, setDepositActive] = useState(false);
   const [selectedNft, setSelectedNft] = useState({});
   const [addressToSendNft, setAddressToSendNft] = useState("");
@@ -94,7 +93,6 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
       setWallets(XerialWalletViewmodel.wallets || []);
       setInventory(XerialWalletViewmodel.inventory || []);
       setMaticBalance(XerialWalletViewmodel.matic || null);
-      setUsdcBalance(XerialWalletViewmodel.usdc || null);
       setLoading(XerialWalletViewmodel.loading || false);
       setLoadingMessage(XerialWalletViewmodel.loadingMessage || "");
       setLoadingNfts(XerialWalletViewmodel.loadingNfts || false);
@@ -118,13 +116,13 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
   }, [loguedWith]);
 
   async function refreshBalance() {
-    await Promise.all([XerialWalletViewmodel.loadMaticBalance(), XerialWalletViewmodel.loadUsdcBalance()]);
+    await Promise.all([XerialWalletViewmodel.loadMaticBalance()]);
   }
 
   async function reloadAllContent() {
     refreshBalance();
     XerialWalletViewmodel.loadInventory();
-    XerialWalletViewmodel.loadPlayerItemsOnSecondaryMarket({ chain: "polygon" });
+    XerialWalletViewmodel.loadPlayerItemsOnSecondaryMarket({ chain: activeChain });
   }
 
   async function onCloseListedNftModal() {
@@ -300,7 +298,7 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
         <>
           <div>
             <div className="atoms__xerial-wallet__balanceAndAddressContainer">
-              <div className="atoms__xerial-wallet__balance">{usdcBalance ? usdcBalance.toFixed(2) : "0.0"} USDC</div>
+              <div className="atoms__xerial-wallet__balance">{maticBalance ? maticBalance.toFixed(2) : "0.0"} {activeChain === defaultPolygonChainValue ? "MATIC" : activeChain === defaultTelosChainValue ? "TLOS" : "error"}</div>
               <div className="atoms__xerial-wallet__address">{wallets.length > 0 && trimmedAddress(XerialWalletViewmodel.getUserAddress({ chain: activeChain }))}</div>
             </div>
           </div>
@@ -370,12 +368,6 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
                       </div>
                       <div className="atoms__xerial-wallet__tokens__tokenValue">{maticBalance ? maticBalance.toFixed(4) : "0.0"} MATIC</div>
                     </div>
-                    <div className="atoms__xerial-wallet__tokens__tokenContainer">
-                      <div className="atoms__xerial-wallet__tokens__polygonTextAndIconContainer">
-                        <img className="atoms__xerial-wallet__tokens__polygonIcon" src={usdcImg} alt="polygon icon" />
-                      </div>
-                      <div className="atoms__xerial-wallet__tokens__tokenValue">{usdcBalance ? usdcBalance.toFixed(2) : "0.0"} USDC</div>
-                    </div>
                   </>
                 )}
                 {activeChain === defaultTelosChainValue && (
@@ -385,12 +377,6 @@ const XerialWallet = ({ XerialWalletViewmodel }) => {
                         <img className="atoms__xerial-wallet__tokens__polygonIcon" src={telosImg} alt="telos icon" />
                       </div>
                       <div className="atoms__xerial-wallet__tokens__tokenValue">{maticBalance ? maticBalance.toFixed(4) : "0.0"} TLOS</div>
-                    </div>
-                    <div className="atoms__xerial-wallet__tokens__tokenContainer">
-                      <div className="atoms__xerial-wallet__tokens__polygonTextAndIconContainer">
-                        <img className="atoms__xerial-wallet__tokens__polygonIcon" src={usdcImg} alt="telos icon" />
-                      </div>
-                      <div className="atoms__xerial-wallet__tokens__tokenValue">{usdcBalance ? usdcBalance.toFixed(2) : "0.0"} USDC</div>
                     </div>
                   </>
                 )}
