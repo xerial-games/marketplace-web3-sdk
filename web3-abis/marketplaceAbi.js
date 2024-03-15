@@ -559,6 +559,13 @@ const marketplaceABI = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "returnNfts",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 		{
 			"internalType": "uint256",

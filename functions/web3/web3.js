@@ -4,6 +4,7 @@ import collectionAbi from "@/web3-abis/collectionAbi";
 import { defaultPolygonChainValue, defaultTelosChainValue } from "@/utils/defaultChainValues";
 import telosGasLimit from "@/utils/telosGasLimit";
 import getEthereumChainParam from "@/utils/getEthereumChainParam";
+import { Decimal } from "decimal.js";
 const ethereum = globalThis.ethereum;
 const checkEthereumExistInUI = function () {
   if (!globalThis.ethereum) throw Error("There is no ethereum in window / MetaMask is not installed");
@@ -135,7 +136,13 @@ web3Functions.purchaseNfts = async function (nfts, chain) {
     } else if (chain === defaultTelosChainValue)
       await checkTelosNetwork();
 
-    const fullPrice = nfts.reduce((accumulator, nft) => nft.price * nft.quantity + accumulator, 0);
+    let fullPrice = new Decimal(0);
+    nfts.forEach((nft) => {
+      const priceDecimal = new Decimal(nft.price);
+      const quantityDecimal = new Decimal(nft.quantity);
+      const result = priceDecimal.mul(quantityDecimal);
+      fullPrice = fullPrice.add(result);
+    });
     const parsedPrice = ethers.utils.parseEther(String(fullPrice));
 
     const marketplaceAddress = getMarketplaceAddress(chain);
@@ -159,9 +166,13 @@ web3Functions.purchaseNft = async function ({ tokenTypeId, quantity, collectionA
     } else if (chain === defaultTelosChainValue)
       await checkTelosNetwork();
     else throw new Error("Invalid Chain");
+    
     const bigNumberQuantity = BigNumber.from(quantity);
     const bigNumberTokenTypeId = BigNumber.from(tokenTypeId);
-    const parsedPrice = ethers.utils.parseEther(String(price * quantity));
+    const priceDecimal = new Decimal(price);
+    const quantityDecimal = new Decimal(quantity);
+    const result = priceDecimal.mul(quantityDecimal);
+    const parsedPrice = ethers.utils.parseEther(String(result));
     const marketplaceAddress = getMarketplaceAddress(chain);
     if (!marketplaceAddress) throw new Error("Marketplace Address Not Found");
     if (!tokenTypeId || !collectionAddress || !quantity || !price) throw new Error("All Parameters Are Required");
