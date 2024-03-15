@@ -166,7 +166,7 @@ web3Functions.purchaseNft = async function ({ tokenTypeId, quantity, collectionA
     } else if (chain === defaultTelosChainValue)
       await checkTelosNetwork();
     else throw new Error("Invalid Chain");
-
+    
     const bigNumberQuantity = BigNumber.from(quantity);
     const bigNumberTokenTypeId = BigNumber.from(tokenTypeId);
     const priceDecimal = new Decimal(price);
