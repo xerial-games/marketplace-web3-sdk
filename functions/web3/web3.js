@@ -117,13 +117,17 @@ async function connectToMetaMask() {
 const web3Functions = {};
 
 // Allow to buy multiple types of NFTs
-web3Functions.purchaseNfts = async function (nfts, chain, price) {
+web3Functions.purchaseNfts = async function (nfts, chain) {
   try {
+    let nftsParsed = [];
     for (const nft of nfts) {
-      const { tokenTypeId, quantity, collectionAddress } = nft;
-      if (!tokenTypeId || !quantity || !collectionAddress) {
-        throw new Error("Each object in the array must have the properties tokenTypeId, quantity and collectionAddress");
+      const { tokenTypeId, quantity, collectionAddress, price } = nft;
+      if (!tokenTypeId || !quantity || !collectionAddress || !price) {
+        throw new Error("Each object in the array must have the properties tokenTypeId, quantity, price and collectionAddress");
       }
+      const bigNumberQuantity = BigNumber.from(quantity);
+      const bigNumberTokenTypeId = BigNumber.from(tokenTypeId);
+      nftsParsed.push({ tokenTypeId: bigNumberTokenTypeId, quantity: bigNumberQuantity, collectionAddress });
     }
 
     if (chain === defaultPolygonChainValue) {
@@ -131,12 +135,15 @@ web3Functions.purchaseNfts = async function (nfts, chain, price) {
     } else if (chain === defaultTelosChainValue)
       await checkTelosNetwork();
 
+    const fullPrice = nfts.reduce((accumulator, nft) => nft.price * nft.quantity + accumulator, 0);
+    const parsedPrice = ethers.utils.parseEther(String(fullPrice));
+
     const marketplaceAddress = getMarketplaceAddress(chain);
     if (!marketplaceAddress) throw new Error("Marketplace Address Not Found");
     const { provider, signer } = await connectToMetaMask();
     const marketplace = new ethers.Contract(marketplaceAddress, marketplaceABI, provider);
 
-    const purchaseTransaction = await marketplace.connect(signer).primaryPurchase(nfts, { value: ethers.utils.parseEther(String(price)) });
+    const purchaseTransaction = await marketplace.connect(signer).primaryPurchase(nftsParsed, { value: parsedPrice });
     const purchaseTransactionWaited = await purchaseTransaction.wait();
     console.log(purchaseTransactionWaited);
   } catch (error) {
@@ -152,13 +159,16 @@ web3Functions.purchaseNft = async function ({ tokenTypeId, quantity, collectionA
     } else if (chain === defaultTelosChainValue)
       await checkTelosNetwork();
     else throw new Error("Invalid Chain");
+    const bigNumberQuantity = BigNumber.from(quantity);
+    const bigNumberTokenTypeId = BigNumber.from(tokenTypeId);
+    const parsedPrice = ethers.utils.parseEther(String(price * quantity));
     const marketplaceAddress = getMarketplaceAddress(chain);
     if (!marketplaceAddress) throw new Error("Marketplace Address Not Found");
-    if (!tokenTypeId || !collectionAddress || !quantity) throw new Error("All Parameters Are Required");
+    if (!tokenTypeId || !collectionAddress || !quantity || !price) throw new Error("All Parameters Are Required");
     const { provider, signer } = await connectToMetaMask();
     const marketplace = new ethers.Contract(marketplaceAddress, marketplaceABI, provider);
 
-    const purchaseTransaction = await marketplace.connect(signer).primaryPurchase([{ tokenTypeId, quantity, collectionAddress }], { value: ethers.utils.parseEther(String(price)) });
+    const purchaseTransaction = await marketplace.connect(signer).primaryPurchase([{ tokenTypeId: bigNumberTokenTypeId, quantity: bigNumberQuantity, collectionAddress }], { value: parsedPrice });
     const purchaseTransactionWaited = await purchaseTransaction.wait();
     console.log(purchaseTransactionWaited);
   } catch (error) {
