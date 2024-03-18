@@ -43,11 +43,11 @@ The `@` in paths works as a form of remapping, this helps us to use short and pr
 
 ## Environment variables
 
-To run your project smoothly, you must have the acrode environment variables, as described here at [.env.example](.env.example) we suggest you use the address of our Marketplace contract that we have already deployed on Polygon's Test Network `(Mumbai)`:
+To run your project smoothly, you must have the acrode environment variables, as described here at [.env.example](.env.example) we suggest you use the address of our Marketplace contract that we have already deployed on Polygon Test Network `(Mumbai)` and Telos Test Network:
 
 ```bash
-// REVIEW: not updated
-NEXT_PUBLIC_POLYGON_MARKETPLACE_CONTRACT=0x729BdBbef17E3DaCC6dD8EB325E1bce40699Ab27
+NEXT_PUBLIC_POLYGON_MARKETPLACE_CONTRACT=0x72e2dbd5A48DdA0151A715aBD82A020e99Cb604b
+NEXT_PUBLIC_TELOS_MARKETPLACE_CONTRACT=0x7f5281824A855bcEf5f976170A5e668Ba156Ee14
 ```
 
 ## GitBook documentation
