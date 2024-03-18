@@ -340,7 +340,7 @@ export default function XerialWalletViewmodel(helpers) {
     vm.observer.notifyAll();
     const userAddress = vm.getUserAddress({ chain: vm.activeChain });
     if (!userAddress) throw new Error("User wallet not found.");
-    const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/eth`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/${vm.activeChain}/eth`);
     const resjson = await response.json();
     if (!resjson.balance) throw new Error("Error to get matic balance.");
     vm.setMatic(Number(resjson.balance));

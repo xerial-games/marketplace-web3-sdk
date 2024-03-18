@@ -1,34 +1,19 @@
 import { ethers, BigNumber } from "ethers";
-import usdcAbi from "@/web3-abis/usdcAbi";
 import marketplaceABI from "@/web3-abis/marketplaceAbi";
 import collectionAbi from "@/web3-abis/collectionAbi";
 import { defaultPolygonChainValue, defaultTelosChainValue } from "@/utils/defaultChainValues";
 import telosGasLimit from "@/utils/telosGasLimit";
 import getEthereumChainParam from "@/utils/getEthereumChainParam";
-const usdcAddress = process.env.NEXT_PUBLIC_POLYGON_USDC_CONTRACT;
+import { Decimal } from "decimal.js";
 const ethereum = globalThis.ethereum;
 const checkEthereumExistInUI = function () {
   if (!globalThis.ethereum) throw Error("There is no ethereum in window / MetaMask is not installed");
 };
 
-function getUsdcAddress (chain) {
-  if (chain === defaultPolygonChainValue) return process.env.NEXT_PUBLIC_POLYGON_USDC_CONTRACT;
-  if (chain === defaultTelosChainValue) return process.env.NEXT_PUBLIC_TELOS_USDC_CONTRACT;
-  throw new Error("Chain Isn't Valid")
-}
-
 function getMarketplaceAddress(chain) {
   if (chain === defaultPolygonChainValue) return process.env.NEXT_PUBLIC_POLYGON_MARKETPLACE_CONTRACT;
   if (chain === defaultTelosChainValue) return process.env.NEXT_PUBLIC_TELOS_MARKETPLACE_CONTRACT;
   throw new Error("Chain Isn't Valid")
-}
-
-function formatBigNumberToString(bigNumberToFormat) {
-  return BigNumber.from(bigNumberToFormat).toString()
-}
-
-function formatToBigNumber(contentToFormat) {
-  return BigNumber.from(contentToFormat);
 }
 
 async function checkTelosNetwork () {
@@ -135,11 +120,15 @@ const web3Functions = {};
 // Allow to buy multiple types of NFTs
 web3Functions.purchaseNfts = async function (nfts, chain) {
   try {
+    let nftsParsed = [];
     for (const nft of nfts) {
-      const { tokenTypeId, quantity, collectionAddress } = nft;
-      if (!tokenTypeId || !quantity || !collectionAddress) {
-        throw new Error("Each object in the array must have the properties tokenTypeId, quantity and collectionAddress");
+      const { tokenTypeId, quantity, collectionAddress, price } = nft;
+      if (!tokenTypeId || !quantity || !collectionAddress || !price) {
+        throw new Error("Each object in the array must have the properties tokenTypeId, quantity, price and collectionAddress");
       }
+      const bigNumberQuantity = BigNumber.from(quantity);
+      const bigNumberTokenTypeId = BigNumber.from(tokenTypeId);
+      nftsParsed.push({ tokenTypeId: bigNumberTokenTypeId, quantity: bigNumberQuantity, collectionAddress });
     }
 
     if (chain === defaultPolygonChainValue) {
@@ -147,24 +136,21 @@ web3Functions.purchaseNfts = async function (nfts, chain) {
     } else if (chain === defaultTelosChainValue)
       await checkTelosNetwork();
 
-    const usdcAddress = getUsdcAddress(chain);
+    let fullPrice = new Decimal(0);
+    nfts.forEach((nft) => {
+      const priceDecimal = new Decimal(nft.price);
+      const quantityDecimal = new Decimal(nft.quantity);
+      const result = priceDecimal.mul(quantityDecimal);
+      fullPrice = fullPrice.add(result);
+    });
+    const parsedPrice = ethers.utils.parseEther(String(fullPrice));
+
     const marketplaceAddress = getMarketplaceAddress(chain);
     if (!marketplaceAddress) throw new Error("Marketplace Address Not Found");
-    if (!usdcAddress) throw new Error("USDC Address Not Found");
     const { provider, signer } = await connectToMetaMask();
-    const usdc = new ethers.Contract(usdcAddress, usdcAbi, provider);
     const marketplace = new ethers.Contract(marketplaceAddress, marketplaceABI, provider);
 
-    // Querying how much USDC the market can access from my wallet
-    const tx = await usdc.allowance(await signer.getAddress(), marketplaceAddress);
-    if (!(Number(tx.toString()) > 0)) {
-      // USDC permission
-      const maxNumber = BigNumber.from(2).pow(256).sub(1);
-      const tx = await usdc.connect(signer).approve(marketplaceAddress, maxNumber);
-      const resTx = await tx.wait();
-    }
-
-    const purchaseTransaction = await marketplace.connect(signer).primaryPurchase(nfts);
+    const purchaseTransaction = await marketplace.connect(signer).primaryPurchase(nftsParsed, { value: parsedPrice });
     const purchaseTransactionWaited = await purchaseTransaction.wait();
     console.log(purchaseTransactionWaited);
   } catch (error) {
@@ -173,32 +159,27 @@ web3Functions.purchaseNfts = async function (nfts, chain) {
 };
 
 // Allow to buy a single type of NFTs
-web3Functions.purchaseNft = async function ({ tokenTypeId, quantity, collectionAddress, chain }) {
+web3Functions.purchaseNft = async function ({ tokenTypeId, quantity, collectionAddress, chain, price }) {
   try {
     if (chain === defaultPolygonChainValue) {
       await checkPolygonNetwork();
     } else if (chain === defaultTelosChainValue)
       await checkTelosNetwork();
     else throw new Error("Invalid Chain");
-    const usdcAddress = getUsdcAddress(chain);
+    
+    const bigNumberQuantity = BigNumber.from(quantity);
+    const bigNumberTokenTypeId = BigNumber.from(tokenTypeId);
+    const priceDecimal = new Decimal(price);
+    const quantityDecimal = new Decimal(quantity);
+    const result = priceDecimal.mul(quantityDecimal);
+    const parsedPrice = ethers.utils.parseEther(String(result));
     const marketplaceAddress = getMarketplaceAddress(chain);
     if (!marketplaceAddress) throw new Error("Marketplace Address Not Found");
-    if (!usdcAddress) throw new Error("USDC Address Is Invalid");
-    if (!tokenTypeId || !collectionAddress || !quantity) throw new Error("All Parameters Are Required");
+    if (!tokenTypeId || !collectionAddress || !quantity || !price) throw new Error("All Parameters Are Required");
     const { provider, signer } = await connectToMetaMask();
-    const usdc = new ethers.Contract(usdcAddress, usdcAbi, provider);
     const marketplace = new ethers.Contract(marketplaceAddress, marketplaceABI, provider);
 
-    // Querying how much USDC the market can access from my wallet
-    const tx = await usdc.allowance(await signer.getAddress(), marketplaceAddress);
-    if (!(Number(tx.toString()) > 0)) {
-      // USDC permission
-      const maxNumber = BigNumber.from(2).pow(256).sub(1);
-      const tx = await usdc.connect(signer).approve(marketplaceAddress, maxNumber);
-      const resTx = await tx.wait();
-    }
-
-    const purchaseTransaction = await marketplace.connect(signer).primaryPurchase([{ tokenTypeId, quantity, collectionAddress }]);
+    const purchaseTransaction = await marketplace.connect(signer).primaryPurchase([{ tokenTypeId: bigNumberTokenTypeId, quantity: bigNumberQuantity, collectionAddress }], { value: parsedPrice });
     const purchaseTransactionWaited = await purchaseTransaction.wait();
     console.log(purchaseTransactionWaited);
   } catch (error) {
@@ -206,29 +187,18 @@ web3Functions.purchaseNft = async function ({ tokenTypeId, quantity, collectionA
   }
 };
 
-web3Functions.secondaryMarketPurchase = async function ({ marketplaceNftId, chain }) {
+web3Functions.secondaryMarketPurchase = async function ({ marketplaceNftId, chain, price }) {
   try {
     if (chain === defaultPolygonChainValue) {
       await checkPolygonNetwork();
     } else if (chain === defaultTelosChainValue)
       await checkTelosNetwork();
     const marketplaceAddress = getMarketplaceAddress(chain);
-    const usdcAddress = getUsdcAddress(chain);
     const { provider, signer } = await connectToMetaMask();
-    const usdc = new ethers.Contract(usdcAddress, usdcAbi, provider);
     const marketplace = new ethers.Contract(marketplaceAddress, marketplaceABI, provider);
-
-    // Querying how much USDC the market can access from my wallet
-    const tx = await usdc.allowance(await signer.getAddress(), marketplaceAddress);
-    if (!(Number(tx.toString()) > 0)) {
-      // USDC permission
-      const maxNumber = BigNumber.from(2).pow(256).sub(1);
-      const tx = await usdc.connect(signer).approve(marketplaceAddress, maxNumber);
-      const resTx = await tx.wait();
-    }
     let purchaseTransaction;
-    if (chain === defaultPolygonChainValue) purchaseTransaction = await marketplace.connect(signer).secondaryPurchase(marketplaceNftId);
-    else purchaseTransaction = await marketplace.connect(signer).secondaryPurchase(marketplaceNftId, { gasLimit: telosGasLimit });
+    if (chain === defaultPolygonChainValue) purchaseTransaction = await marketplace.connect(signer).secondaryPurchase(marketplaceNftId, { value: ethers.utils.parseEther(String(price)) });
+    else purchaseTransaction = await marketplace.connect(signer).secondaryPurchase(marketplaceNftId, { gasLimit: telosGasLimit, value: ethers.utils.parseEther(String(price)) });
     const purchaseTransactionWaited = await purchaseTransaction.wait();
     console.log(purchaseTransactionWaited);
   } catch (error) {
