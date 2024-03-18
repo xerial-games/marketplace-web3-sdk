@@ -1,6 +1,6 @@
-# Xerial Marketplace SDK
+# Introduction
 
-This repository was essentially created to help developers implement the `Xerial Marketplace` functions in the personal Marketplaces of each `Game Studios`.
+Welcome to the `Xerial Marketplace SDK` this repository was essentially created to help developers implement the Xerial Marketplace functions in the personal Marketplaces of each `Game Studio`.
 
 ## SDK functions
 - [web3](functions/web2/WEB2-FUNCTIONS.md) It's necesary use your MetaMask to use.
@@ -10,6 +10,11 @@ This repository was essentially created to help developers implement the `Xerial
 
 - Essential files for implementing `Marketplace` functions can be found in the /utils folder.
 - The /pages folder includes some implementation examples.
+
+### Differences between tokenId and tokenTypeId
+
+- `tokenId`: identifies a specific unique NFT within a collection.
+- `tokenTypeId`: identifies the type to which that NFT belongs within the same collection.
 
 ## Install dependencies
 
@@ -38,11 +43,11 @@ The `@` in paths works as a form of remapping, this helps us to use short and pr
 
 ## Environment variables
 
-To run your project smoothly, you must have the acrode environment variables, as described here at [.env.example](.env.example) we suggest you use the address of our Marketplace and USDC contracts that we have already deployed on Polygon's Test Network `(Mumbai)`:
+To run your project smoothly, you must have the acrode environment variables, as described here at [.env.example](.env.example) we suggest you use the address of our Marketplace contract that we have already deployed on Polygon Test Network `(Mumbai)` and Telos Test Network:
 
 ```bash
-NEXT_PUBLIC_POLYGON_MARKETPLACE_CONTRACT=0x5eB8114eda438bbaC5d81c8CA5f701e00004203a
-NEXT_PUBLIC_POLYGON_USDC_CONTRACT=0x940fd6321c0fF00BB8459367B953170811711f8B
+NEXT_PUBLIC_POLYGON_MARKETPLACE_CONTRACT=0x72e2dbd5A48DdA0151A715aBD82A020e99Cb604b
+NEXT_PUBLIC_TELOS_MARKETPLACE_CONTRACT=0x7f5281824A855bcEf5f976170A5e668Ba156Ee14
 ```
 
 ## GitBook documentation
@@ -51,31 +56,29 @@ You can find more complete documentation about the Marketplace and ohter interes
 
 ## Wallet interaction
 
-To interact with the `Xerial Wallet` you need to send `MATIC` or `USDC` to your address. At the moment it is manual process.
-
-`Coming soon`: we are in the process of adding payment gateways that allow the user to buy any currency through any `TDC, Banks and/or Neobanks`.
+To interact with the `Xerial Wallet` and tokens, you can buy `MATIC` with fiat money through our service.
+You can pay with TDC, banks, neobanks and more!
 
 ## Blockchain features
 
-1. Gasless Transactions: we use `Paymaster`, `Account Abstraction ERC-4337` and `Gas Tank` to perform transactions and sponsoring the gas of users, with each user having their own Smart Account.
+1. Fiat payments: we offer users to buy their NFTs through fiat payments without the need to interact with cryptocurrencies, eliminating all the friction.
 
 2. Dynamic NFTs: we provide an interface to allow updating NFTs, this is only done by the `Game Studio`, the player can see if his NFT has changes and can buy the evolution it has had over time.
-
-`Coming soon`: we will add `Multichain` purchases with a single sign, i.e. you will be able to make purchases in different chains at the same time wrapped in one sign.
 
 ## Infrastructure partnerships
 
 we focus on speed and security for end-user interaction, that's why we choose the best in the market:
 
-- [Biconomy](https://biconomy.io/)
-- [Quicknode](https://www.quicknode.com/)
+- [Polygon](https://polygon.technology/)
+- [Telos](https://www.telos.net/)
 - [AWS](https://aws.amazon.com/)
+- [Ramp](https://ramp.com/)
 
 ## Contributions ✨
 
 - We appreciate any contribution. If you find a bug or have any suggestions, feel free to open an issue or submit a pull request on [GitHub](https://github.com/xerial-games/marketplace-web3-sdk).
 
-- When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change. You can learn more about how you can contribute to this project in the [Contribution Guide](CONTRIBUTING.md).
+- When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change. You can learn more about how you can contribute to this project in the [Contribution Guide](docs/CONTRIBUTING.md).
 
 Thank you for using the Xerial Marketplace SDK! 💫
 
