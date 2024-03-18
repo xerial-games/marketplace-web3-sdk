@@ -70,6 +70,7 @@ You can pay with TDC, banks, neobanks and more!
 we focus on speed and security for end-user interaction, that's why we choose the best in the market:
 
 - [Polygon](https://polygon.technology/)
+- [Telos](https://www.telos.net/)
 - [AWS](https://aws.amazon.com/)
 - [Ramp](https://ramp.com/)
 
