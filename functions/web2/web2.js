@@ -256,10 +256,6 @@ web2Functions.getMaticBalance = async function ({ userAddress, chain }) {
   return Number(resjson.balance);
 };
 
-// REVIEW: can this be deleted? cc @RichardIrala
-/*
   // web2Functions.transferMatic = async function () {}
-  // web2Functions.transferUsdc = async function () {}
-*/
 
 export default web2Functions;

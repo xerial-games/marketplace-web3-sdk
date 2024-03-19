@@ -7,7 +7,6 @@ import getEthereumChainParam from "@/utils/getEthereumChainParam";
 import { Decimal } from "decimal.js";
 const ethereum = globalThis.ethereum;
 
-// REVIEW: this is not being called cc @RichardIrala, is this where you will be prompted to install/download MetaMask?
 const checkEthereumExistInUI = function () {
   if (!globalThis.ethereum) throw Error("There is no ethereum in window / MetaMask is not installed");
 };
