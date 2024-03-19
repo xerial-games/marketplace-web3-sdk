@@ -195,6 +195,7 @@ const Inventory = ({ activeChain, handleActiveChain }) => {
     }
   }
 
+  // REVIEW: some parameters in this function are not read, you will use them later? cc @RichardIrala
   async function connectWithGoogle(credentialResponse) {
     try {
       const { loguedWith, player, sessionToken, tokens, wallets } = await web2Functions.loginWithGoogle({
