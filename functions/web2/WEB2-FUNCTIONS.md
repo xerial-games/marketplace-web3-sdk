@@ -202,8 +202,8 @@ Obtain the NFTs listed in the secondary market.
 
 | Param            | Description                                                   |
 |------------------|---------------------------------------------------------------|
-| projectAddress   | The project address associated with your project.             |
 | chain            | Specifies the blockchain network (e.g., "polygon" or "telos").|
+| projectAddress   | The project address associated with your project.             |
 
 **Response structure:**
 
@@ -253,8 +253,9 @@ Obtain the specific player NFTs listed in the secondary market.
 
 | Param            | Description                                                            |
 |------------------|------------------------------------------------------------------------|
-| userAddress      | The address of the user listing NFTs on the secondary market.          |
 | chain            | Specifies the blockchain network (e.g., "polygon" or "telos").         |
+| userAddress      | The address of the user listing NFTs on the secondary market.          |
+| studioAddress    | The address of the Game Studio.                                        |
 
 **Response structure:**
 
@@ -366,27 +367,55 @@ Obtain all the necessary data for authentication.
 
 | Param           | Description                                                                                                      |
 |-----------------|------------------------------------------------------------------------------------------------------------------|
-| credential     | The GoogleLogin `credentialResponse.credential`. Image at the bottom.                                             |
-| clientId        | The client ID obtained from the Google Cloud Console (https://cloud.google.com/) associated with the credential. |
+| credential      | The GoogleLogin `credentialResponse.credential`. Image at the bottom.                                            |
+| clientId        | The client ID obtained from the [Google Cloud Console](https://cloud.google.com/) associated with the credential. |
 | projectId       | The project ID associated with your project.                                                                     |
 
 _Function ConnectWithGoogle example applied with React:_
 
-![ConnectWithGoogle function](./images/ConnectWithGoogleFunction.png)
+```javascript
+async function connectWithGoogle(credentialResponse) {
+    try {
+      const { loguedWith, player, sessionToken, tokens, wallets } = await web2Functions.loginWithGoogle({
+        credential: credentialResponse.credential,
+        clientId,
+        projectId: project.id,
+      });
+
+      const userAddress = wallets[0].address;
+      if (!userAddress) throw new Error("User Address Not Found");
+      setWallets(wallets);
+      setSessionToken(sessionToken);
+      setUserAddress(userAddress);
+    } catch (error) {
+      console.error("Error: Login Failed");
+      console.error("Error in connectWithGoogle function. Reason: " +  error.message);
+    }
+  }
+```
 
 _GoogleLogin import example:_
 
-```js
+```javascript
 import { GoogleLogin } from '@react-oauth/google';
 ```
 
 _Function Applied in GoogleLogin Component example:_
 
-![GoogleLogin Component](./images/GoogleLoginComponent.png)
+```javascript
+              <GoogleLogin
+                theme="outline"
+                width="335px"
+                onSuccess={connectWithGoogle}
+                onError={() => {
+                  console.error("Login Failed");
+                }}
+              />
+```
 
-**Object structure obtained:**
+**Response structure:**
 
-```js
+```json
 {
   "sessionToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NTk2YzQzZTU2YTVhODFlMWMwZDNkMjMiLCJpYXQiOjE3MDUwNzI0NzUsIm9Ka78j6d8a6D7s8927d9ajSnjudsI6ImFjY2VzcyJ9.Hvans4Rycp2m73uF14qGCy-47xHEAHUtcHSE1H2_GhY",
   "tokens": {
@@ -513,11 +542,10 @@ Allow the player to list NFTs on Secondary Market with Xerial Wallet.
 
 ### 13 - getMaticBalance
 
-Obtain Matic balance of the specific user.
+Obtain Matic balance of a specific user.
 
 | Param             | Description                                            |
 |-------------------|--------------------------------------------------------|
-| userAddress       | The player's address.                                  |
 | userAddress       | The player's address.                                  |
 
 **Response structure:**
