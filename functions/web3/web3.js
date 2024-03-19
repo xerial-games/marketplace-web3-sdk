@@ -12,12 +12,14 @@ const checkEthereumExistInUI = function () {
   if (!globalThis.ethereum) throw Error("There is no ethereum in window / MetaMask is not installed");
 };
 
+// Obtain the Marketplace address
 function getMarketplaceAddress(chain) {
   if (chain === defaultPolygonChainValue) return process.env.NEXT_PUBLIC_POLYGON_MARKETPLACE_CONTRACT;
   if (chain === defaultTelosChainValue) return process.env.NEXT_PUBLIC_TELOS_MARKETPLACE_CONTRACT;
   throw new Error("Chain Isn't Valid")
 }
 
+// Check connection in Telos Network
 async function checkTelosNetwork () {
   const ethereum = window.ethereum;
   if (!ethereum) throw new Error("Metamask Isn't Installed");
@@ -61,6 +63,7 @@ async function checkTelosNetwork () {
   }
 } 
 
+// Check connection in Polygon Network
 async function checkPolygonNetwork() {
   const ethereum = window.ethereum;
   if (!ethereum) throw new Error("Metamask Isn't Installed");
@@ -102,6 +105,7 @@ async function checkPolygonNetwork() {
   }
 }
 
+// Making the MetaMask connection
 async function connectToMetaMask() {
   // Check if MetaMask is installed
   if (typeof ethereum === "undefined") {
