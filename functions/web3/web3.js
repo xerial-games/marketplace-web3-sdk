@@ -6,6 +6,8 @@ import telosGasLimit from "@/utils/telosGasLimit";
 import getEthereumChainParam from "@/utils/getEthereumChainParam";
 import { Decimal } from "decimal.js";
 const ethereum = globalThis.ethereum;
+
+// REVIEW: this is not being called cc @RichardIrala, is this where you will be prompted to install/download MetaMask?
 const checkEthereumExistInUI = function () {
   if (!globalThis.ethereum) throw Error("There is no ethereum in window / MetaMask is not installed");
 };
@@ -124,7 +126,7 @@ web3Functions.purchaseNfts = async function (nfts, chain) {
     for (const nft of nfts) {
       const { tokenTypeId, quantity, collectionAddress, price } = nft;
       if (!tokenTypeId || !quantity || !collectionAddress || !price) {
-        throw new Error("Each object in the array must have the properties tokenTypeId, quantity, price and collectionAddress");
+        throw new Error("Each object in the array must have the properties tokenTypeId, quantity, collectionAddress and price");
       }
       const bigNumberQuantity = BigNumber.from(quantity);
       const bigNumberTokenTypeId = BigNumber.from(tokenTypeId);
@@ -187,6 +189,7 @@ web3Functions.purchaseNft = async function ({ tokenTypeId, quantity, collectionA
   }
 };
 
+// Allow  the player to buy NFTs on the Secondary Market
 web3Functions.secondaryMarketPurchase = async function ({ marketplaceNftId, chain, price }) {
   try {
     if (chain === defaultPolygonChainValue) {
@@ -207,6 +210,7 @@ web3Functions.secondaryMarketPurchase = async function ({ marketplaceNftId, chai
   }
 };
 
+// Allows the player to list NFT on the Secondary Market
 web3Functions.sellNftOnSecondaryMarket = async function ({ collectionAddress, tokenId, price, chain }) {
   try {
     if (chain === defaultPolygonChainValue) {
@@ -232,6 +236,7 @@ web3Functions.sellNftOnSecondaryMarket = async function ({ collectionAddress, to
   }
 };
 
+// Allows the player to delist NFT on the Secondary Market
 web3Functions.delistNftOnSecondaryMarket = async function ({ marketplaceNftId, chain }) {
   try {
     if (chain === defaultPolygonChainValue) {
