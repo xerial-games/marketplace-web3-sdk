@@ -10,6 +10,21 @@ const callApi = async (url, payload) => {
   return response;
 };
 
+const callApiRest = async (url, payload, options) => {
+  if (!options) {
+    const response = await fetch(url);
+    return response;
+  } else {
+    const finalOptions = {
+      ...options,
+      headers: options.headers ?? { "Content-Type": "Application/json" },
+      body: JSON.stringify(payload),
+    };
+    const response = await fetch(url, finalOptions);
+    return response;
+  }
+};
+
 const callWalletApi = async (url, payload, options) => {
   if (!options) {
     const response = await fetch(url);
@@ -32,4 +47,4 @@ const errorsManager = async (response) => {
   return resjson;
 };
 
-export { callApi, errorsManager, callWalletApi };
+export { callApi, callApiRest, errorsManager, callWalletApi };

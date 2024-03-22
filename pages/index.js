@@ -85,7 +85,7 @@ export default function Home({ XerialWalletViewmodel, activeChain, handleActiveC
   async function load() {
     setLoadingProject(true);
     const getProjectForDomainResponse = await web2Functions.getProjectForDomain({ projectDomain: projectDomain });
-    setProject(getProjectForDomainResponse.project);
+    setProject(getProjectForDomainResponse);
     setLoadingProject(false);
   }
 
@@ -110,7 +110,7 @@ export default function Home({ XerialWalletViewmodel, activeChain, handleActiveC
   async function loadListedNftsOnSecondaryMarket() {
     const getListedNftsOnSecondaryMarket = await web2Functions.getListedNftsOnSecondaryMarket({
       chain: defaultPolygonChainValue,
-      projectAddress: project.address,
+      projectId: project.id,
     });
 
     setListedNftsOnSecondaryMarket(getListedNftsOnSecondaryMarket);
@@ -119,7 +119,7 @@ export default function Home({ XerialWalletViewmodel, activeChain, handleActiveC
   async function loadListedNftsOnSecondaryMarketInTelos() {
     const getListedNftsOnSecondaryMarket = await web2Functions.getListedNftsOnSecondaryMarket({
       chain: defaultTelosChainValue,
-      projectAddress: project.address,
+      projectId: project.id,
     });
 
     setListedNftsOnSecondaryMarketInTelos(getListedNftsOnSecondaryMarket);
@@ -210,12 +210,12 @@ export default function Home({ XerialWalletViewmodel, activeChain, handleActiveC
               <img className="home__projectLogo" src={project.logo} alt="project logo" />
             </div>
             <div className="home__projectBannerContainer">
-              <img className="home__projectBanner" src={project.userBanner} />
+              <img className="home__projectBanner" src={project.banner} />
             </div>
             <div className="home__projectDataSubcontainer">
               <div className="home__projectData">ID: {project.id}</div>
               <div className="home__projectData">Name: {project.name}</div>
-              <div className="home__projectData">Description: {project.description}</div>
+              {/* <div className="home__projectData">Description: {project.description}</div> */}
               <div className="home__projectData">Project domain: {project.domain}</div>
               <a className="home__projectDownloadLink" href={project.downloadLink} about="download link" target="_blank">
                 Click to open the game download page

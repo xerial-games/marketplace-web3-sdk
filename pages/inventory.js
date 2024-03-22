@@ -86,7 +86,7 @@ const Inventory = ({ activeChain, handleActiveChain }) => {
 
   async function load() {
     const getProjectForDomainResponse = await web2Functions.getProjectForDomain({ projectDomain: projectDomain });
-    setProject(getProjectForDomainResponse.project);
+    setProject(getProjectForDomainResponse);
   }
 
   async function loadCollections() {
@@ -98,7 +98,7 @@ const Inventory = ({ activeChain, handleActiveChain }) => {
     try {
       const inventory = await web2Functions.getInventory({
         address: userAddress,
-        studioAddress: project.address,
+        projectId: project.id,
         chain: defaultPolygonChainValue,
       });
 
@@ -112,7 +112,7 @@ const Inventory = ({ activeChain, handleActiveChain }) => {
     try {
       const inventory = await web2Functions.getInventory({
         address: userAddress,
-        studioAddress: project.address,
+        projectId: project.id,
         chain: defaultTelosChainValue,
       });
 
@@ -127,7 +127,7 @@ const Inventory = ({ activeChain, handleActiveChain }) => {
       const items = await web2Functions.getPlayerItemsOnSecondaryMarket({
         chain: defaultPolygonChainValue,
         userAddress: userAddress,
-        studioAddress: project.address,
+        projectId: project.id,
       });
       setPlayerItemsOnSecondaryMarket(items);
     } catch (error) {
@@ -140,7 +140,7 @@ const Inventory = ({ activeChain, handleActiveChain }) => {
       const items = await web2Functions.getPlayerItemsOnSecondaryMarket({
         chain: defaultTelosChainValue,
         userAddress: userAddress,
-        studioAddress: project.address,
+        projectId: project.id,
       });
       setPlayerItemsOnSecondaryMarketInTelos(items);
     } catch (error) {

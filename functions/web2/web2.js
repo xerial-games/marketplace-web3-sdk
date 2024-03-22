@@ -1,22 +1,19 @@
-import { callApi, errorsManager } from "@/functions/callApi";
+import { callApi, callApiRest, errorsManager } from "@/functions/callApi";
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_HOST;
+const walletApiBaseUrl = process.env.NEXT_PUBLIC_WALLET_API_HOST;
 const web2Functions = {};
 
 // Obtain the collections from the Game Studio
 web2Functions.getGameStudioCollections = async ({ projectId }) => {
-  const response = await callApi(`${process.env.NEXT_PUBLIC_API_HOST}/get_collections_from_project`, { projectId });
+  const response = await callApiRest(`${process.env.NEXT_PUBLIC_API_HOST}/collections?project=${projectId}`);
   return await errorsManager(response);
 };
 
 // Obtain the user's inventory
-web2Functions.getInventory = async ({ address, studioAddress, chain }) => {
+web2Functions.getInventory = async ({ address, projectId, chain }) => {
   try {
-    const response = await callApi(`${apiBaseUrl}/get_inventory`, {
-      studioAddress,
-      address,
-      chain,
-    });
+    const response = await callApiRest(`${walletApiBaseUrl}/wallet/${address}/${chain}/project-inventory/${projectId}`);
     const resjson = await errorsManager(response);
     return resjson;
   } catch (error) {
@@ -27,29 +24,17 @@ web2Functions.getInventory = async ({ address, studioAddress, chain }) => {
 
 // Obtain the NFTs listed in the Primary Market.
 web2Functions.getListedNfts = async function ({ chain, projectId }) {
-  const response = await callApi(`${apiBaseUrl}/get_listed_nfts`, {
-    chain,
-    projectId,
-  });
+  const url = `${apiBaseUrl}/marketplace/${projectId}/${chain}/primary`;
+  const response = await callApiRest(url);
   const resjson = await errorsManager(response);
   return resjson;
 };
 
 // Obtain the NFTs listed in the secondary market.
-web2Functions.getListedNftsOnSecondaryMarket = async function ({ chain, projectAddress }) {
+web2Functions.getListedNftsOnSecondaryMarket = async function ({ chain, projectId }) {
   try {
-    const url = `${process.env.NEXT_PUBLIC_API_HOST}/get_market_items`;
-    const raw = JSON.stringify({
-      chain,
-      studioAddress: projectAddress,
-    });
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: raw,
-    });
+    const url = `${apiBaseUrl}/marketplace/${projectId}/${chain}/secondary`;
+    const response = await callApiRest(url);
     const resjson = await response.json();
     return resjson;
   } catch (error) {
@@ -59,21 +44,10 @@ web2Functions.getListedNftsOnSecondaryMarket = async function ({ chain, projectA
 };
 
 // Obtain the specific player NFTs listed in the Secondary Market.
-web2Functions.getPlayerItemsOnSecondaryMarket = async function ({ chain, userAddress, studioAddress }) {
+web2Functions.getPlayerItemsOnSecondaryMarket = async function ({ chain, userAddress, projectId }) {
   try {
-    const url = `${process.env.NEXT_PUBLIC_API_HOST}/get_market_items`;
-    const raw = JSON.stringify({
-      chain,
-      seller: userAddress,
-      studioAddress
-    });
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: raw,
-    });
+    const url = `${apiBaseUrl}/marketplace/${projectId}/${chain}/secondary?seller=${userAddress}`;
+    const response = await callApiRest(url);
     const resjson = await response.json();
     if (response.status.toString()[0] != "2") throw resjson;
     return resjson;
@@ -84,9 +58,7 @@ web2Functions.getPlayerItemsOnSecondaryMarket = async function ({ chain, userAdd
 
 // Obtain information about your project using the configured project domain in the Dashboard.
 web2Functions.getProjectForDomain = async function ({ projectDomain }) {
-  const response = await callApi(`${apiBaseUrl}/get_project_for_marketplace`, {
-    projectDomain,
-  });
+  const response = await callApiRest(`${apiBaseUrl}/marketplace/${projectDomain}`);
   const resjson = await errorsManager(response);
   return resjson;
 };
@@ -96,7 +68,7 @@ web2Functions.loginWithGoogle = async function ({ credential, clientId, projectI
   try {
     if (!projectId) throw new Error("Project Not Found");
     const raw = JSON.stringify({ token: credential, clientId, projectId });
-    const resAuth = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/auth/google`, {
+    const resAuth = await fetch(`${walletApiBaseUrl}/auth/google`, {
       method: "POST",
       body: raw,
       headers: {
@@ -105,7 +77,7 @@ web2Functions.loginWithGoogle = async function ({ credential, clientId, projectI
     });
     const resjsonAuth = await errorsManager(resAuth);
     if (resjsonAuth.refresh && resjsonAuth.access) {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/user`, {
+      const response = await fetch(`${walletApiBaseUrl}/user`, {
         method: "GET",
         headers: {
           "Content-Type": "Application/json",
@@ -133,7 +105,7 @@ web2Functions.loginWithGoogle = async function ({ credential, clientId, projectI
 web2Functions.logout = async function () {};
 
 // Allows the player to buy NFTs on the Primary Market with Xerial Wallet.
-web2Functions.primaryPurchaseWithXerialWallet = async function ({ tokenTypeId, quantity, collectionAddress, userAddress, sessionToken }) {
+web2Functions.primaryPurchaseWithXerialWallet = async function ({ tokenTypeId, quantity, collectionAddress, userAddress, sessionToken, chain }) {
   try {
     if (!userAddress) throw new Error("User Wallet Not Found");
     if (!sessionToken) throw new Error("Session Token Not Found");
@@ -142,7 +114,7 @@ web2Functions.primaryPurchaseWithXerialWallet = async function ({ tokenTypeId, q
       quantity,
       collectionAddress,
     });
-    const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/primary-purchase`, {
+    const response = await fetch(`${walletApiBaseUrl}/wallet/${userAddress}/${chain}/primary-purchase`, {
       method: "POST",
       body: raw,
       headers: {
@@ -160,11 +132,11 @@ web2Functions.primaryPurchaseWithXerialWallet = async function ({ tokenTypeId, q
 };
 
 // Allow the player to buy NFTs on Secondary Market with Xerial Wallet.
-web2Functions.secondaryPurchaseWithXerialWallet = async function ({ marketItemId, userAddress, sessionToken }) {
+web2Functions.secondaryPurchaseWithXerialWallet = async function ({ marketItemId, userAddress, sessionToken, chain }) {
   try {
     if (!userAddress) throw new Error("User Wallet Not Found");
     const raw = JSON.stringify({ marketItemId });
-    const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/secondary-purchase`, {
+    const response = await fetch(`${walletApiBaseUrl}/wallet/${userAddress}/${chain}/secondary-purchase`, {
       method: "POST",
       body: raw,
       headers: {
@@ -182,11 +154,11 @@ web2Functions.secondaryPurchaseWithXerialWallet = async function ({ marketItemId
 };
 
 // Allow the player to delist NFTs on Secondary Market with Xerial Wallet.
-web2Functions.delistNftOnSecondaryMarket = async function ({ marketItemId, userAddress, sessionToken }) {
+web2Functions.delistNftOnSecondaryMarket = async function ({ marketItemId, userAddress, sessionToken, chain }) {
   try {
     if (!userAddress) throw new Error("User Wallet Not Found");
     const raw = JSON.stringify({ marketItemId });
-    const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/delist-nft`, {
+    const response = await fetch(`${walletApiBaseUrl}/wallet/${userAddress}/${chain}/delist-nft`, {
       method: "POST",
       body: raw,
       headers: {
@@ -204,11 +176,11 @@ web2Functions.delistNftOnSecondaryMarket = async function ({ marketItemId, userA
 };
 
 // Allow the player to list NFTs on Secondary Market with Xerial Wallet.
-web2Functions.listNftOnSecondaryMarket = async function ({ collectionAddress, tokenId, price, userAddress, sessionToken }) {
+web2Functions.listNftOnSecondaryMarket = async function ({ collectionAddress, tokenId, price, userAddress, sessionToken, chain }) {
   try {
     if (!userAddress) throw new Error("User Wallet Not Found");
     const raw = JSON.stringify({ collectionAddress, tokenId, price });
-    const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/list-nft`, {
+    const response = await fetch(`${walletApiBaseUrl}/wallet/${userAddress}/${chain}/list-nft`, {
       method: "POST",
       body: raw,
       headers: {
@@ -226,11 +198,11 @@ web2Functions.listNftOnSecondaryMarket = async function ({ collectionAddress, to
 };
 
 // Allow the player to list NFTs on Secondary Market with Xerial Wallet.
-web2Functions.transferNft = async function ({ collectionAddress, tokenId, to, userAddress }) {
+web2Functions.transferNft = async function ({ collectionAddress, tokenId, to, userAddress, chain }) {
   try {
     if (!userAddress) throw new Error("User Wallet Not Found");
     const raw = JSON.stringify({ collectionAddress, tokenId, to });
-    const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/transfer-nft`, {
+    const response = await fetch(`${walletApiBaseUrl}/wallet/${userAddress}/${chain}/transfer-nft`, {
       method: "POST",
       body: raw,
       headers: {
@@ -250,7 +222,7 @@ web2Functions.transferNft = async function ({ collectionAddress, tokenId, to, us
 // Obtain Matic balance of a specific user.
 web2Functions.getMaticBalance = async function ({ userAddress, chain }) {
   if (!userAddress) throw new Error("User Wallet Not Found");
-  const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/${chain}/eth`);
+  const response = await fetch(`${walletApiBaseUrl}/wallet/${userAddress}/${chain}/eth`);
   const resjson = await errorsManager(response);
   if (!resjson.balance) throw new Error("Error to get MATIC balance");
   return Number(resjson.balance);
