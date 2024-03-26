@@ -21,8 +21,8 @@ export default function XerialWalletViewmodel(helpers) {
     const result = await helpers.getProjectForMarketplace({
       projectDomain: projectDomain
     });
-    if (!result.project) throw new Error("Project not found.")
-    vm.setProject(result.project);
+    if (!result) throw new Error("Project Not Found");
+    vm.setProject(result);
   }
 
   vm.setProject = function (newProject) {
@@ -270,17 +270,7 @@ export default function XerialWalletViewmodel(helpers) {
     if (!vm.project.address) throw new Error("Project not found.");
     vm.loadingNfts = true;
     vm.observer.notifyAll();
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/get_inventory`, {
-      method: "POST",
-      body: JSON.stringify({
-        studioAddress: vm.project.address,
-        address: userAddress,
-        chain: "polygon"
-      }),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
+    const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/${vm.activeChain}/project-inventory/${vm.project.id}`);
     const resjson = await response.json();
     if (resjson) {
       vm.setInventory(resjson);
@@ -354,7 +344,7 @@ export default function XerialWalletViewmodel(helpers) {
     const userAddress = vm.getUserAddress({ chain: vm.activeChain });
     if (!userAddress) throw new Error("User wallet not found.");
 
-    const resTokens = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/tokens`);
+    const resTokens = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/${vm.activeChain}/tokens`);
     const resjsonTokens = await resTokens.json();
     if (!resjsonTokens.balances) throw new Error("Error to get USDC balance.");
     vm.setUsdc(Number(resjsonTokens.balances.usdc));
@@ -380,7 +370,7 @@ export default function XerialWalletViewmodel(helpers) {
       vm.loadingMessage = "Transferring your asset";
       vm.observer.notifyAll();
       const raw = JSON.stringify({ collectionAddress, tokenId, to});
-      const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/transfer-nft`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/${vm.activeChain}/transfer-nft`, {
         method: "POST",
         body: raw,
         headers: {
@@ -416,7 +406,7 @@ export default function XerialWalletViewmodel(helpers) {
       vm.loadingMessage = "Publishing your asset";
       vm.observer.notifyAll();
       const raw = JSON.stringify({ collectionAddress, tokenId, price});
-      const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/list-nft`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/${vm.activeChain}/list-nft`, {
         method: "POST",
         body: raw,
         headers: {
@@ -454,7 +444,7 @@ export default function XerialWalletViewmodel(helpers) {
       vm.loadingMessage = "Delisting your asset";
       vm.observer.notifyAll();
       const raw = JSON.stringify({ marketItemId });
-      const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/delist-nft`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/${vm.activeChain}/delist-nft`, {
         method: "POST",
         body: raw,
         headers: {
@@ -496,7 +486,7 @@ export default function XerialWalletViewmodel(helpers) {
       vm.loadingMessage = "Purchasing NFT";
       vm.observer.notifyAll();
       const raw = JSON.stringify({ purchases: [{ typeId: tokenTypeId, quantity, collectionAddress }] });
-      const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/primary-purchase`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/${vm.activeChain}/primary-purchase`, {
         method: "POST",
         body: raw,
         headers: {
@@ -526,7 +516,7 @@ export default function XerialWalletViewmodel(helpers) {
       vm.loadingMessage = "Purchasing NFT";
       vm.observer.notifyAll();
       const raw = JSON.stringify({ marketItemId });
-      const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/polygon/secondary-purchase`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_API_HOST}/wallet/${userAddress}/${vm.activeChain}/secondary-purchase`, {
         method: "POST",
         body: raw,
         headers: {
@@ -549,19 +539,9 @@ export default function XerialWalletViewmodel(helpers) {
   }
 
   vm.loadPlayerItemsOnSecondaryMarket = async function ({ chain }) {
-    const url = `${process.env.NEXT_PUBLIC_API_HOST}/get_market_items`;
-    const raw = JSON.stringify({
-      seller: vm.getUserAddress({ chain: vm.activeChain }),
-      chain,
-      studioAddress: vm.project.address
-    });
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: raw
-    });
+    const seller = vm.getUserAddress({ chain: vm.activeChain });
+    const url = `${process.env.NEXT_PUBLIC_API_HOST}/marketplace/${vm.project.id}/${chain}/secondary?seller=${seller}`;
+    const response = await fetch(url);
     const resjson = await response.json();
     vm.setPlayerItemsOnSecondaryMarket(resjson);
   }

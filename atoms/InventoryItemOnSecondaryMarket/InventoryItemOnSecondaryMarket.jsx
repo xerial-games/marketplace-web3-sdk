@@ -1,8 +1,15 @@
 import web3Functions from "@/functions/web3/web3";
+import getActiveCurrency from "@/utils/getActiveCurrency";
+import toastNotify from "@/utils/toastNotify";
 
 const InventoryItemOnSecondaryMarket = ({ nft, activeChain }) => {
   async function onDelistNft() {
-    await web3Functions.delistNftOnSecondaryMarket({ marketplaceNftId: nft.marketItemId, chain: activeChain });
+    try {
+      await web3Functions.delistNftOnSecondaryMarket({ marketplaceNftId: nft.marketItemId, chain: activeChain });
+    } catch (error) {
+      console.error(error.message);
+      toastNotify("Error: Delist NFT Failed", "error");
+    }
   }
 
   return (
@@ -13,7 +20,7 @@ const InventoryItemOnSecondaryMarket = ({ nft, activeChain }) => {
         <h2>NFT name: {nft.metadata.name}</h2>
         <p>collection address: {nft.metadata.contract.address}</p>
         <p>collection name: {nft.metadata.contract.name}</p>
-        <p className="atom-item__generalText atom-item__priceMagenta">Price: {nft.price} USDC</p>
+        <p className="atom-item__generalText atom-item__priceMagenta">Price: {nft.price} {getActiveCurrency(activeChain)}</p>
       </div>
       <button className="inventory-items__buttonSell" type="submit" onClick={onDelistNft}>
         Delist

@@ -47,7 +47,7 @@ const Inventory = ({ activeChain, handleActiveChain }) => {
   }, [sessionToken]);
 
   useEffect(() => {
-    if (items && items.length > 0) {
+    if (items && items.length >= 0) {
       const formattedItems = items?.map((nft) => {
         return nft.tokenIds.map((tokenId) => {
           return { ...nft, tokenId };
@@ -66,7 +66,7 @@ const Inventory = ({ activeChain, handleActiveChain }) => {
   }, [items]);
 
   useEffect(() => {
-    if (itemsInTelos && itemsInTelos.length > 0) {
+    if (itemsInTelos && itemsInTelos.length >= 0) {
       const formattedItemsInTelos = itemsInTelos?.map((nft) => {
         return nft.tokenIds.map((tokenId) => {
           return { ...nft, tokenId };
@@ -86,7 +86,7 @@ const Inventory = ({ activeChain, handleActiveChain }) => {
 
   async function load() {
     const getProjectForDomainResponse = await web2Functions.getProjectForDomain({ projectDomain: projectDomain });
-    setProject(getProjectForDomainResponse.project);
+    setProject(getProjectForDomainResponse);
   }
 
   async function loadCollections() {
@@ -98,7 +98,7 @@ const Inventory = ({ activeChain, handleActiveChain }) => {
     try {
       const inventory = await web2Functions.getInventory({
         address: userAddress,
-        studioAddress: project.address,
+        projectId: project.id,
         chain: defaultPolygonChainValue,
       });
 
@@ -112,7 +112,7 @@ const Inventory = ({ activeChain, handleActiveChain }) => {
     try {
       const inventory = await web2Functions.getInventory({
         address: userAddress,
-        studioAddress: project.address,
+        projectId: project.id,
         chain: defaultTelosChainValue,
       });
 
@@ -127,7 +127,7 @@ const Inventory = ({ activeChain, handleActiveChain }) => {
       const items = await web2Functions.getPlayerItemsOnSecondaryMarket({
         chain: defaultPolygonChainValue,
         userAddress: userAddress,
-        studioAddress: project.address,
+        projectId: project.id,
       });
       setPlayerItemsOnSecondaryMarket(items);
     } catch (error) {
@@ -140,7 +140,7 @@ const Inventory = ({ activeChain, handleActiveChain }) => {
       const items = await web2Functions.getPlayerItemsOnSecondaryMarket({
         chain: defaultTelosChainValue,
         userAddress: userAddress,
-        studioAddress: project.address,
+        projectId: project.id,
       });
       setPlayerItemsOnSecondaryMarketInTelos(items);
     } catch (error) {
@@ -320,7 +320,7 @@ const Inventory = ({ activeChain, handleActiveChain }) => {
           </div>
           <div className="inventory-items__itemsContainer" style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
             {currentItems.map((nft) => {
-              return <InventoryItem nft={nft} key={nft.metadata.contract.address + nft.tokenId} tokenId={nft.tokenId} />;
+              return <InventoryItem nft={nft} key={nft.metadata.contract.address + nft.tokenId} tokenId={nft.tokenId} activeChain={activeChain} />;
             })}
           </div>
         </div>

@@ -2,6 +2,7 @@ import web3Functions from "@/functions/web3/web3";
 import { useEffect, useState } from "react";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import capitalizeFirstLetter from "@/utils/capitalizeFirstLetter";
+import getActiveCurrency from "@/utils/getActiveCurrency";
 
 const SecondaryMarketItem = ({ nft, sellerAddress, XerialWalletViewmodel, activeChain }) => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -65,7 +66,7 @@ const SecondaryMarketItem = ({ nft, sellerAddress, XerialWalletViewmodel, active
         <p className="atom-item__generalText">Seller address: {nft.seller}</p>
         <p className="atom-item__generalText">Owner: {nft.seller}</p>
         <p className="atom-item__generalText">Available supply: 1</p>
-        <p className="atom-item__generalText atom-item__priceMagenta">Price: {nft.price} USDC</p>
+        <p className="atom-item__generalText atom-item__priceMagenta">Price: {nft.price} {getActiveCurrency(activeChain)}</p>
         {nft.metadata.attributes.slice(0, 6).map((attribute, index) => {
           return (
             <div className="atom-item__attributeCardContainer" key={index}>

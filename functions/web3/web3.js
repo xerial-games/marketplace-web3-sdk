@@ -229,7 +229,7 @@ web3Functions.sellNftOnSecondaryMarket = async function ({ collectionAddress, to
       const approvalForAllTransaction = await collectionContract.connect(signer).setApprovalForAll(marketplaceAddress, true);
       const approvalForAllTransactionWaited = await approvalForAllTransaction.wait();
     }
-    const formattedPrice = ethers.utils.parseUnits(price, 6);
+    const formattedPrice = ethers.utils.parseEther(price);
     const createMarketItemTransaction = await marketplace.connect(signer).createMarketItem(collectionAddress, tokenId, formattedPrice);
     const createMarketItemTransactionWaited = await createMarketItemTransaction.wait();
     console.log(createMarketItemTransactionWaited);
