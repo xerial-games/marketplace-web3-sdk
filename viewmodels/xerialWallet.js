@@ -21,7 +21,7 @@ export default function XerialWalletViewmodel(helpers) {
     const result = await helpers.getProjectForMarketplace({
       projectDomain: projectDomain
     });
-    if (!result) throw new Error("Project not found.")
+    if (!result) throw new Error("Project Not Found");
     vm.setProject(result);
   }
 
