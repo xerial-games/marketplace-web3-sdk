@@ -158,16 +158,37 @@ export default function Home({ XerialWalletViewmodel, activeChain, handleActiveC
 
     return (
       <div className="home__principalContainer">
+        <nav className="global-styles__menu">
+          <ul>
+            <li>
+              <button className="global-styles__home__menuOption" onClick={goToInventory}>
+                Go to inventory
+              </button>
+            </li>
+            <li>
+              <button className="global-styles__home__menuOption" onClick={refreshListedItems}>
+                Refresh listed items
+              </button>
+            </li>
+            <li>
+              <button className="global-styles__home__menuOption">Active chain: {activeChain}</button>
+              <ul class="global-styles__home__subMenus">
+                <li>
+                  <button className="global-styles__button__sub-menu__option" onClick={() => handleActiveChain(defaultTelosChainValue)}>
+                    Change to telos
+                  </button>
+                </li>
+                <li>
+                  <button className="global-styles__button__sub-menu__option" onClick={() => handleActiveChain(defaultPolygonChainValue)}>
+                    Change to polygon
+                  </button>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+
         <div className="home__buttonsContainer">
-          <button className="home__button" onClick={goToInventory}>
-            Go to Inventory
-          </button>
-          <button className="home__button" onClick={() => handleActiveChain(activeChain === defaultPolygonChainValue ? defaultTelosChainValue : defaultPolygonChainValue)}>
-            Change active chain to {activeChain === defaultPolygonChainValue ? defaultTelosChainValue : defaultPolygonChainValue}
-          </button>
-          <button className="home__button" onClick={refreshListedItems}>
-            Refresh Listed Items
-          </button>
           <div className="home__loginWithGoogleContainer">
             {!loguedWith ? (
               <GoogleLogin
@@ -202,7 +223,6 @@ export default function Home({ XerialWalletViewmodel, activeChain, handleActiveC
             </button>
           )}
         </div>
-        {/* {loguedWith && <div className="home__noListedNftsMessage" style={{marginBottom: 20, marginTop: 20}}>Logued with: {loguedWith}</div>} */}
         {project && (
           <div className="home__projectDataContainer">
             <div className="home__projectLogoAndTitleContainer">
@@ -215,7 +235,6 @@ export default function Home({ XerialWalletViewmodel, activeChain, handleActiveC
             <div className="home__projectDataSubcontainer">
               <div className="home__projectData">ID: {project.id}</div>
               <div className="home__projectData">Name: {project.name}</div>
-              {/* <div className="home__projectData">Description: {project.description}</div> */}
               <div className="home__projectData">Project domain: {project.domain}</div>
               <a className="home__projectDownloadLink" href={project.downloadLink} about="download link" target="_blank">
                 Click to open the game download page
@@ -233,7 +252,7 @@ export default function Home({ XerialWalletViewmodel, activeChain, handleActiveC
                   <div className="home__noListedNftsMessage">There are no listed NFTs</div>
                 ) : (
                   listedNfts?.map((nft) => {
-                    return <Item key={nft.id} nft={nft} sellerAddress={project.address} XerialWalletViewmodel={XerialWalletViewmodel} activeChain={activeChain}/>;
+                    return <Item key={nft.id} nft={nft} sellerAddress={project.address} XerialWalletViewmodel={XerialWalletViewmodel} activeChain={activeChain} />;
                   })
                 )}
               </div>
@@ -243,7 +262,7 @@ export default function Home({ XerialWalletViewmodel, activeChain, handleActiveC
                   <div className="home__noListedNftsMessage">There are no listed NFTs</div>
                 ) : (
                   listedNftsOnSecondaryMarket?.map((nft) => {
-                    return <SecondaryMarketItem key={nft.marketItemId} nft={nft} XerialWalletViewmodel={XerialWalletViewmodel} activeChain={activeChain}/>;
+                    return <SecondaryMarketItem key={nft.marketItemId} nft={nft} XerialWalletViewmodel={XerialWalletViewmodel} activeChain={activeChain} />;
                   })
                 )}
               </div>
