@@ -47,7 +47,7 @@ const Inventory = ({ activeChain, handleActiveChain }) => {
   }, [sessionToken]);
 
   useEffect(() => {
-    if (items && items.length > 0) {
+    if (items && items.length >= 0) {
       const formattedItems = items?.map((nft) => {
         return nft.tokenIds.map((tokenId) => {
           return { ...nft, tokenId };
@@ -66,7 +66,7 @@ const Inventory = ({ activeChain, handleActiveChain }) => {
   }, [items]);
 
   useEffect(() => {
-    if (itemsInTelos && itemsInTelos.length > 0) {
+    if (itemsInTelos && itemsInTelos.length >= 0) {
       const formattedItemsInTelos = itemsInTelos?.map((nft) => {
         return nft.tokenIds.map((tokenId) => {
           return { ...nft, tokenId };
@@ -320,7 +320,7 @@ const Inventory = ({ activeChain, handleActiveChain }) => {
           </div>
           <div className="inventory-items__itemsContainer" style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
             {currentItems.map((nft) => {
-              return <InventoryItem nft={nft} key={nft.metadata.contract.address + nft.tokenId} tokenId={nft.tokenId} />;
+              return <InventoryItem nft={nft} key={nft.metadata.contract.address + nft.tokenId} tokenId={nft.tokenId} activeChain={activeChain} />;
             })}
           </div>
         </div>

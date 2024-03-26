@@ -2,6 +2,7 @@ import web3Functions from "@/functions/web3/web3";
 import capitalizeFirstLetter from "@/utils/capitalizeFirstLetter";
 import { useEffect, useState } from "react";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import getActiveCurrency from "@/utils/getActiveCurrency";
 
 const Item = ({ nft, sellerAddress, XerialWalletViewmodel, activeChain }) => {
   const [amount, setAmount] = useState("");
@@ -64,7 +65,7 @@ const Item = ({ nft, sellerAddress, XerialWalletViewmodel, activeChain }) => {
       <img className="atom-item__itemImage" src={nft.metadata.image} alt="nft img" />
       <div className="atom-item__priceAndTypeIdContainer">
         <h1 className="atom-item__generalText global-style__textWithDots">Token typeId: {nft.typeId}</h1>
-        <p className="atom-item__generalText atom-item__priceMagenta">Price: {nft.price} USDC</p>
+        <p className="atom-item__generalText atom-item__priceMagenta">Price: {nft.price} {getActiveCurrency(activeChain)}</p>
       </div>
       <h2 className="atom-item__generalText global-style__textWithDots">Name: {nft.metadata.name}</h2>
       <p className="atom-item__generalText">Collection address: {nft.metadata.contract.address}</p>
