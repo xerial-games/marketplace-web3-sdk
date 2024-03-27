@@ -112,6 +112,122 @@ h3 {
   width: 100%
 }
 
+/* Header nav */
+.global-styles__menu {
+  background: #151515;
+  height: 64px;
+  padding-left: 18px;
+  border-radius: 42px;
+  font-family: "Poppins", sans-serif;
+}
+
+.global-styles__menu ul,
+.global-styles__menu li {
+  margin: 0 auto;
+  padding: 0;
+  list-style: none
+}
+
+.global-styles__menu ul {
+  width: 100%;
+  text-align: left;
+}
+
+.global-styles__menu li {
+  display: inline-block;
+  position: relative;
+}
+
+.global-styles__home__menuOption {
+  background-color: transparent;
+  display: block;
+  line-height: 64px;
+  padding: 0 14px;
+  text-decoration: none;
+  color: #FFFFFF;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+}
+
+.global-styles__home__menuOption.dropdown-arrow:after {
+  content: "\25BE";
+  margin-left: 5px;
+}
+
+.global-styles__home__menuOption:hover {
+  color: #0099CC;
+  background: #F2F2F2;
+}
+
+.global-styles__menu ul.global-styles__home__subMenus {
+  height: auto;
+  overflow: hidden;
+  width: 170px;
+  background: #444444;
+  position: absolute;
+  z-index: 99;
+  display: none;
+}
+
+.global-styles__menu ul.global-styles__home__subMenus li {
+  display: block;
+  text-align: left;
+  width: 100%;
+}
+
+.global-styles__button__sub-menu__option {
+  color: #FFFFFF;
+  font-size: 16px;
+  background-color: transparent;
+  padding: 6px 4px;
+  width: 100%;
+  font-family: "Poppins", sans-serif;
+  cursor: pointer;
+}
+
+.global-styles__menu li:hover ul.global-styles__home__subMenus {
+  display: block
+}
+
+.global-styles__button__sub-menu__option:hover {
+  background: #F2F2F2;
+  color: #444444;
+}
+
+@media screen and (max-width: 800px) {
+  .global-styles__menu {
+    position: relative
+  }
+
+  .global-styles__menu ul {
+    background: #444444;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    z-index: 3;
+    height: auto;
+    display: none;
+    text-align: left;
+  }
+
+  .global-styles__menu ul.global-styles__home__subMenus {
+    width: 100%;
+    position: static;
+  }
+
+  .global-styles__button__sub-menu__option {
+    padding-left: 30px;
+  }
+
+  .global-styles__menu li {
+    display: block;
+    float: none;
+    width: auto;
+  }
+}
+
 @import "@/styles/home.css";
 @import "@/styles/inventory.css";
 @import "@/atoms/XerialWallet/XerialWallet.css";

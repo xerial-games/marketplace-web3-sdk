@@ -420,37 +420,48 @@ const Inventory = ({ activeChain, handleActiveChain }) => {
 
   return (
     <div className="inventory__container">
-      <div className="inventory__buttons">
-        <div className="home__buttonsContainer">
-          <button className="inventory__button" onClick={goToHome}>
-            Go to Home
-          </button>
-          <button className="home__button" onClick={() => handleActiveChain(activeChain === defaultPolygonChainValue ? defaultTelosChainValue : defaultPolygonChainValue)}>
-            Change active chain to {activeChain === defaultPolygonChainValue ? defaultTelosChainValue : defaultPolygonChainValue}
-          </button>
+      <nav className="global-styles__menu">
+        <ul>
+          <li>
+            <button className="global-styles__home__menuOption" onClick={goToHome}>
+              Go to Home
+            </button>
+          </li>
           {sessionToken && (
-            <button className="inventory__button" onClick={reloadPlayerItemsOnSecondaryMarketAndInventory}>
-              Reload Inventory and Player Market Items
-            </button>
+            <li>
+              <button className="global-styles__home__menuOption" onClick={reloadPlayerItemsOnSecondaryMarketAndInventory}>
+                Reload Inventory and Player Market Items
+              </button>
+            </li>
           )}
-          {!loguedWith ? (
-            <button className="inventory__button" onClick={connectWallet}>
-              Connect with MetaMask
-            </button>
-          ) : (
-            <button className="inventory__button" onClick={logoutAndClearUI}>
-              logout
-            </button>
-          )}
-          {/* <GoogleLogin
-            theme="outline"
-            width="335px"
-            onSuccess={connectWithGoogle}
-            onError={() => {
-              console.error("Login Failed");
-            }}
-          /> */}
-        </div>
+          <li>
+            <button className="global-styles__home__menuOption">Active chain: {activeChain}</button>
+            <ul class="global-styles__home__subMenus">
+              <li>
+                <button className="global-styles__button__sub-menu__option" onClick={() => handleActiveChain(defaultTelosChainValue)}>
+                  Change to Telos
+                </button>
+              </li>
+              <li>
+                <button className="global-styles__button__sub-menu__option" onClick={() => handleActiveChain(defaultPolygonChainValue)}>
+                  Change to Polygon
+                </button>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <div className="home__buttonsContainer">
+        {!loguedWith && (
+          <button className="inventory__button" onClick={connectWallet}>
+            Connect with MetaMask
+          </button>
+        )}
+        {loguedWith === "metamask" && (
+          <button className="inventory__button" onClick={logoutAndClearUI}>
+            Logout
+          </button>
+        )}
       </div>
       {sessionToken ? (
         <div className="inventory__background">
