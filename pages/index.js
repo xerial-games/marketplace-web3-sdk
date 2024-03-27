@@ -162,12 +162,12 @@ export default function Home({ XerialWalletViewmodel, activeChain, handleActiveC
           <ul>
             <li>
               <button className="global-styles__home__menuOption" onClick={goToInventory}>
-                Go to inventory
+                Go to Inventory
               </button>
             </li>
             <li>
               <button className="global-styles__home__menuOption" onClick={refreshListedItems}>
-                Refresh listed items
+                Refresh listed Items
               </button>
             </li>
             <li>
@@ -175,12 +175,12 @@ export default function Home({ XerialWalletViewmodel, activeChain, handleActiveC
               <ul class="global-styles__home__subMenus">
                 <li>
                   <button className="global-styles__button__sub-menu__option" onClick={() => handleActiveChain(defaultTelosChainValue)}>
-                    Change to telos
+                    Change to Telos
                   </button>
                 </li>
                 <li>
                   <button className="global-styles__button__sub-menu__option" onClick={() => handleActiveChain(defaultPolygonChainValue)}>
-                    Change to polygon
+                    Change to Polygon
                   </button>
                 </li>
               </ul>

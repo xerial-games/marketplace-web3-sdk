@@ -424,7 +424,7 @@ const Inventory = ({ activeChain, handleActiveChain }) => {
         <ul>
           <li>
             <button className="global-styles__home__menuOption" onClick={goToHome}>
-              Go to home
+              Go to Home
             </button>
           </li>
           {sessionToken && (
@@ -439,12 +439,12 @@ const Inventory = ({ activeChain, handleActiveChain }) => {
             <ul class="global-styles__home__subMenus">
               <li>
                 <button className="global-styles__button__sub-menu__option" onClick={() => handleActiveChain(defaultTelosChainValue)}>
-                  Change to telos
+                  Change to Telos
                 </button>
               </li>
               <li>
                 <button className="global-styles__button__sub-menu__option" onClick={() => handleActiveChain(defaultPolygonChainValue)}>
-                  Change to polygon
+                  Change to Polygon
                 </button>
               </li>
             </ul>
